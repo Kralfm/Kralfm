@@ -5,45 +5,81 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Kral FM Muhabbet</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#111;color:#fff}
-header{padding:22px 16px;text-align:center;background:linear-gradient(135deg,#111,#2a2a2a)}
-h1{margin:0 0 6px;font-size:28px}.sub{color:#bbb}
-.wrap{max-width:720px;margin:20px auto;padding:0 14px}
-.card{background:#1b1b1b;border:1px solid #333;border-radius:18px;padding:16px;box-shadow:0 8px 30px #0006}
-#messages{height:55vh;min-height:360px;overflow:auto;padding:8px}
-.msg{padding:10px 12px;margin:8px 0;background:#262626;border-radius:12px}
-.name{font-weight:bold}.time{font-size:11px;color:#888;margin-left:8px}
-.form{display:flex;gap:8px;margin-top:12px}.form input{flex:1;padding:13px;border-radius:12px;border:1px solid #444;background:#101010;color:#fff}
-button{border:0;border-radius:12px;padding:12px 16px;background:#e11;color:#fff;font-weight:bold;cursor:pointer}
-.note{text-align:center;color:#999;font-size:13px;margin-top:12px}
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif}
+header{background:#b00000;text-align:center;padding:18px;font-size:25px;font-weight:bold}
+main{max-width:760px;margin:auto;padding:14px}
+section{background:#1d1d1d;border-radius:14px;padding:15px;margin-bottom:14px}
+a.listen{display:block;text-align:center;background:#e00000;color:white;text-decoration:none;padding:14px;border-radius:10px;font-weight:bold}
+#messages{height:52vh;overflow:auto;background:#101010;border-radius:10px;padding:10px}
+.msg{background:#292929;border-radius:9px;padding:9px;margin:6px 0;word-break:break-word}
+.name{font-weight:bold;color:#ff5555;margin-right:6px}
+form{display:flex;gap:7px;margin-top:10px}
+input{min-width:0;flex:1;padding:13px;border:0;border-radius:9px;font-size:16px}
+button{padding:13px 16px;border:0;border-radius:9px;background:#e00000;color:white;font-weight:bold}
+.small{color:#aaa;font-size:13px}
 </style>
 </head>
 <body>
-<header><h1>👑 Kral FM Muhabbet</h1><div class="sub">Radyo • Sohbet • Muhabbet</div></header>
-<div class="wrap"><div class="card">
-<div id="messages">
-<div class="msg"><span class="name">Sistem</span><span class="time">şimdi</span><br>Hoş geldiniz! Gerçek zamanlı sohbet bağlantısı hazırlandığında mesajlar tüm kullanıcılara anında ulaşacak.</div>
-</div>
-<div class="form">
-<input id="name" maxlength="20" placeholder="Adınız">
-<input id="text" maxlength="300" placeholder="Mesajınız">
-<button onclick="send()">Gönder</button>
-</div>
-<div class="note">Kral FM Muhabbet</div>
-</div></div>
-<script>
-function send(){
- const n=document.getElementById('name').value.trim()||'Misafir';
- const t=document.getElementById('text').value.trim();
- if(!t)return;
- const d=document.createElement('div'); d.className='msg';
- const now=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
- d.innerHTML='<span class="name">'+escapeHtml(n)+'</span><span class="time">'+now+'</span><br>'+escapeHtml(t);
- document.getElementById('messages').appendChild(d);
- document.getElementById('messages').scrollTop=999999;
- document.getElementById('text').value='';
-}
-function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+<header>🎙️ Kral FM Muhabbet</header>
+<main>
+<section>
+<h2>📻 Kral FM</h2>
+<a class="listen" href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener">▶ Kral FM'i Dinle</a>
+<p class="small">Yayın açıldığında dinlemek için butona dokun.</p>
+</section>
+<section>
+<h2>💬 Canlı Muhabbet</h2>
+<div id="messages"></div>
+<form id="chatForm">
+<input id="name" maxlength="30" placeholder="Adınız" required>
+<input id="text" maxlength="300" placeholder="Mesajınız" required>
+<button>Gönder</button>
+</form>
+<p id="status" class="small">Bağlanıyor...</p>
+</section>
+</main>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {getDatabase,ref,push,onChildAdded,query,orderByChild,limitToLast}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyDvfuuPnoBVhBNgMy1n0iBfsY9J29IwbzA",
+ authDomain:"kralfm-muhabbet.firebaseapp.com",
+ databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId:"kralfm-muhabbet",
+ storageBucket:"kralfm-muhabbet.firebasestorage.app",
+ messagingSenderId:"638769846511",
+ appId:"1:638769846511:web:f6d8abb91564873996a31a"
+};
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+const messagesQuery=query(ref(db,"messages"),orderByChild("createdAt"),limitToLast(100));
+const box=document.getElementById("messages");
+const status=document.getElementById("status");
+
+onChildAdded(messagesQuery,s=>{
+ const d=s.val()||{};
+ const el=document.createElement("div"); el.className="msg";
+ const n=document.createElement("span"); n.className="name"; n.textContent=(d.name||"Misafir")+":";
+ const t=document.createElement("span"); t.textContent=d.text||"";
+ el.append(n,t); box.appendChild(el); box.scrollTop=box.scrollHeight;
+});
+status.textContent="Sohbet bağlantısı hazır.";
+
+document.getElementById("chatForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const name=document.getElementById("name").value.trim().slice(0,30);
+ const text=document.getElementById("text").value.trim().slice(0,300);
+ if(!name||!text)return;
+ try{
+  await push(ref(db,"messages"),{name,text,createdAt:Date.now()});
+  document.getElementById("text").value="";
+ }catch(err){
+  status.textContent="Mesaj gönderilemedi. Firebase Kuralları yazma iznini engelliyor olabilir.";
+ }
+});
 </script>
 </body>
 </html>
