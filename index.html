@@ -7,4 +7,4 @@ onChildAdded(query(messagesRef,orderByChild("createdAt"),limitToLast(100)),s=>{c
 document.getElementById("chatForm").addEventListener("submit",async e=>{e.preventDefault();const n=document.getElementById("name").value.trim(),t=document.getElementById("text").value.trim();if(!n||!t)return;try{await push(messagesRef,{name:n.slice(0,30),text:t.slice(0,300),createdAt:Date.now()});document.getElementById("text").value=""}catch(e){status.textContent="Mesaj gönderilemedi."}});
 document.getElementById("clear").addEventListener("click",async()=>{if(!confirm("Tüm sohbet mesajları silinsin mi?"))return;try{await remove(messagesRef);box.innerHTML="";status.textContent="Sohbet temizlendi."}catch(e){status.textContent="Sohbet silinemedi."}});
 </script></body></html><button ('http://kralfm.radiostream321.com/', '_blank')">
-  ▶️ Kral FM'i Dinle
+  ▶️ Kral FM'i Dinle</a>
