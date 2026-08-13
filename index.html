@@ -165,7 +165,15 @@ if(m==="yardım" || m==="yardim"){
 return "❓ Komutlar: selam, alkış, yayıncı, Aşk_dr, bravo yayıncı, teşekkürler yayıncı, dans, gül, kalp, kahve, uyku, radyo, bot";
 }
 
-return null;
+const güzelCevaplar = [
+  "😊 Ne güzel bir mesaj! Kral FM Muhabbet'te seninle sohbet etmek gerçekten çok keyifli. Umarım günün güzel sürprizlerle ve bolca mutlulukla geçer. 🌟",
+  "🌸 Çok güzel söyledin! Bazen küçük bir güzel söz bile insanın gününü değiştirebilir. Yüzünden gülümseme, kalbinden güzel duygular eksik olmasın. 😊✨",
+  "💫 Harika! Güzel düşünceler güzel sohbetleri beraberinde getirir. Kral FM Muhabbet'te her zaman neşeli ve keyifli anlar olsun. 🎵❤️",
+  "🍀 Umarım bugün karşına seni mutlu edecek güzel bir haber çıkar. Her yeni gün yeni bir başlangıçtır; güzel şeyler için her zaman umut vardır. 🌈😊",
+  "🎶 Neşen hiç eksilmesin! Güzel müzikler, güzel sohbetler ve güzel insanlar eşliğinde harika bir gün geçirmeni dilerim. ❤️📻"
+];
+
+return güzelCevaplar[Math.floor(Math.random() * güzelCevaplar.length)];
 
 }
 
