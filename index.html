@@ -6,82 +6,19 @@
 <title>Kral FM Muhabbet</title>
 
 <style>
-body{
-  margin:0;
-  background:#111;
-  color:#fff;
-  font-family:Arial,sans-serif
-}
-header{
-  background:#b00000;
-  padding:18px;
-  text-align:center;
-  font-size:24px;
-  font-weight:bold
-}
-main{
-  max-width:760px;
-  margin:auto;
-  padding:15px
-}
-.card{
-  background:#1e1e1e;
-  border-radius:14px;
-  padding:15px;
-  margin-bottom:15px
-}
-#messages{
-  height:52vh;
-  overflow:auto;
-  background:#0b0b0b;
-  border-radius:10px;
-  padding:10px
-}
-.msg{
-  background:#292929;
-  border-radius:9px;
-  padding:9px;
-  margin:7px 0;
-  word-break:break-word
-}
-.name{
-  font-weight:bold;
-  color:#ff5555;
-  margin-right:6px
-}
-form{
-  display:flex;
-  gap:7px;
-  margin-top:10px
-}
-input{
-  flex:1;
-  min-width:0;
-  padding:12px;
-  border:0;
-  border-radius:8px;
-  font-size:16px
-}
-button{
-  border:0;
-  border-radius:8px;
-  padding:12px 15px;
-  background:#e00000;
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer
-}
-#clear{
-  margin-top:12px
-}
-.note{
-  color:#aaa;
-  font-size:13px
-}
-audio{
-  width:100%;
-  margin-top:8px
-}
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif}
+header{background:#b00000;padding:18px;text-align:center;font-size:24px;font-weight:bold}
+main{max-width:760px;margin:auto;padding:15px}
+.card{background:#1e1e1e;border-radius:14px;padding:15px;margin-bottom:15px}
+#messages{height:52vh;overflow:auto;background:#0b0b0b;border-radius:10px;padding:10px}
+.msg{background:#292929;border-radius:9px;padding:9px;margin:7px 0;word-break:break-word}
+.name{font-weight:bold;color:#ff5555;margin-right:6px}
+form{display:flex;gap:7px;margin-top:10px}
+input{flex:1;min-width:0;padding:12px;border:0;border-radius:8px;font-size:16px}
+button{border:0;border-radius:8px;padding:12px 15px;background:#e00000;color:#fff;font-weight:bold;cursor:pointer}
+#clear{margin-top:12px}
+.note{color:#aaa;font-size:13px}
+audio{width:100%;margin-top:8px}
 </style>
 </head>
 
@@ -124,8 +61,7 @@ Tarayıcınız ses oynatmayı desteklemiyor.
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
 getDatabase,
@@ -136,8 +72,7 @@ remove,
 query,
 orderByChild,
 limitToLast
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -154,59 +89,162 @@ const messagesRef=ref(db,"messages");
 const box=document.getElementById("messages");
 const status=document.getElementById("status");
 
+function showMessage(d){
+
+const r=document.createElement("div");
+const n=document.createElement("span");
+const t=document.createElement("span");
+
+r.className="msg";
+n.className="name";
+n.textContent=(d.name||"Misafir")+":";
+t.textContent=d.text||"";
+
+r.append(n,t);
+box.appendChild(r);
+box.scrollTop=box.scrollHeight;
+
+}
+
+function botReply(text){
+
+const m=text.toLocaleLowerCase("tr-TR").trim();
+
+if(m.includes("aşk_dr") || m.includes("aşk dr")){
+return "❤️ Aşk_dr'a kocaman selamlar! 🎙️👏";
+}
+
+if(m.includes("bravo") && (m.includes("yayıncı") || m.includes("yayinci"))){
+return "👏👏 Bravo yayıncımız! Süpersin! 🎉";
+}
+
+if(m.includes("teşekkür") && (m.includes("yayıncı") || m.includes("yayinci"))){
+return "❤️ Emeğine sağlık yayıncımız!";
+}
+
+if(m.includes("yayıncı") || m.includes("yayinci")){
+return "🎙️ Yayıncımıza kocaman alkışlar! 👏👏👏";
+}
+
+if(m.includes("alkış") || m.includes("alkis") || m.includes("👏")){
+return "👏👏👏 Alkışlar yayıncımıza! Harika yayın! 🎙️📻";
+}
+
+if(m.includes("dans")){
+return "💃🕺 Haydi piste!";
+}
+
+if(m.includes("gül") || m.includes("gul")){
+return "😂😂 Ben de güldüm!";
+}
+
+if(m.includes("kalp") || m.includes("❤️")){
+return "❤️ Kral FM sevgisi!";
+}
+
+if(m.includes("kahve")){
+return "☕ Kahveler hazır!";
+}
+
+if(m.includes("uyku")){
+return "😴 Botun pili azalıyor...";
+}
+
+if(m.includes("selam") || m.includes("merhaba")){
+return "👋 Selam! Kral FM Muhabbet'e hoş geldin!";
+}
+
+if(m==="radyo" || m.includes("radyo")){
+return "📻 Kral FM yayında! 🎶";
+}
+
+if(m==="bot" || m.includes("bot")){
+return "🤖 Ben Kral FM Eğlence Botu! Buradayım!";
+}
+
+if(m==="yardım" || m==="yardim"){
+return "❓ Komutlar: selam, alkış, yayıncı, Aşk_dr, bravo yayıncı, teşekkürler yayıncı, dans, gül, kalp, kahve, uyku, radyo, bot";
+}
+
+return null;
+
+}
+
 onChildAdded(
 query(messagesRef,orderByChild("createdAt"),limitToLast(100)),
-s=>{
-  const d=s.val()||{};
-  const r=document.createElement("div");
-  const n=document.createElement("span");
-  const t=document.createElement("span");
+async s=>{
 
-  r.className="msg";
-  n.className="name";
-  n.textContent=(d.name||"Misafir")+":";
-  t.textContent=d.text||"";
+const d=s.val()||{};
 
-  r.append(n,t);
-  box.appendChild(r);
-  box.scrollTop=box.scrollHeight;
+showMessage(d);
+
+if(d.name==="Kral FM Bot 🤖") return;
+
+const reply=botReply(d.text||"");
+
+if(!reply) return;
+
+try{
+
+await push(messagesRef,{
+name:"Kral FM Bot 🤖",
+text:reply,
+createdAt:Date.now()
 });
 
-status.textContent="Sohbet hazır.";
+}catch(e){
+
+console.log("Bot hatası:",e);
+
+}
+
+});
+
+status.textContent="Sohbet hazır. 🤖";
 
 document.getElementById("chatForm").addEventListener("submit",async e=>{
-  e.preventDefault();
 
-  const n=document.getElementById("name").value.trim();
-  const t=document.getElementById("text").value.trim();
+e.preventDefault();
 
-  if(!n||!t)return;
+const n=document.getElementById("name").value.trim();
+const t=document.getElementById("text").value.trim();
 
-  try{
-    await push(messagesRef,{
-      name:n.slice(0,30),
-      text:t.slice(0,300),
-      createdAt:Date.now()
-    });
+if(!n||!t)return;
 
-    document.getElementById("text").value="";
-  }
-  catch(e){
-    status.textContent="Mesaj gönderilemedi.";
-  }
+try{
+
+await push(messagesRef,{
+name:n.slice(0,30),
+text:t.slice(0,300),
+createdAt:Date.now()
+});
+
+document.getElementById("text").value="";
+
+}catch(e){
+
+status.textContent="Mesaj gönderilemedi.";
+
+}
+
 });
 
 document.getElementById("clear").addEventListener("click",async()=>{
-  if(!confirm("Tüm sohbet mesajları silinsin mi?"))return;
 
-  try{
-    await remove(messagesRef);
-    box.innerHTML="";
-    status.textContent="Sohbet temizlendi.";
-  }
-  catch(e){
-    status.textContent="Sohbet silinemedi.";
-  }
+if(!confirm("Tüm sohbet mesajları silinsin mi?"))return;
+
+try{
+
+await remove(messagesRef);
+box.innerHTML="";
+status.textContent="Sohbet temizlendi.";
+
+}catch(e){
+
+status.textContent="Sohbet silinemedi.";
+
+}
+
 });
 
 </script>
