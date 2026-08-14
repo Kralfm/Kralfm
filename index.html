@@ -12,9 +12,14 @@ main{max-width:760px;margin:auto;padding:15px}
 .card{background:#1e1e1e;border-radius:14px;padding:15px;margin-bottom:15px}
 #messages{height:52vh;overflow:auto;background:#0b0b0b;border-radius:10px;padding:10px}
 .msg{background:#292929;border-radius:9px;padding:9px;margin:7px 0;word-break:break-word}
-.name{font-weight:bold;color:#ff5555;margin-right:6px}
-form{display:flex;gap:7px;margin-top:10px}
-input{flex:1;min-width:0;padding:12px;border:0;border-radius:8px;font-size:16px}
+.name{font-weight:bold;margin-right:6px}
+form{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+input[type="text"]{flex:1;min-width:0;padding:12px;border:0;border-radius:8px;font-size:16px}
+/* Renk Seçici Kutusu Stili */
+.color-picker-wrapper{display:flex;align-items:center;background:#292929;padding:0 8px;border-radius:8px;gap:5px;font-size:13px;color:#aaa}
+input[type="color"]{-webkit-appearance:none;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;background:none}
+input[type="color"]::-webkit-color-swatch-wrapper{padding:0}
+input[type="color"]::-webkit-color-swatch{border:none;border-radius:50%}
 button{border:0;border-radius:8px;padding:12px 15px;background:#e00000;color:#fff;font-weight:bold;cursor:pointer}
 #clear{margin-top:12px}
 .note{color:#aaa;font-size:13px}
@@ -27,21 +32,20 @@ audio{width:100%;margin-top:8px}
 <header>🎙️ Kral FM Muhabbet</header>
 
 <main>
+
 <div class="card">
 <h2>📻 Kral FM</h2>
 
+<!-- Listen2myradio HTTPS Düzeltmeli Oynatıcı -->
+<audio controls preload="none">
+  <source src="https://corsproxy.io/?https://uk15freenew.listen2myradio.com/live.mp3?typeportmount=s1_5251_stream_199828082" type="audio/mpeg">
+  Tarayıcınız ses oynatıcısını desteklemiyor.
+</audio>
 
-
-<a href="http://kralfm.radio12345.com/" target="_blank" rel="noopener">
-<button type="button">📻 Kral FM'i Dinle</button>
-</a>
-
-<p class="note">▶ Kral FM'i dinlemek için butona basabilirsiniz.</p>
+<p class="note">▶ Oynat düğmesine basarak Kral FM'i dinleyebilirsiniz.</p>
 </div>
 
 <div class="card">
-
-
 
 <h2>💬 Canlı Muhabbet</h2>
 
@@ -49,6 +53,13 @@ audio{width:100%;margin-top:8px}
 
 <form id="chatForm">
 <input id="name" maxlength="30" placeholder="Adınız" required>
+
+<!-- Kullanıcı İsim Rengi Seçici -->
+<div class="color-picker-wrapper" title="İsim Renginizi Seçin">
+  <span>Renk:</span>
+  <input id="userColor" type="color" value="#ff5555">
+</div>
+
 <input id="text" maxlength="300" placeholder="Mesajınız" required>
 <button type="submit">Gönder</button>
 </form>
@@ -99,6 +110,10 @@ const t=document.createElement("span");
 
 r.className="msg";
 n.className="name";
+
+// Seçilen özel rengi isme uygula
+n.style.color = d.color || "#ff5555";
+
 n.textContent=(d.name||"Misafir")+":";
 t.textContent=d.text||"";
 
@@ -190,6 +205,7 @@ try{
 await push(messagesRef,{
 name:"Kral FM Bot 🤖",
 text:reply,
+color:"#00e676", // Botun mesaj ismi için yeşil renk
 createdAt:Date.now()
 });
 
@@ -209,6 +225,7 @@ e.preventDefault();
 
 const n=document.getElementById("name").value.trim();
 const t=document.getElementById("text").value.trim();
+const c=document.getElementById("userColor").value; // Seçilen renk
 
 if(!n||!t)return;
 
@@ -217,6 +234,7 @@ try{
 await push(messagesRef,{
 name:n.slice(0,30),
 text:t.slice(0,300),
+color:c, // Rengi veritabanına kaydet
 createdAt:Date.now()
 });
 
@@ -249,7 +267,6 @@ status.textContent="Sohbet silinemedi.";
 
 </script>
 
-  
-
 </body>
 </html>
+
