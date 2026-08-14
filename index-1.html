@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kral FM Muhabbet</title>
+<style>
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif}
+header{background:#b00000;padding:18px;text-align:center;font-size:24px;font-weight:bold}
+main{max-width:760px;margin:auto;padding:15px}
+.card{background:#1e1e1e;border-radius:14px;padding:15px;margin-bottom:15px}
+#messages{height:52vh;overflow:auto;background:#0b0b0b;border-radius:10px;padding:10px}
+.msg{background:#292929;border-radius:9px;padding:9px;margin:7px 0;word-break:break-word}
+.name{font-weight:bold;margin-right:6px}
+form{display:flex;gap:7px;margin-top:10px}
+input{flex:1;min-width:0;padding:12px;border:0;border-radius:8px;font-size:16px}
+button{border:0;border-radius:8px;padding:12px 15px;background:#e00000;color:#fff;font-weight:bold;cursor:pointer}
+#clear{margin-top:12px}
+.note{color:#aaa;font-size:13px}
+audio{width:100%;margin-top:8px}
+.colors{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
+.colorBtn{width:30px;height:30px;border-radius:50%;padding:0;border:2px solid transparent;cursor:pointer}
+.colorBtn.selected{border-color:#fff;box-shadow:0 0 0 2px #777}
+</style>
+</head>
+<body>
+<header>🎙️ Kral FM Muhabbet</header>
+<main>
+<div class="card">
+<h2>📻 Kral FM</h2>
+<audio controls>
+<source src="https://uk15freenew.listen2myradio.com/live.mp3?typeportmount=s1_5251_stream_199828082">
+</audio>
+<p class="note">▶ Oynat düğmesine basarak Kral FM'i dinleyebilirsiniz.</p>
+</div>
+
+<div class="card">
+<h2>💬 Canlı Muhabbet</h2>
+<div id="messages"></div>
+
+<form id="chatForm">
+<input id="name" maxlength="30" placeholder="Adınız" required>
+<input id="text" maxlength="300" placeholder="Mesajınız" required>
+<button type="submit">Gönder</button>
+</form>
+
+<div class="colors">
+<span class="note">🎨 İsim rengim:</span>
+<button class="colorBtn selected" data-color="#ff5555" style="background:#ff5555" title="Kırmızı" type="button"></button>
+<button class="colorBtn" data-color="#ff77bb" style="background:#ff77bb" title="Pembe" type="button"></button>
+<button class="colorBtn" data-color="#ff4081" style="background:#ff4081" title="Fuşya" type="button"></button>
+<button class="colorBtn" data-color="#ff9f43" style="background:#ff9f43" title="Turuncu" type="button"></button>
+<button class="colorBtn" data-color="#ff6d00" style="background:#ff6d00" title="Koyu turuncu" type="button"></button>
+<button class="colorBtn" data-color="#ffe066" style="background:#ffe066" title="Sarı" type="button"></button>
+<button class="colorBtn" data-color="#55dd88" style="background:#55dd88" title="Yeşil" type="button"></button>
+<button class="colorBtn" data-color="#8bc34a" style="background:#8bc34a" title="Açık yeşil" type="button"></button>
+<button class="colorBtn" data-color="#80cbc4" style="background:#80cbc4" title="Mint" type="button"></button>
+<button class="colorBtn" data-color="#55dddd" style="background:#55dddd" title="Turkuaz" type="button"></button>
+<button class="colorBtn" data-color="#00bcd4" style="background:#00bcd4" title="Camgöbeği" type="button"></button>
+<button class="colorBtn" data-color="#55aaff" style="background:#55aaff" title="Mavi" type="button"></button>
+<button class="colorBtn" data-color="#90caf9" style="background:#90caf9" title="Açık mavi" type="button"></button>
+<button class="colorBtn" data-color="#7c4dff" style="background:#7c4dff" title="Eflatun" type="button"></button>
+<button class="colorBtn" data-color="#c477ff" style="background:#c477ff" title="Mor" type="button"></button>
+<button class="colorBtn" data-color="#b39ddb" style="background:#b39ddb" title="Lavanta" type="button"></button>
+<button class="colorBtn" data-color="#ffffff" style="background:#ffffff" title="Beyaz" type="button"></button>
+<button class="colorBtn" data-color="#aaaaaa" style="background:#aaaaaa" title="Gri" type="button"></button>
+<button class="colorBtn" data-color="#795548" style="background:#795548" title="Kahverengi" type="button"></button>
+<button class="colorBtn" data-color="#00c853" style="background:#00c853" title="Parlak yeşil" type="button"></button>
+</div>
+
+<button id="clear" type="button">🗑️ Sohbeti Temizle</button>
+<p id="status" class="note">Bağlanıyor...</p>
+</div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+getDatabase,
+ref,
+push,
+onChildAdded,
+remove,
+query,
+orderByChild,
+limitToLast
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
+const firebaseConfig={
+apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
+authDomain:"kralfm-muhabbet.firebaseapp.com",
+databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",
+projectId:"kralfm-muhabbet",
+storageBucket:"kralfm-muhabbet.firebasestorage.app",
+messagingSenderId:"638769846511",
+appId:"1:638769846511:web:f6d8abb91564873996"
+};
+
+const db=getDatabase(initializeApp(firebaseConfig));
+const messagesRef=ref(db,"messages");
+const box=document.getElementById("messages");
+const status=document.getElementById("status");
+let myColor="#ff5555";
+
+function showMessage(d){
+const r=document.createElement("div");
+const n=document.createElement("span");
+const t=document.createElement("span");
+r.className="msg";
+n.className="name";
+n.style.color=d.color||"#ff5555";
+n.textContent=(d.name||"Misafir")+":";
+t.textContent=d.text||"";
+r.append(n,t);
+box.appendChild(r);
+box.scrollTop=box.scrollHeight;
+}
+
+function botReply(text){
+const m=text.toLocaleLowerCase("tr-TR").trim();
+
+if(m.includes("aşk_dr") || m.includes("aşk dr")) return "❤️ Aşk_dr'a kocaman selamlar! 🎙️👏";
+if(m.includes("bravo") && (m.includes("yayıncı") || m.includes("yayinci"))) return "👏👏 Bravo yayıncımız! Süpersin! 🎉";
+if(m.includes("teşekkür") && (m.includes("yayıncı") || m.includes("yayinci"))) return "❤️ Emeğine sağlık yayıncımız!";
+if(m.includes("yayıncı") || m.includes("yayinci")) return "🎙️ Yayıncımıza kocaman alkışlar! 👏👏👏";
+if(m.includes("alkış") || m.includes("alkis") || m.includes("👏")) return "👏👏👏 Alkışlar yayıncımıza! Harika yayın! 🎙️📻";
+if(m.includes("dans")) return "💃🕺 Haydi piste!";
+if(m.includes("gül") || m.includes("gul")) return "😂😂 Ben de güldüm!";
+if(m.includes("kalp") || m.includes("❤️")) return "❤️ Kral FM sevgisi!";
+if(m.includes("kahve")) return "☕ Kahveler hazır!";
+if(m.includes("uyku")) return "😴 Botun pili azalıyor...";
+if(m.includes("selam") || m.includes("merhaba")) return "👋 Selam! Kral FM Muhabbet'e hoş geldin!";
+if(m==="radyo" || m.includes("radyo")) return "📻 Kral FM yayında! 🎶";
+if(m==="bot" || m.includes("bot")) return "🤖 Ben Kral FM Eğlence Botu! Buradayım!";
+if(m==="yardım" || m==="yardim") return "❓ Komutlar: selam, alkış, yayıncı, Aşk_dr, bravo yayıncı, teşekkürler yayıncı, dans, gül, kalp, kahve, uyku, radyo, bot";
+return null;
+}
+
+onChildAdded(
+query(messagesRef,orderByChild("createdAt"),limitToLast(100)),
+async s=>{
+const d=s.val()||{};
+showMessage(d);
+if(d.name==="Kral FM Bot 🤖") return;
+const reply=botReply(d.text||"");
+if(!reply) return;
+try{
+await push(messagesRef,{
+name:"Kral FM Bot 🤖",
+text:reply,
+color:"#ffd700",
+createdAt:Date.now()
+});
+}catch(e){
+console.log("Bot hatası:",e);
+}
+});
+
+status.textContent="Sohbet hazır. 🤖";
+
+document.querySelectorAll(".colorBtn").forEach(btn=>{
+btn.addEventListener("click",()=>{
+myColor=btn.dataset.color;
+document.querySelectorAll(".colorBtn").forEach(b=>b.classList.remove("selected"));
+btn.classList.add("selected");
+status.textContent="İsim renginiz seçildi: "+btn.title+" 🎨";
+});
+});
+
+document.getElementById("chatForm").addEventListener("submit",async e=>{
+e.preventDefault();
+const n=document.getElementById("name").value.trim();
+const t=document.getElementById("text").value.trim();
+if(!n||!t)return;
+try{
+await push(messagesRef,{
+name:n.slice(0,30),
+text:t.slice(0,300),
+color:myColor,
+createdAt:Date.now()
+});
+document.getElementById("text").value="";
+}catch(e){
+status.textContent="Mesaj gönderilemedi.";
+}
+});
+
+document.getElementById("clear").addEventListener("click",async()=>{
+if(!confirm("Tüm sohbet mesajları silinsin mi?"))return;
+try{
+await remove(messagesRef);
+box.innerHTML="";
+status.textContent="Sohbet temizlendi.";
+}catch(e){
+status.textContent="Sohbet silinemedi.";
+}
+});
+</script>
+</body>
+</html>
