@@ -243,27 +243,10 @@ status.textContent="Sohbet silinemedi.";
 
 }
 
-});
-<div id="colorPicker" style="margin:10px 0;">
-  <label>🎨 Yazı rengin: </label>
-  <input type="color" id="userColor" value="#000000">
-</div>
 
-<script>
-const colorPicker = document.getElementById("userColor");
-
-colorPicker.addEventListener("input", function () {
-  localStorage.setItem("kralfmUserColor", this.value);
-});
-
-const savedColor = localStorage.getItem("kralfmUserColor");
-if (savedColor) {
-  colorPicker.value = savedColor;
-}
 </script>
 
   
-</script>
 
 </body>
 </html>
