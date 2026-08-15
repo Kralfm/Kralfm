@@ -243,13 +243,14 @@ let hasJoined = false;
 let welcomedUsers = new Set(); 
 let lastActivityTime = Date.now();
 
-status.textContent = "Sohbet hazır. 🤖";
+status.textContent = "Sohbet aktif ve hazır. 🤖";
 
 function getTimeString(timestamp) {
   return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 }
 
 function showMessage(d) {
+  if (!d) return;
   const r = document.createElement("div");
   const timeSpan = document.createElement("span");
   const isBot = d.type === "bot";
@@ -384,21 +385,28 @@ async function announceJoin(username) {
   if (hasJoined || !username) return;
   hasJoined = true;
 
-  await push(messagesRef, {
-    text: `🚪 ${username} sohbet odasına katıldı.`,
-    type: "system",
-    createdAt: Date.now()
-  });
+  try {
+    await push(messagesRef, {
+      text: `🚪 ${username} sohbet odasına katıldı.`,
+      type: "system",
+      createdAt: Date.now()
+    });
 
-  const leaveMsgRef = push(messagesRef);
-  onDisconnect(leaveMsgRef).set({
-    text: `🚪 ${username} sohbet odasından ayrıldı.`,
-    type: "system",
-    createdAt: Date.now()
-  });
+    const leaveMsgRef = push(messagesRef);
+    onDisconnect(leaveMsgRef).set({
+      text: `🚪 ${username} sohbet odasından ayrıldı.`,
+      type: "system",
+      createdAt: Date.now()
+    });
+  } catch (err) {
+    console.error("Katılımcı duyurusu hatası:", err);
+  }
 }
 
-onChildAdded(messagesRef, s => showMessage(s.val() || {}));
+// Mesajları dinle
+onChildAdded(messagesRef, s => {
+  showMessage(s.val());
+});
 
 document.getElementById("chatForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -413,21 +421,23 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
   lastActivityTime = Date.now();
   if (!hasJoined) await announceJoin(n);
 
-  // Önce kullanıcı mesajını gönder
-  await push(messagesRef, {
-    name: n, text: t, color: c, avatar: a, type: "user", createdAt: Date.now()
-  });
+  try {
+    await push(messagesRef, {
+      name: n, text: t, color: c, avatar: a, type: "user", createdAt: Date.now()
+    });
 
-  // Bot yanıt mantığı doğrudan tetikleniyor
-  const isFirst = !welcomedUsers.has(n.toLowerCase());
-  const botReply = getBotReply(t, n, isFirst);
-  
-  if (botReply) {
-    setTimeout(async () => {
-      await push(messagesRef, {
-        name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
-      });
-    }, 600);
+    const isFirst = !welcomedUsers.has(n.toLowerCase());
+    const botReply = getBotReply(t, n, isFirst);
+    
+    if (botReply) {
+      setTimeout(async () => {
+        await push(messagesRef, {
+          name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
+        });
+      }, 600);
+    }
+  } catch (err) {
+    alert("Mesaj gönderilemedi, lütfen tekrar deneyin.");
   }
 
   textInput.value = "";
@@ -438,17 +448,21 @@ async function sendQuickMessage(textMsg, type = "user") {
   lastActivityTime = Date.now();
   if (!hasJoined && nameInput.value.trim()) await announceJoin(n);
 
-  await push(messagesRef, {
-    name: n, text: textMsg, color: colorInput.value, avatar: avatarInput.value, type: type, createdAt: Date.now()
-  });
+  try {
+    await push(messagesRef, {
+      name: n, text: textMsg, color: colorInput.value, avatar: avatarInput.value, type: type, createdAt: Date.now()
+    });
 
-  const botReply = getBotReply(textMsg, n, false);
-  if (botReply) {
-    setTimeout(async () => {
-      await push(messagesRef, {
-        name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
-      });
-    }, 600);
+    const botReply = getBotReply(textMsg, n, false);
+    if (botReply) {
+      setTimeout(async () => {
+        await push(messagesRef, {
+          name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
+        });
+      }, 600);
+    }
+  } catch (err) {
+    console.error("Hızlı mesaj hatası:", err);
   }
 }
 
@@ -478,16 +492,4 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
   requestModal.style.display = "none";
 });
 
-document.getElementById("clear").addEventListener("click", async () => {
-  try {
-    await remove(messagesRef);
-    box.innerHTML = "";
-  } catch (error) {
-    box.innerHTML = "";
-  }
-});
-
-const simulatedUsers = [
-  { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
-  { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
-  { 
+document.getElementById("clear").addEventListen
