@@ -51,6 +51,19 @@ main{max-width:850px;margin:auto;padding:15px}
 .bot-badge { background: #7c3aed; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
 .msg.system-msg{ background:#222; border:1px dashed #555; color:#aaa; font-style:italic; font-size:13px; text-align:center }
 
+/* Bize özel seslenildiğinde çıkacak parlayan ışık efekti */
+.msg.mentioned-msg {
+  background: linear-gradient(135deg, #451a03 0%, #78350f 100%) !important;
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+  animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.4); }
+  100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.9); }
+}
+
 .time{ font-size:11px; color:#888; margin-right:6px }
 .avatar{ margin-right:4px; font-size:16px }
 .name{ font-weight:bold; color:#ff5555; margin-right:6px }
@@ -135,6 +148,11 @@ button.request-btn { background: #047857; border-color: #10b981; }
       <option value="🕶️">🕶️ Karizmatik</option>
       <option value="👑">👑 Kral</option>
       <option value="☕">☕ Kahve</option>
+      <option value="🎶">🎶 Nota</option>
+      <option value="🎙️">🎙️ Mikrofon</option>
+      <option value="🌟">🌟 Yıldız</option>
+      <option value="🎧">🎧 Kulaklık</option>
+      <option value="🎉">🎉 Parti</option>
     </select>
     
     <input type="color" id="userColor" value="#ff5555" title="Renk Seç">
@@ -255,7 +273,18 @@ function showMessage(d) {
   const n = document.createElement("span");
   const t = document.createElement("span");
 
-  if(d.type === "applause") {
+  // Kendi adımıza seslenilip seslenilmediğini kontrol etme
+  const myCurrentName = nameInput.value.trim().toLowerCase();
+  const messageTextLower = (d.text || "").toLowerCase();
+  const isMentioned = myCurrentName && (
+    messageTextLower.includes(`@${myCurrentName}`) || 
+    messageTextLower.includes(myCurrentName)
+  ) && d.name.toLowerCase() !== myCurrentName;
+
+  if (isMentioned) {
+    r.className = "msg mentioned-msg"; // Bize özel parlayan şık ışık efekti
+    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
+  } else if(d.type === "applause") {
     r.className = "msg applause-msg";
     if(isSoundEnabled) { applauseAudio.currentTime = 0; applauseAudio.play().catch(()=>{}); }
   } else if (d.type === "request") {
@@ -297,7 +326,25 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return `👋 Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler! 🎧☕`;
   }
 
-  // İSTEK YAPILDIĞINDA ÖZEL BOT YANITI
+  // HERKESE KAHVE İKRAMI
+  if (m.includes("@herkes") && m.includes("kahve")) {
+    return `☕ Hey herkes duydu! @${userName} odadaki herkese bol köpüklü taze kahve ikram etti! Afiyet olsun dostlar! 😋✨`;
+  }
+
+  // KİŞİYE KAHVE ISMARLAMA (@kullanici kahve)
+  if (m.includes("kahve") && m.includes("@")) {
+    return `☕ Müjde! @${userName}, sohbet arkadaşına tatlı bir kahve ısmarladı, afiyet olsun! ☕✨`;
+  }
+
+  // TATLI SELAMLAŞMALAR
+  if (m.includes("selam") || m.includes("selamün aleyküm") || m.includes("selamunaleyküm") || m === "sa") {
+    return getRandomReply([
+      `🌸 Aleykümselam Sayın @${userName}, hoş geldin! Sefalar getirdin, keyifli dinlemeler ve sohbetler dileriz! 📻☕`,
+      `🎙️ Aleykümselam @${userName}! Kulaklarımız sende, muhabbetin daim olsun dostum! 🎶✨`,
+      `☕ Ve aleykümselam hoş geldin @${userName}! Hemen sana mis gibi bir kahve kapıp geliyorum! 🌟`
+    ]);
+  }
+
   if (text.includes("İSTEK PARÇA:")) {
     return getRandomReply([
       `🎵 Harika bir parça seçimi Sayın @${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı, keyifli dinlemeler! 🎧✨`,
@@ -307,11 +354,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
   }
 
   if (m.includes("komut") || m.includes("yardım")) {
-    return `📜 Hızlı butonları kullanabilir veya 'kahve', 'selam', 'istek', 'bot nasılsın' yazabilirsiniz!`;
-  }
-
-  if (m.includes("selam") || m.includes("slm") || m === "sa") {
-    return `🌸 Aleykümselam Sayın @${userName}, hoş geldin! 📻✨`;
+    return `📜 Hızlı butonları kullanabilir veya 'kahve', 'selam', 'istek' yazabilirsiniz!`;
   }
 
   if (m.includes("kahve") || m.includes("☕")) {
