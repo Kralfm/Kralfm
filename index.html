@@ -291,7 +291,7 @@ button[type="submit"] {
 <div class="card">
   <div class="chat-header-flex">
     <h2 style="margin:0;">💬 Canlı Muhabbet</h2>
-    <div class="online-counter" id="onlineCount">🟢 Çevrimiçi: 1</div>
+    <div class="online-counter" id="onlineCount">🟢 Çevrimiçi: 0</div>
   </div>
 
   <div id="messages"></div>
@@ -339,7 +339,8 @@ import {
   startAt,
   onDisconnect,
   onValue,
-  set
+  set,
+  remove
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -355,7 +356,6 @@ const firebaseConfig = {
 const db = getDatabase(initializeApp(firebaseConfig));
 const messagesRef = ref(db, "messages");
 const onlineRef = ref(db, "online_users");
-const connectedRef = ref(db, ".info/connected");
 
 const box = document.getElementById("messages");
 const status = document.getElementById("status");
@@ -366,17 +366,22 @@ const radioAudio = document.getElementById("radioAudio");
 const toggleRadioBtn = document.getElementById("toggleRadio");
 const onlineCountEl = document.getElementById("onlineCount");
 
-// --- ÇEVRİMİÇİ KULLANICI TAKİP SİSTEMİ ---
-onValue(connectedRef, (snap) => {
-  if (snap.val() === true) {
-    const myUserRef = push(onlineRef);
-    set(myUserRef, true);
-    onDisconnect(myUserRef).remove();
-  }
-});
+// --- ÇEVRİMİÇİ KULLANICI SAYICI (DÜZELTİLDİ) ---
+let myUserSessionRef = null;
 
+function trackOnlineUser(userName) {
+  if (myUserSessionRef) return; // Zaten odaya eklenmişse tekrar ekleme
+  
+  myUserSessionRef = push(onlineRef);
+  set(myUserSessionRef, { name: userName, joinedAt: Date.now() });
+
+  // Sekme kapandığında veya ayrıldığında sayı otomatik düşer
+  onDisconnect(myUserSessionRef).remove();
+}
+
+// Çevrimiçi olanları anlık takip et
 onValue(onlineRef, (snap) => {
-  const count = snap.exists() ? Object.keys(snap.val()).length : 1;
+  const count = snap.exists() ? Object.keys(snap.val()).length : 0;
   onlineCountEl.textContent = `🟢 Çevrimiçi: ${count}`;
 });
 
@@ -464,15 +469,12 @@ function getRandomReply(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// SADECE VE SADECE İÇİNDE "BOT" GEÇEN MESAJLARA CEVAP VERİR
+// --- BOT CEVAP SİSTEMİ (İSTEKLER DÜZELTİLDİ) ---
 function getBotReply(text, userName) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
 
-  // "bot" geçmiyorsa sessiz kalır
-  if (!m.includes("bot")) return null;
-
-  // --- İSTEK ŞARKI TESPİTİ ---
-  if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki")) {
+  // 1. İSTEK CEVABI (Mesajda "bot" şartı aranmaz, direkt cevap verir)
+  if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki") || m.includes("parça")) {
     return getRandomReply([
       `🎵 Harika seçim Sayın ${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı. Kral FM ailesi olarak keyifli dinlemeler dileriz! 🎧☕`,
       `🎶 İstek notunuzu aldık ${userName}! Yayıncımız birazdan şarkınızı sırayla buluşturacak. Radyonuz açık, çayınız demli olsun! Keyifli dinlemeler! 📻✨`,
@@ -480,7 +482,9 @@ function getBotReply(text, userName) {
     ]);
   }
 
-  // --- DİĞER BOT YANITLARI ---
+  // 2. SADECE İÇİNDE "BOT" GEÇEN DİĞER MESAJLAR
+  if (!m.includes("bot")) return null;
+
   if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
     return getRandomReply([
       `👋 Selam ${userName}! Bana mı seslendin? Radyo Kral FM dinlerken buradayım! 💜`,
@@ -513,6 +517,9 @@ function getBotReply(text, userName) {
 async function announceJoin(username) {
   if (hasJoined || !username) return;
   hasJoined = true;
+
+  // Çevrimiçi sayacına kullanıcıyı kaydet
+  trackOnlineUser(username);
 
   await push(messagesRef, {
     text: `🚪 ${username} sohbet odasına katıldı.`,
