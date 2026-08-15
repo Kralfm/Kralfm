@@ -305,7 +305,8 @@ button.applause-btn:hover { background: #b45309; }
 
   <div id="messages"></div>
 
-  <form id="chatForm">
+  <!-- Otomatik doldurmayı kapatan parametreler eklendi -->
+  <form id="chatForm" autocomplete="off">
     <select id="userAvatar" title="Avatarınızı Seçin">
       <option value="👩">👩 Kadın</option>
       <option value="👨">👨 Erkek</option>
@@ -326,8 +327,8 @@ button.applause-btn:hover { background: #b45309; }
     </select>
     
     <input type="color" id="userColor" value="#ff5555" title="İsim Renginizi Seçin">
-    <input type="text" id="name" maxlength="30" placeholder="Adınız" required>
-    <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
+    <input type="text" id="name" maxlength="30" placeholder="Adınız" autocomplete="off" name="chat_username_field" autocorrect="off" autocapitalize="off" required>
+    <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." autocomplete="off" name="chat_message_field" autocorrect="off" autocapitalize="off" required>
 
     <button type="submit">Gönder</button>
   </form>
@@ -611,17 +612,4 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
   const n = nameInput.value.trim();
   const c = colorInput.value;
   const a = avatarInput.value;
-  const t = textInput.value.trim();
-
-  if(!n || !t) return;
-
-  const isFirstMsg = !hasJoined;
-  if (!hasJoined) await announceJoin(n);
-
-  try {
-    await push(messagesRef, {
-      name: n.slice(0, 30),
-      color: c,
-      avatar: a,
-      text: t.slice(0, 300),
-      createdAt: 
+  const t = textInput.value.trim(
