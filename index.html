@@ -136,24 +136,24 @@ main{max-width:850px;margin:auto;padding:15px}
 .play-btn:hover { filter: brightness(1.1); }
 .play-btn:active { transform: scale(0.98); }
 
-/* --- KÜÇÜK PENCEREDE AÇILAN HARİCİ LINK STİLİ --- */
-.external-link { 
+/* --- UFAK PENCERE BUTONU STİLİ --- */
+.popup-btn { 
   display: inline-block; 
   margin-top: 14px; 
-  padding: 8px 16px;
-  background: rgba(255, 0, 0, 0.15);
+  padding: 10px 20px;
+  background: rgba(255, 0, 0, 0.2);
   border: 1px solid #ff3333;
   border-radius: 8px;
-  color: #ff4d4d; 
-  text-decoration: none; 
+  color: #ff6666; 
   font-size: 14px; 
   font-weight: bold; 
+  cursor: pointer;
   transition: all 0.2s ease;
 }
-.external-link:hover { 
+.popup-btn:hover { 
   background: #ff3333;
   color: #fff;
-  box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+  box-shadow: 0 0 12px rgba(255, 51, 51, 0.6);
 }
 
 /* --- SOHBET VE MESAJ ALANI STİLLERİ --- */
@@ -176,12 +176,19 @@ main{max-width:850px;margin:auto;padding:15px}
   line-height: 1.4;
 }
 
-/* --- BOT MESAJ TASARIMI --- */
+/* --- BOT VE ALKIŞ MESAJ TASARIMI --- */
 .msg.bot-msg {
   background: linear-gradient(135deg, #1e1b4b 0%, #31103f 100%);
   border: 1px solid #7c3aed;
   border-left: 5px solid #a855f7;
   box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+}
+
+.msg.applause-msg {
+  background: linear-gradient(135deg, #3f2b10 0%, #2a1a08 100%);
+  border: 1px solid #f59e0b;
+  color: #fef08a;
+  font-weight: bold;
 }
 
 .bot-badge {
@@ -254,7 +261,28 @@ button[type="submit"] {
   cursor: pointer;
 }
 
-#clear { margin-top: 12px; background: #444; color: #fff; border: 0; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+.action-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+button.action-btn {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+button.action-btn:hover { background: #444; }
+button.applause-btn { background: #d97706; border-color: #f59e0b; color: #fff; }
+button.applause-btn:hover { background: #b45309; }
+
 .note { color: #aaa; font-size: 13px; }
 </style>
 </head>
@@ -285,10 +313,9 @@ button[type="submit"] {
   <audio id="radioAudio" preload="none"></audio>
   <button type="button" class="play-btn" id="toggleRadio">▶ Radyoyu Başlat</button>
   <br>
-  <!-- Küçük pencere olarak açılması sağlandı -->
-  <a href="http://kralfm.radio12345.com/" 
-     onclick="window.open(this.href, 'KralFMPopup', 'width=520,height=420,resizable=yes,scrollbars=yes'); return false;" 
-     class="external-link">📻 KralFM Harici Pencerede Dinle</a>
+  
+  <!-- GARANTİLİ UFAK PENCERE BUTONU -->
+  <button type="button" id="openMiniPlayer" class="popup-btn">📻 KralFM Ufak Pencerede Aç</button>
 </div>
 
 <div class="card">
@@ -322,10 +349,17 @@ button[type="submit"] {
     <button type="submit">Gönder</button>
   </form>
 
-  <button id="clear" type="button">🗑️ Ekranı Temizle</button>
+  <div class="action-btns">
+    <button id="sendApplause" type="button" class="action-btn applause-btn">👏 Alkış Gönder</button>
+    <button id="clear" type="button" class="action-btn">🗑️ Ekranı Temizle</button>
+  </div>
+
   <p id="status" class="note">Bağlanıyor...</p>
 </div>
 </main>
+
+<!-- ÇALIŞAN ALKIŞ SESİ SES DOSYASI -->
+<audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -360,6 +394,16 @@ const colorInput = document.getElementById("userColor");
 const avatarInput = document.getElementById("userAvatar");
 const radioAudio = document.getElementById("radioAudio");
 const toggleRadioBtn = document.getElementById("toggleRadio");
+const applauseAudio = document.getElementById("applauseSound");
+
+// --- UFAK PENCERE AÇMA İŞLEVİ ---
+document.getElementById("openMiniPlayer").addEventListener("click", () => {
+  window.open(
+    "http://kralfm.radio12345.com/",
+    "KralFMPopupWindow",
+    "width=500,height=380,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no"
+  );
+});
 
 // HLS Radyo Yayın Ayarı
 const streamUrl = "https://ssllive.kralfm.com.tr/kralfm/kralfm.stream/playlist.m3u8";
@@ -380,7 +424,7 @@ toggleRadioBtn.addEventListener("click", () => {
       toggleRadioBtn.textContent = "⏸️ Radyoyu Durdur";
       toggleRadioBtn.style.background = "linear-gradient(180deg, #444 0%, #222 100%)";
     }).catch(() => {
-      window.open("http://kralfm.radio12345.com/", "KralFMPopup", "width=520,height=420");
+      document.getElementById("openMiniPlayer").click();
     });
   } else {
     radioAudio.pause();
@@ -418,7 +462,15 @@ function showMessage(d, isBot = false) {
   const n = document.createElement("span");
   const t = document.createElement("span");
 
-  r.className = isBot ? "msg bot-msg" : "msg";
+  if(d.type === "applause") {
+    r.className = "msg applause-msg";
+    // Alkış gelince sesi çal
+    applauseAudio.currentTime = 0;
+    applauseAudio.play().catch(()=>{});
+  } else {
+    r.className = isBot ? "msg bot-msg" : "msg";
+  }
+
   n.className = isBot ? "name bot-name" : "name";
   
   if(!isBot && d.color) {
@@ -549,6 +601,28 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
   } catch(e) {
     status.textContent = "Mesaj gönderilemedi.";
+  }
+});
+
+// --- ALKIŞ GÖNDERME BUTONU ---
+document.getElementById("sendApplause").addEventListener("click", async () => {
+  const n = nameInput.value.trim() || "Bir Dinleyici";
+  const c = colorInput.value;
+  const a = avatarInput.value;
+
+  if (!hasJoined && nameInput.value.trim()) await announceJoin(n);
+
+  try {
+    await push(messagesRef, {
+      name: n,
+      color: c,
+      avatar: a,
+      text: "👏 harika bir alkış gönderdi! 👏👏👏",
+      type: "applause",
+      createdAt: Date.now()
+    });
+  } catch(e) {
+    status.textContent = "Alkış gönderilemedi.";
   }
 });
 
