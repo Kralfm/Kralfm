@@ -51,7 +51,7 @@ main{max-width:850px;margin:auto;padding:15px}
 .bot-badge { background: #7c3aed; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
 .msg.system-msg{ background:#222; border:1px dashed #555; color:#aaa; font-style:italic; font-size:13px; text-align:center }
 
-/* Bize özel seslenildiğinde çıkacak parlayan ışık efekti */
+/* Bize özel seslenildiğinde çıkacak parlayan şık ışık efekti */
 .msg.mentioned-msg {
   background: linear-gradient(135deg, #451a03 0%, #78350f 100%) !important;
   border: 2px solid #f59e0b !important;
@@ -273,11 +273,12 @@ function showMessage(d) {
   const n = document.createElement("span");
   const t = document.createElement("span");
 
-  // Kendi adımıza seslenilip seslenilmediğini kontrol etme
+  // Kendi adımıza seslenilip seslenilmediğini kontrol etme (@ veya & ile)
   const myCurrentName = nameInput.value.trim().toLowerCase();
   const messageTextLower = (d.text || "").toLowerCase();
   const isMentioned = myCurrentName && (
     messageTextLower.includes(`@${myCurrentName}`) || 
+    messageTextLower.includes(`&${myCurrentName}`) ||
     messageTextLower.includes(myCurrentName)
   ) && d.name.toLowerCase() !== myCurrentName;
 
@@ -321,6 +322,11 @@ function getRandomReply(arr) {
 function getBotReply(text, userName, isFirstMessage = false) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
 
+  // Botun kendi kendine cevap vermesini engelle
+  if (userName.toLowerCase() === "kral bot") {
+    return null;
+  }
+
   if (isFirstMessage && !welcomedUsers.has(userName.toLowerCase())) {
     welcomedUsers.add(userName.toLowerCase());
     return `👋 Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler! 🎧☕`;
@@ -331,17 +337,27 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return `☕ Hey herkes duydu! @${userName} odadaki herkese bol köpüklü taze kahve ikram etti! Afiyet olsun dostlar! 😋✨`;
   }
 
-  // KİŞİYE KAHVE ISMARLAMA (@kullanici kahve)
-  if (m.includes("kahve") && m.includes("@")) {
+  // KİŞİYE KAHVE ISMARLAMA
+  if (m.includes("kahve") && (m.includes("@") || m.includes("&"))) {
     return `☕ Müjde! @${userName}, sohbet arkadaşına tatlı bir kahve ısmarladı, afiyet olsun! ☕✨`;
   }
 
-  // TATLI SELAMLAŞMALAR
+  // SELAM YAZILDIĞINDA "Aleykümselam" İLE KARŞILAMA
   if (m.includes("selam") || m.includes("selamün aleyküm") || m.includes("selamunaleyküm") || m === "sa") {
+    return `Aleykümselam @${userName}`;
+  }
+
+  // MERHABA YAZILDIĞINDA "Merhaba" İLE KARŞILAMA
+  if (m.includes("merhaba") || m.includes("mrb")) {
+    return `Merhaba @${userName}`;
+  }
+
+  // BOT KENDİSİNE VEYA MESAJLARA YANIT VERDİĞİNDE
+  if (m.includes("bot") || m.includes("kral bot")) {
     return getRandomReply([
-      `🌸 Aleykümselam Sayın @${userName}, hoş geldin! Sefalar getirdin, keyifli dinlemeler ve sohbetler dileriz! 📻☕`,
-      `🎙️ Aleykümselam @${userName}! Kulaklarımız sende, muhabbetin daim olsun dostum! 🎶✨`,
-      `☕ Ve aleykümselam hoş geldin @${userName}! Hemen sana mis gibi bir kahve kapıp geliyorum! 🌟`
+      `🤖 Buyurayın Sayın @${userName}, seni dinliyorum! Radyo ve sohbet nasıl gidiyor? 📻✨`,
+      `Efendim @${userName}? Kral FM'in en sadık dinleyicilerinden biri olduğunu biliyorum! 🎧☕`,
+      `Buradayım @${userName}! İstek parça ya da kahve ikramı için yardımcı olabilirim! 🎶`
     ]);
   }
 
@@ -469,50 +485,4 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
   await sendQuickMessage(requestText, "request");
 
   document.getElementById("songArtist").value = "";
-  document.getElementById("songTitle").value = "";
-  requestModal.style.display = "none";
-});
-
-document.getElementById("clear").addEventListener("click", () => box.innerHTML = "");
-
-const simulatedUsers = [
-  { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
-  { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
-  { name: "NostaljiKralı", avatar: "👑", color: "#f1c40f" },
-  { name: "GeceYildizi", avatar: "🌟", color: "#9b59b6" },
-  { name: "KahveSever", avatar: "☕", color: "#d35400" }
-];
-
-const simulatedMessages = [
-  "Keyifli dinlemeler herkese ☕ Harika bir parça çalıyor!",
-  "Radyonun sesini biraz daha açtım, bu şarkı efsane 🎶🔥",
-  "Herkese iyi akşamlar, muhabbetiniz bol olsun dostlar ✨",
-  "Ağzına sağlık yayıncım, süper gidiyor 📻",
-  "Odadaki herkese benden bol köpüklü kahve ikramı ☕😋"
-];
-
-function startIdleSimulation() {
-  setInterval(async () => {
-    const now = Date.now();
-    if (now - lastActivityTime > 180000) {
-      const randomUser = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
-      const randomMsg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
-
-      await push(messagesRef, {
-        name: randomUser.name,
-        text: randomMsg,
-        color: randomUser.color,
-        avatar: randomUser.avatar,
-        type: "user",
-        createdAt: Date.now()
-      });
-
-      lastActivityTime = Date.now();
-    }
-  }, 30000);
-}
-
-startIdleSimulation();
-</script>
-</body>
-</html>
+  document.getElementById("son
