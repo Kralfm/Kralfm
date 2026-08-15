@@ -403,7 +403,6 @@ async function announceJoin(username) {
   }
 }
 
-// Mesajları dinle
 onChildAdded(messagesRef, s => {
   showMessage(s.val());
 });
@@ -434,10 +433,10 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
         await push(messagesRef, {
           name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
         });
-      }, 600);
+      }, 500);
     }
   } catch (err) {
-    alert("Mesaj gönderilemedi, lütfen tekrar deneyin.");
+    alert("Mesaj gönderilemedi. Firebase Kurallarını (Rules) kontrol edin!");
   }
 
   textInput.value = "";
@@ -459,7 +458,7 @@ async function sendQuickMessage(textMsg, type = "user") {
         await push(messagesRef, {
           name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
         });
-      }, 600);
+      }, 500);
     }
   } catch (err) {
     console.error("Hızlı mesaj hatası:", err);
@@ -492,4 +491,55 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
   requestModal.style.display = "none";
 });
 
-document.getElementById("clear").addEventListen
+document.getElementById("clear").addEventListener("click", async () => {
+  try {
+    await remove(messagesRef);
+    box.innerHTML = "";
+  } catch (error) {
+    box.innerHTML = "";
+  }
+});
+
+const simulatedUsers = [
+  { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
+  { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
+  { name: "NostaljiKralı", avatar: "👑", color: "#f1c40f" },
+  { name: "GeceYildizi", avatar: "🌟", color: "#9b59b6" },
+  { name: "KahveSever", avatar: "☕", color: "#d35400" }
+];
+
+const simulatedMessages = [
+  "Keyifli dinlemeler herkese ☕ Harika bir parça çalıyor!",
+  "Radyonun sesini biraz daha açtım, bu şarkı efsane 🎶🔥",
+  "Herkese iyi akşamlar, muhabbetiniz bol olsun dostlar ✨",
+  "Ağzına sağlık yayıncım, süper gidiyor 📻",
+  "Odadaki herkese benden bol köpüklü kahve ikramı ☕😋"
+];
+
+function startIdleSimulation() {
+  setInterval(async () => {
+    const now = Date.now();
+    if (now - lastActivityTime > 180000) {
+      const randomUser = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
+      const randomMsg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
+
+      try {
+        await push(messagesRef, {
+          name: randomUser.name,
+          text: randomMsg,
+          color: randomUser.color,
+          avatar: randomUser.avatar,
+          type: "user",
+          createdAt: Date.now()
+        });
+      } catch(e) {}
+
+      lastActivityTime = Date.now();
+    }
+  }, 30000);
+}
+
+startIdleSimulation();
+</script>
+</body>
+</html>
