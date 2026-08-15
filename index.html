@@ -64,7 +64,6 @@ input#name { width: 120px; padding: 12px; font-size: 15px; }
 input#text { flex: 1; padding: 12px; min-width: 180px; font-size: 15px; }
 button[type="submit"] { border: 0; border-radius: 8px; padding: 12px 20px; background: #e00000; color: #fff; font-weight: bold; cursor: pointer; }
 
-/* REAKSİYON VE EYLEM BUTONLARI */
 .action-btns { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 button.action-btn { background: #333; color: #fff; border: 1px solid #555; padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.2s; }
 button.action-btn:hover { background: #444; }
@@ -76,12 +75,10 @@ button.request-btn { background: #047857; border-color: #10b981; }
 
 .note { color: #aaa; font-size: 13px; }
 
-/* BİLDİRİM SESİ BUTONU (HEADER İÇİNDE) */
 .sound-toggle-btn {
   position: absolute; right: 15px; top: 15px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer;
 }
 
-/* ИSTEK PARÇA MODAL (POP-UP) */
 .modal-overlay {
   display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;
 }
@@ -147,7 +144,6 @@ button.request-btn { background: #047857; border-color: #10b981; }
     <button type="submit">Gönder</button>
   </form>
 
-  <!-- HIZLI REAKSİYON & İSTEK BUTONLARI -->
   <div class="action-btns">
     <button id="sendApplause" type="button" class="action-btn applause-btn">👏 Alkış</button>
     <button id="sendCoffee" type="button" class="action-btn coffee-btn">☕ Kahve Ismarla</button>
@@ -161,7 +157,6 @@ button.request-btn { background: #047857; border-color: #10b981; }
 </div>
 </main>
 
-<!-- İSTEK PARÇA MODAL (POP-UP) -->
 <div id="requestModal" class="modal-overlay">
   <div class="modal-box">
     <h3>🎵 İstek Parça Gönder</h3>
@@ -175,7 +170,6 @@ button.request-btn { background: #047857; border-color: #10b981; }
   </div>
 </div>
 
-<!-- SES EFEKTLERİ -->
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 <audio id="notificationSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
@@ -220,7 +214,6 @@ const soundToggleBtn = document.getElementById("soundToggle");
 
 let isSoundEnabled = true;
 
-// SES AÇ/KAPAT DÜĞMESİ
 soundToggleBtn.addEventListener("click", () => {
   isSoundEnabled = !isSoundEnabled;
   soundToggleBtn.textContent = isSoundEnabled ? "🔔 Ses Açık" : "🔕 Sessiz";
@@ -233,6 +226,7 @@ toggleRadioBtn.addEventListener("click", () => {
 
 let hasJoined = false;
 let welcomedUsers = new Set(); 
+let lastActivityTime = Date.now();
 
 function getTimeString(timestamp) {
   return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
@@ -303,6 +297,15 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return `👋 Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler! 🎧☕`;
   }
 
+  // İSTEK YAPILDIĞINDA ÖZEL BOT YANITI
+  if (text.includes("İSTEK PARÇA:")) {
+    return getRandomReply([
+      `🎵 Harika bir parça seçimi Sayın @${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı, keyifli dinlemeler! 🎧✨`,
+      `📻 Baş üstüne Sayın @${userName}! İstek şarkınız listeye eklendi, yayıncımız birazdan çalacak. Keyifli sohbetler! 🎶☕`,
+      `✨ Mükemmel bir seçim @${userName}! Şarkı isteğiniz sıraya alındı, kulağınız bizde olsun! 🎧❤️`
+    ]);
+  }
+
   if (m.includes("komut") || m.includes("yardım")) {
     return `📜 Hızlı butonları kullanabilir veya 'kahve', 'selam', 'istek', 'bot nasılsın' yazabilirsiniz!`;
   }
@@ -353,7 +356,6 @@ onChildAdded(
 
 status.textContent = "Sohbet hazır. 🤖";
 
-// MESAJ GÖNDERME
 document.getElementById("chatForm").addEventListener("submit", async e => {
   e.preventDefault();
 
@@ -364,6 +366,7 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
   if (!n || !t) return;
 
+  lastActivityTime = Date.now();
   if (!hasJoined) await announceJoin(n);
 
   await push(messagesRef, {
@@ -382,9 +385,9 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
   textInput.value = "";
 });
 
-// HIZLI MESAJA YARDIMCI FONKSİYON
 async function sendQuickMessage(textMsg, type = "user") {
   const n = nameInput.value.trim() || "Misafir";
+  lastActivityTime = Date.now();
   if (!hasJoined && nameInput.value.trim()) await announceJoin(n);
 
   await push(messagesRef, {
@@ -401,13 +404,11 @@ async function sendQuickMessage(textMsg, type = "user") {
   }
 }
 
-// REAKSİYON BUTONLARI DINLEYICILERI
 document.getElementById("sendApplause").addEventListener("click", () => sendQuickMessage("👏 Coşkulu bir alkış gönderdi!", "applause"));
 document.getElementById("sendCoffee").addEventListener("click", () => sendQuickMessage("☕ Odadaki herkese sıcacık bir kahve ikram etti!"));
 document.getElementById("sendHeart").addEventListener("click", () => sendQuickMessage("❤️ Kucak dolusu sevgiler ve kalpler gönderdi!"));
 document.getElementById("sendFire").addEventListener("click", () => sendQuickMessage("🔥 Ortamı alev alev yaktı!"));
 
-// İSTEK MODAL İŞLEMLERİ
 const requestModal = document.getElementById("requestModal");
 document.getElementById("openRequestModal").addEventListener("click", () => requestModal.style.display = "flex");
 document.getElementById("closeRequestModal").addEventListener("click", () => requestModal.style.display = "none");
@@ -429,8 +430,46 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
   requestModal.style.display = "none";
 });
 
-// TEMİZLE
 document.getElementById("clear").addEventListener("click", () => box.innerHTML = "");
+
+const simulatedUsers = [
+  { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
+  { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
+  { name: "NostaljiKralı", avatar: "👑", color: "#f1c40f" },
+  { name: "GeceYildizi", avatar: "🌟", color: "#9b59b6" },
+  { name: "KahveSever", avatar: "☕", color: "#d35400" }
+];
+
+const simulatedMessages = [
+  "Keyifli dinlemeler herkese ☕ Harika bir parça çalıyor!",
+  "Radyonun sesini biraz daha açtım, bu şarkı efsane 🎶🔥",
+  "Herkese iyi akşamlar, muhabbetiniz bol olsun dostlar ✨",
+  "Ağzına sağlık yayıncım, süper gidiyor 📻",
+  "Odadaki herkese benden bol köpüklü kahve ikramı ☕😋"
+];
+
+function startIdleSimulation() {
+  setInterval(async () => {
+    const now = Date.now();
+    if (now - lastActivityTime > 180000) {
+      const randomUser = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
+      const randomMsg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
+
+      await push(messagesRef, {
+        name: randomUser.name,
+        text: randomMsg,
+        color: randomUser.color,
+        avatar: randomUser.avatar,
+        type: "user",
+        createdAt: Date.now()
+      });
+
+      lastActivityTime = Date.now();
+    }
+  }, 30000);
+}
+
+startIdleSimulation();
 </script>
 </body>
 </html>
