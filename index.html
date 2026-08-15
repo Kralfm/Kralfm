@@ -226,7 +226,6 @@ toggleRadioBtn.addEventListener("click", () => {
 });
 
 let hasJoined = false;
-let welcomedUsers = new Set(); 
 let lastActivityTime = Date.now();
 
 function getTimeString(timestamp) {
@@ -286,20 +285,29 @@ function showMessage(d) {
   box.scrollTop = box.scrollHeight;
 }
 
-// OpenAI Destekli Bot & Duru Sistemi
+// İsme Duyarlı Akıllı Bot & Duru Sistemi
 async function getChatGPTReply(userMessage, userName) {
-  // Karakterler ve ağırlıkları (Duru'nun ağırlığı 1, diğerleri 3 - yani Duru çok daha az konuşacak)
   const bots = [
-    { name: "Batuhan", role: "havalı, genç, radyo kurdu", weight: 3 },
-    { name: "Ozan", role: "duygusal, şiir seven, türkücü", weight: 2 },
-    { name: "Sefa", role: "neşeli, esprili, kahve bağımlısı", weight: 3 },
+    { name: "Batuhan", role: "havalı, genç, radyo kurdu, modern konuşur", weight: 3 },
+    { name: "Ozan", role: "duygusal, şiir seven, türkücü, hafif eski toprak", weight: 2 },
+    { name: "Sefa", role: "neşeli, esprili, yerinde duramayan biri", weight: 3 },
     { name: "Sürmeneli", role: "Karadenizli, coşkulu, şakacı", weight: 3 },
-    { name: "DuRu", role: "kibar, sadece nezaket gerektiren anlarda konuşan, kahve ikram eden zarif bir dinleyici", weight: 1 }
+    { name: "DuRu", role: "zarif, kibar, duygusal, nazik bir hanımefendi, kahve ikram etmeyi çok sever", weight: 1 }
   ];
 
-  const totalWeight = bots.reduce((sum, b) => sum + b.weight, 0);
-  let random = Math.random() * totalWeight;
-  const randomBot = bots.find(b => (random -= b.weight) < 0) || bots[0];
+  let randomBot;
+  const lowerMessage = userMessage.toLowerCase();
+
+  // Mesajda hangi botun adı geçiyorsa doğrudan o seçilsin
+  const targetBot = bots.find(b => lowerMessage.includes(b.name.toLowerCase()));
+
+  if (targetBot) {
+    randomBot = targetBot;
+  } else {
+    const totalWeight = bots.reduce((sum, b) => sum + b.weight, 0);
+    let random = Math.random() * totalWeight;
+    randomBot = bots.find(b => (random -= b.weight) < 0) || bots[0];
+  }
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -308,16 +316,17 @@ async function getChatGPTReply(userMessage, userName) {
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: `Sen ${randomBot.name} isimli bir radyo dinleyicisisin. Karakterin: ${randomBot.role}. ${userName} isimli kullanıcıya kısa, samimi ve radyo sohbetine uygun şekilde cevap ver. Eğer Duru isen, çok kısa ve zarif cevap ver, mutlaka kahve ikramından bahset.` }, 
+          { role: "system", content: `Sen ${randomBot.name} isimli bir radyo dinleyicisisin. Karakterin: ${randomBot.role}. ${userName} isimli kullanıcıya cevap ver. Asla robot gibi konuşma, çok samimi ol. Eğer ismin Duru ise nazik ol ve kahve ikramını eksik etme. Her seferinde farklı cümleler kur.` }, 
           { role: "user", content: userMessage }
         ],
-        max_tokens: 60
+        max_tokens: 80,
+        temperature: 0.9
       })
     });
     const data = await response.json();
     return { botName: randomBot.name, text: data.choices[0].message.content.trim() };
   } catch { 
-    return { botName: randomBot.name, text: "Eyvallah hocam, harika gidiyor!" }; 
+    return { botName: randomBot.name, text: "Eyvallah, radyo süper gidiyor!" }; 
   }
 }
 
@@ -367,7 +376,6 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
   textInput.value = "";
 
-  // Yapay Zeka Bot Cevabı
   setTimeout(async () => {
     const ai = await getChatGPTReply(t, n);
     await push(messagesRef, {
@@ -418,9 +426,9 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
 
 document.getElementById("clear").addEventListener("click", () => box.innerHTML = "");
 
-// --- DURU'NUN OTOMATİK KAHVE İKRAMI (Çok Nadir / Seyrek) ---
+// Duru'nun Otomatik Kahve İkramı
 setInterval(() => {
-    if (Math.random() > 0.85) { // Düşük ihtimalle tetiklenir
+    if (Math.random() > 0.85) {
         push(messagesRef, { 
             name: "DuRu", 
             text: "🌸 Selamlar herkese... Sohbetiniz o kadar güzel ki, hepinize benden taze, bol köpüklü kahveler! ☕", 
@@ -429,9 +437,9 @@ setInterval(() => {
             createdAt: Date.now() 
         });
     }
-}, 60000); // 1 dakikada bir kontrol
+}, 60000);
 
-// --- OTOMATİK AKTİFLİK SİMÜLASYONU ---
+// Otomatik Aktiflik Simülasyonu
 const simulatedUsers = [
   { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
   { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
