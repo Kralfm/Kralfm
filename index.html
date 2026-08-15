@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Radyo Kral FM Muhabbet</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif}
@@ -132,15 +133,30 @@ main{max-width:850px;margin:auto;padding:15px}
   transition: all 0.2s ease;
 }
 
-.play-btn:hover {
-  filter: brightness(1.1);
+.play-btn:hover { filter: brightness(1.1); }
+.play-btn:active { transform: scale(0.98); }
+
+/* --- CANLI KULLANICI SAYACI BAŞLIĞI --- */
+.chat-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.play-btn:active { transform: scale(0.98); }
+.online-counter {
+  background: #111;
+  border: 1px solid #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #4ade80;
+  font-weight: bold;
+}
 
 /* --- SOHBET VE MESAJ ALANI STİLLERİ --- */
 #messages {
-  height: 65vh;
+  height: 60vh;
   overflow-y: auto;
   background: #0b0b0b;
   border-radius: 10px;
@@ -158,12 +174,31 @@ main{max-width:850px;margin:auto;padding:15px}
   line-height: 1.4;
 }
 
-.msg.bot-msg{background:#1a2a3a;border:1px solid #0088cc}
+/* --- BOT MESAJ TASARIMI --- */
+.msg.bot-msg {
+  background: linear-gradient(135deg, #1e1b4b 0%, #31103f 100%);
+  border: 1px solid #7c3aed;
+  border-left: 5px solid #a855f7;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+}
+
+.bot-badge {
+  background: #7c3aed;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .msg.system-msg{background:#222;border:1px dashed #555;color:#aaa;font-style:italic;font-size:13px;text-align:center}
 .time{font-size:11px;color:#888;margin-right:6px}
 .avatar{margin-right:4px;font-size:16px}
 .name{font-weight:bold;color:#ff5555;margin-right:6px}
-.bot-name{color:#00aaff !important}
+.bot-name{color:#c084fc !important; font-weight: 900;}
 
 form {
   display: flex;
@@ -173,15 +208,14 @@ form {
   flex-wrap: wrap;
 }
 
-select#userAvatar {
-  padding: 12px 8px;
-  border: 0;
-  border-radius: 8px;
-  font-size: 18px;
+select#userAvatar, input#name, input#text {
   background: #2a2a2a;
   color: #fff;
-  cursor: pointer;
+  border-radius: 8px;
+  border: 0;
 }
+
+select#userAvatar { padding: 12px 8px; font-size: 18px; cursor: pointer; }
 
 input[type="color"] {
   width: 48px;
@@ -190,39 +224,22 @@ input[type="color"] {
   padding: 0;
   background: none;
   cursor: pointer;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 input[type="color"]::-webkit-color-swatch { border: 2px solid #444; border-radius: 8px; }
 
-input#name {
-  width: 120px;
-  padding: 12px;
-  border: 0;
-  border-radius: 8px;
-  font-size: 15px;
-  background: #2a2a2a;
-  color: #fff;
-}
+input#name { width: 120px; padding: 12px; font-size: 15px; }
 
 input#text {
   flex: 1;
   min-width: 200px;
   padding: 14px 15px;
   border: 1px solid #444;
-  border-radius: 8px;
   font-size: 16px;
-  background: #2a2a2a;
-  color: #fff;
-  transition: border-color 0.2s;
 }
 
-input#text:focus {
-  outline: none;
-  border-color: #ff3333;
-}
+input#text:focus { outline: none; border-color: #ff3333; }
 
 button[type="submit"] {
   border: 0;
@@ -233,10 +250,9 @@ button[type="submit"] {
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
-  white-space: nowrap;
 }
 
-#clear { margin-top: 12px; background: #444; }
+#clear { margin-top: 12px; background: #444; color: #fff; border: 0; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
 .note { color: #aaa; font-size: 13px; }
 .external-link { display: inline-block; margin-top: 12px; color: #ff7777; text-decoration: none; font-size: 13px; font-weight: bold; }
 .external-link:hover { text-decoration: underline; }
@@ -248,45 +264,39 @@ button[type="submit"] {
 <header>🎙️ Kral FM Muhabbet</header>
 
 <main>
-<!-- 📻 Radyo Kral FM Kartı -->
 <div class="card radio-player-card">
-  
   <div class="radio-banner">
     <div class="radio-logo-box">
       <div class="l2mr-logo">
-        <svg viewBox="0 0 24 24">
-          <path d="M12,2A9,9 0 0,0 3,11V18A3,3 0 0,0 6,21H8V13H5V11A7,7 0 0,1 12,4A7,7 0 0,1 19,11V13H16V21H18A3,3 0 0,0 21,18V11A9,9 0 0,0 12,2Z"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M12,2A9,9 0 0,0 3,11V18A3,3 0 0,0 6,21H8V13H5V11A7,7 0 0,1 12,4A7,7 0 0,1 19,11V13H16V21H18A3,3 0 0,0 21,18V11A9,9 0 0,0 12,2Z"/></svg>
       </div>
       <div class="radio-logo-text">
         <h1>📻 Radyo Kral FM</h1>
         <span>Kesintisiz Canlı Yayın</span>
       </div>
     </div>
-    <div class="live-badge">
-      <span class="live-dot"></span> CANLI YAYIN
-    </div>
+    <div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div>
   </div>
 
-  <!-- Yenilenmiş Şık Açıklama Metni -->
   <div class="radio-description">
     ✨ Müziğin ritmi, dostluğun adresi! En güzel şarkılar, sıcacık sohbetler ve unutulmaz anlar için doğru yerdesiniz. Keyifli dinlemeler, hoş sohbetler dileriz... 🎶☕
   </div>
 
-  <audio id="radioAudio" preload="none" src="https://ssllive.kralfm.com.tr/kralfm/kralfm.stream/playlist.m3u8"></audio>
-
+  <audio id="radioAudio" preload="none"></audio>
   <button type="button" class="play-btn" id="toggleRadio">▶ Radyoyu Başlat</button>
   <br>
   <a href="http://kralfm.radio12345.com/" target="_blank" rel="noopener" class="external-link">🔗 Harici Sekmede Dinle</a>
 </div>
 
 <div class="card">
-  <h2>💬 Canlı Muhabbet</h2>
-  
+  <div class="chat-header-flex">
+    <h2 style="margin:0;">💬 Canlı Muhabbet</h2>
+    <div class="online-counter" id="onlineCount">🟢 Çevrimiçi: 1</div>
+  </div>
+
   <div id="messages"></div>
 
   <form id="chatForm">
-    <!-- Kadın / Erkek ve Çeşitli Avatarlar -->
     <select id="userAvatar" title="Avatarınızı Seçin">
       <option value="👩">👩 Kadın</option>
       <option value="👨">👨 Erkek</option>
@@ -309,7 +319,6 @@ button[type="submit"] {
     <input type="color" id="userColor" value="#ff5555" title="İsim Renginizi Seçin">
     <input type="text" id="name" maxlength="30" placeholder="Adınız" required>
     <input type="text" id="text" maxlength="300" placeholder="Mesajınızı buraya yazın..." required>
-    
     <button type="submit">Gönder</button>
   </form>
 
@@ -328,7 +337,9 @@ import {
   query,
   orderByChild,
   startAt,
-  onDisconnect
+  onDisconnect,
+  onValue,
+  set
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -343,16 +354,43 @@ const firebaseConfig = {
 
 const db = getDatabase(initializeApp(firebaseConfig));
 const messagesRef = ref(db, "messages");
+const onlineRef = ref(db, "online_users");
+const connectedRef = ref(db, ".info/connected");
+
 const box = document.getElementById("messages");
 const status = document.getElementById("status");
 const nameInput = document.getElementById("name");
 const colorInput = document.getElementById("userColor");
 const avatarInput = document.getElementById("userAvatar");
-
 const radioAudio = document.getElementById("radioAudio");
 const toggleRadioBtn = document.getElementById("toggleRadio");
+const onlineCountEl = document.getElementById("onlineCount");
 
+// --- ÇEVRİMİÇİ KULLANICI TAKİP SİSTEMİ ---
+onValue(connectedRef, (snap) => {
+  if (snap.val() === true) {
+    const myUserRef = push(onlineRef);
+    set(myUserRef, true);
+    onDisconnect(myUserRef).remove();
+  }
+});
+
+onValue(onlineRef, (snap) => {
+  const count = snap.exists() ? Object.keys(snap.val()).length : 1;
+  onlineCountEl.textContent = `🟢 Çevrimiçi: ${count}`;
+});
+
+// HLS Radyo Yayın Ayarı
+const streamUrl = "https://ssllive.kralfm.com.tr/kralfm/kralfm.stream/playlist.m3u8";
 let isPlaying = false;
+
+if (Hls.isSupported()) {
+  const hls = new Hls();
+  hls.loadSource(streamUrl);
+  hls.attachMedia(radioAudio);
+} else if (radioAudio.canPlayType('application/vnd.apple.mpegurl')) {
+  radioAudio.src = streamUrl;
+}
 
 toggleRadioBtn.addEventListener("click", () => {
   if (!isPlaying) {
@@ -360,7 +398,7 @@ toggleRadioBtn.addEventListener("click", () => {
       isPlaying = true;
       toggleRadioBtn.textContent = "⏸️ Radyoyu Durdur";
       toggleRadioBtn.style.background = "linear-gradient(180deg, #444 0%, #222 100%)";
-    }).catch(err => {
+    }).catch(() => {
       window.open("http://kralfm.radio12345.com/", "_blank");
     });
   } else {
@@ -372,11 +410,9 @@ toggleRadioBtn.addEventListener("click", () => {
 });
 
 let hasJoined = false;
-let currentDisconnectRef = null;
 
 function getTimeString(timestamp) {
-  const date = timestamp ? new Date(timestamp) : new Date();
-  return date.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+  return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 }
 
 function showMessage(d, isBot = false) {
@@ -411,29 +447,67 @@ function showMessage(d, isBot = false) {
   n.textContent = (d.name || "Misafir") + ": ";
   t.textContent = d.text || "";
 
-  r.append(timeSpan, avatarSpan, n, t);
+  if (isBot) {
+    const badge = document.createElement("span");
+    badge.className = "bot-badge";
+    badge.textContent = "BOT";
+    r.append(timeSpan, badge, avatarSpan, n, t);
+  } else {
+    r.append(timeSpan, avatarSpan, n, t);
+  }
+
   box.appendChild(r);
   box.scrollTop = box.scrollHeight;
 }
 
-function getBotReply(text) {
+function getRandomReply(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// SADECE VE SADECE İÇİNDE "BOT" GEÇEN MESAJLARA CEVAP VERİR
+function getBotReply(text, userName) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
 
-  if(m.includes("bravo") && (m.includes("yayıncı") || m.includes("yayinci"))) return "👏👏 Bravo yayıncımız! Süpersin! 🎉";
-  if(m.includes("teşekkür") && (m.includes("yayıncı") || m.includes("yayinci"))) return "❤️ Emeğine sağlık yayıncımız!";
-  if(m.includes("yayıncı") || m.includes("yayinci")) return "🎙️ Yayıncımıza kocaman alkışlar! 👏👏👏";
-  if(m.includes("alkış") || m.includes("alkis") || m.includes("👏")) return "👏👏👏 Alkışlar yayıncımıza! Harika yayın! 🎙️📻";
-  if(m.includes("dans")) return "💃🕺 Haydi piste!";
-  if(m.includes("gül") || m.includes("gul")) return "😂😂 Ben de güldüm!";
-  if(m.includes("kalp") || m.includes("❤️")) return "❤️ Kral FM sevgisi!";
-  if(m.includes("kahve")) return "☕ Kahveler hazır!";
-  if(m.includes("uyku")) return "😴 Botun pili azalıyor...";
-  if(m.includes("selam") || m.includes("merhaba")) return "👋 Selam! Hoş geldin!";
-  if(m.includes("radyo")) return "📻 Radyo Kral FM yayında! 🎶";
-  if(m.includes("bot")) return "🤖 Ben Eğlence Botu! Buradayım!";
-  if(m === "yardım" || m === "yardim") return "❓ Komutlar: selam, alkış, yayıncı, bravo yayıncı, teşekkürler yayıncı, dans, gül, kalp, kahve, uyku, radyo, bot";
+  // "bot" geçmiyorsa sessiz kalır
+  if (!m.includes("bot")) return null;
 
-  return null;
+  // --- İSTEK ŞARKI TESPİTİ ---
+  if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki")) {
+    return getRandomReply([
+      `🎵 Harika seçim Sayın ${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı. Kral FM ailesi olarak keyifli dinlemeler dileriz! 🎧☕`,
+      `🎶 İstek notunuzu aldık ${userName}! Yayıncımız birazdan şarkınızı sırayla buluşturacak. Radyonuz açık, çayınız demli olsun! Keyifli dinlemeler! 📻✨`,
+      `🎼 Mükemmel bir tercih Sayın ${userName}! Şarkı isteğiniz yayıncımız tarafından sıraya dahil edildi. Kulağınız Kral FM'de olsun, keyifli saatler! 🎙️❤️`
+    ]);
+  }
+
+  // --- DİĞER BOT YANITLARI ---
+  if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
+    return getRandomReply([
+      `👋 Selam ${userName}! Bana mı seslendin? Radyo Kral FM dinlerken buradayım! 💜`,
+      `✨ Merhaba ${userName}! Benimle konuştuğun için teşekkürler, nasılsın? 🤖`
+    ]);
+  }
+
+  if(m.includes("nasıl") || m.includes("nasilsin") || m.includes("naber")) {
+    return getRandomReply([
+      `🤖 Pillerim full, Kral FM ritimleriyle şarj oluyorum! Sen nasılsın ${userName}?`,
+      `🤖 Çok iyiyim! Sohbet odasını izleyip müziğin tadını çıkarıyorum. Sen nasılsın?`
+    ]);
+  }
+
+  if(m.includes("ne yapıyorsun") || m.includes("ne napiyon") || m.includes("napıyon")) {
+    return "🤖 Odadaki harika insanları izliyor ve yayına tempo tutuyorum! 🎧";
+  }
+
+  if(m.includes("sağol") || m.includes("teşekkür") || m.includes("eyvallah")) {
+    return `❤️ Ne demek ${userName}, her zaman buradayım! Müzikle kal! 🎉`;
+  }
+
+  return getRandomReply([
+    `🤖 Efendim ${userName}, beni mi çağırdın? 💜`,
+    `🤖 Buradayım ${userName}! İletini aldım, keyifli dinlemeler! 📻`,
+    `🤖 Sesini duydum ${userName}! Kral FM muhabbetine eşlik etmeye hazırım!`
+  ]);
 }
 
 async function announceJoin(username) {
@@ -447,8 +521,7 @@ async function announceJoin(username) {
   });
 
   const leaveMsgRef = push(messagesRef);
-  currentDisconnectRef = onDisconnect(leaveMsgRef);
-  currentDisconnectRef.set({
+  onDisconnect(leaveMsgRef).set({
     text: `🚪 ${username} sohbet odasından ayrıldı.`,
     type: "system",
     createdAt: Date.now()
@@ -459,10 +532,7 @@ const pageStartTime = Date.now();
 
 onChildAdded(
   query(messagesRef, orderByChild("createdAt"), startAt(pageStartTime)),
-  s => {
-    const d = s.val() || {};
-    showMessage(d);
-  }
+  s => showMessage(s.val() || {})
 );
 
 status.textContent = "Sohbet hazır. 🤖";
@@ -477,9 +547,7 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
   if(!n || !t) return;
 
-  if (!hasJoined) {
-    await announceJoin(n);
-  }
+  if (!hasJoined) await announceJoin(n);
 
   try {
     await push(messagesRef, {
@@ -492,11 +560,11 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
     document.getElementById("text").value = "";
 
-    const reply = getBotReply(t);
+    const reply = getBotReply(t, n);
     if(reply) {
       setTimeout(() => {
-        showMessage({ name: "Radyo Bot 🤖", text: reply, createdAt: Date.now() }, true);
-      }, 400);
+        showMessage({ name: "Kral Bot", text: reply, createdAt: Date.now() }, true);
+      }, 500);
     }
 
   } catch(e) {
