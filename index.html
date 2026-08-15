@@ -166,6 +166,7 @@ main{max-width:850px;margin:auto;padding:15px}
   word-break: break-word;
   font-size: 15px;
   line-height: 1.4;
+  white-space: pre-line;
 }
 
 .msg.bot-msg {
@@ -453,32 +454,36 @@ function getBotReply(text, userName, isFirstMessage = false) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
   let botResponse = "";
 
-  // 1. İLK GİRİŞ KARŞILAMA
+  // 1. İLK GİRİŞ KARŞILAMA SİSTEMİ
   if (isFirstMessage && !welcomedUsers.has(userName.toLowerCase())) {
     welcomedUsers.add(userName.toLowerCase());
     botResponse += getRandomReply([
-      `👋 Ooo Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler ve bol sohbetler dileriz! (İpucu: Komutlar için 'yardım' yazabilirsin) 🎧☕\n`,
-      `✨ Aramıza hoş geldin @${userName}! Sefalar getirdin, radyonuz açık muhabbetiniz bol olsun! (Öğrenmek için 'yardım' yazabilirsin) 📻❤️\n`,
-      `🎉 Ailemize hoş geldin @${userName}! Sizi aramızda görmek çok güzel, keyifli saatler! 🎙️✨\n`
+      `👋 Ooo Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler ve bol sohbetler dileriz! 🎧☕`,
+      `✨ Aramıza hoş geldin @${userName}! Sefalar getirdin, radyonuz açık muhabbetiniz bol olsun! 📻❤️`,
+      `🎉 Ailemize hoş geldin @${userName}! Sizi aramızda görmek çok güzel, keyifli saatler! 🎙️✨`
     ]);
   }
 
-  // YARDIM / KOMUTLAR BİLGİLENDİRMESİ
-  if (m === "yardım" || m === "yardim" || m === "komutlar" || m.includes("bot yardım") || m.includes("bot yardim")) {
-    return `📜 Sayın @${userName}, Kral Bot Komut Rehberi:\n
-☕ Kahve İkramı: '@İsim kahve' veya '@herkes kahve'\n
-🔍 Kişi Sorma: '@İsim neredesin' veya 'nerelerdesin'\n
-❤️ Kalp / Sevgi: Mesajında 'kalp' veya '❤️' kullanabilirsin\n
-😙 Islık Çalma: 'ıslık' veya 'fuyyt' yazarak coşkuyu arttır\n
-🎵 İstek Parça: Mesajında 'istek' veya 'şarkı' yazabilirsin\n
-🤖 Botla Sohbet: 'bot selam', 'bot nasılsın' yazarak benimle konuşabilirsin! 🎧✨`;
+  // 2. YARDIM / KOMUTLAR BİLGİLENDİRMESİ
+  if (m.includes("komut") || m.includes("yardım") || m.includes("yardim") || m === "bot komutları") {
+    return `📜 Sayın @${userName}, Kral Bot Komut Rehberi:\n\n☕ Kahve İkramı: '@İsim kahve' veya '@herkes kahve'\n🔍 Kişi Sorma: '@İsim neredesin' veya 'nerelerdesin'\n👋 Selamlama: 'selam', 'slm', 'sa' yazabilirsiniz\n❤️ Kalp / Sevgi: Mesajınızda 'kalp' veya '❤️' kullanabilirsiniz\n😙 Islık Çalma: 'ıslık' veya 'fuyyt' yazarak coşkuyu arttırın\n🎵 İstek Parça: Mesajınızda 'istek' veya 'şarkı' yazabilirsiniz\n🤖 Botla Sohbet: 'bot nasılsın' yazarak benimle konuşabilirsiniz! 🎧✨`;
+  }
+
+  // 3. SELAM & ALEYKÜMSELAM KARŞILAMA SİSTEMİ
+  if (m.includes("selam") || m.includes("slm") || m.includes("merhaba") || m === "sa" || m.includes("selamun aleykum") || m.includes("selamün aleyküm")) {
+    botResponse += getRandomReply([
+      `🌸 Aleykümselam Sayın @${userName}, hoş geldin! Sefalar getirdin, keyifli dinlemeler! 📻✨`,
+      `👋 Ve Aleykümselam @${userName}! Aramıza hoş geldin, radyonuz açık sohbetiniz neşeli olsun! ❤️🎙️`,
+      `✨ Aleykümselam Sayın @${userName}! Sizi görmek çok güzel, hoş geldiniz! ☕🎉`
+    ]);
+    return botResponse;
   }
 
   // ETİKETLENEN İSMİ BULMA (Örn: @Ayşe kahve)
   const mentionMatch = text.match(/@([a-zA-Z0-9çğıöşüÇĞİÖŞÜ_]+)/);
   const mentionedUser = mentionMatch ? mentionMatch[1] : null;
 
-  // 2. KAHVE İKRAM SİSTEMİ (@İsim kahve VEYA @herkes kahve)
+  // 4. KAHVE İKRAM SİSTEMİ (@İsim kahve VEYA @herkes kahve)
   if (m.includes("kahve") || m.includes("☕")) {
     if (mentionedUser) {
       if (mentionedUser.toLowerCase() === "herkes") {
@@ -504,14 +509,16 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 3. NEREDESİN SORMAMA SİSTEMİ (@İsim neredesin / nerelerdesin)
+  // 5. MİZAHİ VE ŞİİRSEL NEREDESİN SORMAMA SİSTEMİ (@İsim neredesin / nerelerdesin)
   if (m.includes("neredesin") || m.includes("nerelerdesin") || m.includes("nerdesin")) {
     if (mentionedUser) {
       botResponse += getRandomReply([
+        `🕵️ Algılayıcılarım çalışıyor... Sayın @${mentionedUser}, en son mutfakta gizlice buzdolabını yağmalarken görüldü! @${userName} seni arıyor haberin olsun! 😂🍕`,
+        `🛸 Kötü haber Sayın @${userName}! Uzaylılar @${mentionedUser} kişisini kaçırdı, sohbetin neşesi kaçmasın diye pazarlık yapıyoruz! 🛸😜`,
+        `😴 @${mentionedUser} büyük ihtimalle klavye başında uyuyakaldı, horlama sesleri Kral FM stüdyolarına kadar geliyor! Uyanın Sayın dinleyicimiz! 💤😂`,
+        `🔍 Ajan Bot görevde! Sayın @${mentionedUser} izini kaybettirdi. Görenlerin @${userName} dostumuzun yanına getirmesi insaniyet namına rica olunur! 🕵️‍♂️😁`,
         `💬 Sayın @${mentionedUser}, neredesiniz acaba? @${userName} gözleri yollarda sizi arıyor, sohbetin tadı sizsiz çıkmıyor! 🔍❤️`,
-        `✨ @${mentionedUser} neredelerdesiniz? @${userName} dostumuz yokluğunu hissetti, ses verin de neşemiz yerine gelsin! 📻🎙️`,
         `🌸 "Gözden ırak olan gönülden ırak olmazmış..." Sayın @${mentionedUser}, @${userName} sizi sordu, kulaklarınız çınlasın! 🎶💬`,
-        `🌟 Bir tatlı esinti gibi bekleniyorsunuz Sayın @${mentionedUser}! @${userName} merakla gelişinizi bekliyor, neredesiniz? ☕✨`,
         `🎵 "Neredesin sen..." şarkısı stüdyoda çalarken @${userName} tam da sizi soruyordu Sayın @${mentionedUser}! 🎧❤️`
       ]);
     } else {
@@ -523,7 +530,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 4. KALP VE SEVGİ
+  // 6. KALP VE SEVGİ
   if (m.includes("kalp") || m.includes("❤️") || m.includes("love") || m.includes("sevgi")) {
     botResponse += getRandomReply([
       `❤️ Sayın @${userName}, Kral FM ailesinden size kucak dolusu sevgiler ve kalpler! 💖✨`,
@@ -533,7 +540,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 5. ISLIK
+  // 7. ISLIK
   if (m.includes("ıslık") || m.includes("islik") || m.includes("fıtt") || m.includes("fuyyt") || m.includes("😙")) {
     botResponse += getRandomReply([
       `😙 FUYYYT! Sayın yayıncımıza @${userName} isimli dinleyicimizden coşkulu bir ıslık geldi! 🎶🎙️`,
@@ -543,7 +550,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 6. İSTEK PARÇA
+  // 8. İSTEK PARÇA
   if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki") || m.includes("parça")) {
     botResponse += getRandomReply([
       `🎵 Harika seçim Sayın @${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı! 🎧☕`,
@@ -552,21 +559,16 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 7. BOTLA SOHBET
+  // 9. BOTLA SOHBET
   if (m.includes("bot")) {
-    if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
-      botResponse += getRandomReply([
-        `👋 Selam @${userName}! Bana mı seslendin? Kral FM dinlerken buradayım! 💜`,
-        `✨ Merhaba @${userName}! Benimle konuştuğun için teşekkürler, nasılsın? 🤖`
-      ]);
-    } else if(m.includes("nasıl") || m.includes("nasilsin") || m.includes("naber")) {
+    if(m.includes("nasıl") || m.includes("nasilsin") || m.includes("naber")) {
       botResponse += getRandomReply([
         `🤖 Pillerim full, Kral FM ritimleriyle şarj oluyorum! Sen nasılsın @${userName}?`,
         `🤖 Çok iyiyim! Sohbet odasını izleyip müziğin tadını çıkarıyorum. Sen nasılsın?`
       ]);
     } else {
       botResponse += getRandomReply([
-        `🤖 Efendim @${userName}, beni mi çağırdın? 💜`,
+        `🤖 Efendim @${userName}, beni mi çağırdın? Komutları öğrenmek için 'komutlar' yazabilirsin! 💜`,
         `🤖 Buradayım @${userName}! İletini aldım, keyifli dinlemeler! 📻`
       ]);
     }
@@ -622,49 +624,4 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
       color: c,
       avatar: a,
       text: t.slice(0, 300),
-      createdAt: Date.now()
-    });
-
-    textInput.value = "";
-
-    const reply = getBotReply(t, n, isFirstMsg);
-    if(reply) {
-      setTimeout(() => {
-        showMessage({ name: "Kral Bot", text: reply, createdAt: Date.now() }, true);
-      }, 600);
-    }
-
-  } catch(e) {
-    status.textContent = "Mesaj gönderilemedi.";
-  }
-});
-
-document.getElementById("sendApplause").addEventListener("click", async () => {
-  const n = nameInput.value.trim() || "Bir Dinleyici";
-  const c = colorInput.value;
-  const a = avatarInput.value;
-
-  if (!hasJoined && nameInput.value.trim()) await announceJoin(n);
-
-  try {
-    await push(messagesRef, {
-      name: n,
-      color: c,
-      avatar: a,
-      text: "👏 harika bir alkış gönderdi! 👏👏👏",
-      type: "applause",
-      createdAt: Date.now()
-    });
-  } catch(e) {
-    status.textContent = "Alkış gönderilemedi.";
-  }
-});
-
-document.getElementById("clear").addEventListener("click", () => {
-  box.innerHTML = "";
-  status.textContent = "Ekran temizlendi.";
-});
-</script>
-
-</body>
-</html>
+      createdAt: 
