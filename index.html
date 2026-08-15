@@ -170,7 +170,7 @@ button.request-btn { background: #047857; border-color: #10b981; }
     <button id="clear" type="button" class="action-btn">🗑️ Temizle</button>
   </div>
 
-  <p id="status" class="note">Bağlanıyor...</p>
+  <p id="status" class="note">Sohbet hazır. 🤖</p>
 </div>
 </main>
 
@@ -241,6 +241,8 @@ toggleRadioBtn.addEventListener("click", () => {
 let hasJoined = false;
 let welcomedUsers = new Set(); 
 let lastActivityTime = Date.now();
+
+status.textContent = "Sohbet hazır. 🤖";
 
 function getTimeString(timestamp) {
   return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
@@ -321,12 +323,10 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return null;
   }
 
-  // SELAM KARSILAMASI
   if (m === "selam" || m === "sa" || m === "selamün aleyküm" || m === "selamunaleyküm" || m.includes("selam")) {
     return `Aleykümselam @${userName}`;
   }
 
-  // MERHABA KARSILAMASI
   if (m === "merhaba" || m === "mrb" || m.includes("merhaba")) {
     return `Merhaba @${userName}`;
   }
@@ -397,10 +397,7 @@ async function announceJoin(username) {
   });
 }
 
-// Bağlantı durumunu anında aktif etmek için onChildAdded doğrudan messagesRef'e bağlandı
 onChildAdded(messagesRef, s => showMessage(s.val() || {}));
-
-status.textContent = "Sohbet hazır. 🤖";
 
 document.getElementById("chatForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -484,4 +481,40 @@ const simulatedUsers = [
   { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
   { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
   { name: "NostaljiKralı", avatar: "👑", color: "#f1c40f" },
- 
+  { name: "GeceYildizi", avatar: "🌟", color: "#9b59b6" },
+  { name: "KahveSever", avatar: "☕", color: "#d35400" }
+];
+
+const simulatedMessages = [
+  "Keyifli dinlemeler herkese ☕ Harika bir parça çalıyor!",
+  "Radyonun sesini biraz daha açtım, bu şarkı efsane 🎶🔥",
+  "Herkese iyi akşamlar, muhabbetiniz bol olsun dostlar ✨",
+  "Ağzına sağlık yayıncım, süper gidiyor 📻",
+  "Odadaki herkese benden bol köpüklü kahve ikramı ☕😋"
+];
+
+function startIdleSimulation() {
+  setInterval(async () => {
+    const now = Date.now();
+    if (now - lastActivityTime > 180000) {
+      const randomUser = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
+      const randomMsg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
+
+      await push(messagesRef, {
+        name: randomUser.name,
+        text: randomMsg,
+        color: randomUser.color,
+        avatar: randomUser.avatar,
+        type: "user",
+        createdAt: Date.now()
+      });
+
+      lastActivityTime = Date.now();
+    }
+  }, 30000);
+}
+
+startIdleSimulation();
+</script>
+</body>
+</html>
