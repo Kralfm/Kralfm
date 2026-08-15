@@ -12,12 +12,11 @@ header{background:#b00000;padding:18px;text-align:center;font-size:22px;font-wei
 main{max-width:850px;margin:auto;padding:15px}
 .card{background:#1e1e1e;border-radius:14px;padding:18px;margin-bottom:15px}
 
-/* --- RADYO KRAL FM TEMA --- */
+/* --- RADYO KRAL FM TEMA & KART DÜZENİ --- */
 .radio-player-card {
   background: linear-gradient(145deg, #180303 0%, #2a0808 100%);
   border: 1px solid #aa0000;
   box-shadow: 0 4px 20px rgba(224, 0, 0, 0.3);
-  text-align: center;
   position: relative;
   overflow: hidden;
 }
@@ -119,22 +118,44 @@ main{max-width:850px;margin:auto;padding:15px}
   100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
 }
 
+.popup-player-box {
+  display: flex;
+  gap: 10px;
+  background: rgba(0,0,0,0.5);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px dashed #555;
+  align-items: center;
+}
+
 .play-btn {
-  width: 100%;
+  flex: 1;
   padding: 14px;
-  font-size: 18px;
+  font-size: 16px;
   background: linear-gradient(180deg, #ff1a1a 0%, #990000 100%);
   border: 0;
-  border-radius: 10px;
+  border-radius: 8px;
   color: #fff;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.6);
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.play-btn:hover { filter: brightness(1.1); }
+.play-btn:hover { filter: brightness(1.2); }
 .play-btn:active { transform: scale(0.98); }
+
+.popup-hint {
+  font-size: 12px;
+  color: #aaa;
+  text-align: right;
+  line-height: 1.2;
+  padding-right: 5px;
+}
 
 /* --- SOHBET VE MESAJ ALANI STİLLERİ --- */
 #messages {
@@ -290,7 +311,14 @@ button.applause-btn:hover { background: #b45309; }
     ✨ Müziğin ritmi, dostluğun adresi! En güzel şarkılar, sıcacık sohbetler ve unutulmaz anlar için doğru yerdesiniz. Keyifli dinlemeler, hoş sohbetler dileriz... 🎶☕
   </div>
 
-  <button type="button" class="play-btn" id="toggleRadio">▶ Radyoyu Başlat (Küçük Pencerede Dinle)</button>
+  <div class="popup-player-box">
+    <button type="button" class="play-btn" id="toggleRadio">
+      <span>🚀</span> Radyoyu Açılır Pencerede Başlat
+    </button>
+    <div class="popup-hint">
+      🗔 Kesintisiz Dinleme<br><small style="color:#777;">Ayrı pencerede çalar</small>
+    </div>
+  </div>
 </div>
 
 <div class="card">
@@ -369,7 +397,6 @@ const avatarInput = document.getElementById("userAvatar");
 const toggleRadioBtn = document.getElementById("toggleRadio");
 const applauseAudio = document.getElementById("applauseSound");
 
-// RADYOYU BAŞLAT BUTONU ARTIK DOĞRUDAN UFAK PENCEREYİ AÇAR
 toggleRadioBtn.addEventListener("click", () => {
   window.open(
     "http://kralfm.radio12345.com/",
@@ -379,6 +406,7 @@ toggleRadioBtn.addEventListener("click", () => {
 });
 
 let hasJoined = false;
+let welcomedUsers = new Set(); // Botun daha önce hoş geldin dediği kişileri tutar
 
 function getTimeString(timestamp) {
   return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
@@ -440,47 +468,82 @@ function getRandomReply(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// --- BOT CEVAP SİSTEMİ ---
-function getBotReply(text, userName) {
+// --- AKILLI BOT VE HOŞ GELDİN SİSTEMİ ---
+function getBotReply(text, userName, isFirstMessage = false) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
+  let botResponse = "";
 
+  // 1. İLK DEFA MESAJ ATAN KULLANICIYI KARŞILAMA 👋
+  if (isFirstMessage && !welcomedUsers.has(userName.toLowerCase())) {
+    welcomedUsers.add(userName.toLowerCase());
+    botResponse += getRandomReply([
+      `👋 Ooo Hoş geldin Sayın ${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler ve bol sohbetler dileriz! 🎧☕\n`,
+      `✨ Aramıza hoş geldin ${userName}! Sefalar getirdin, radyonuz açık muhabbetiniz bol olsun! 📻❤️\n`,
+      `🎉 Ailemize hoş geldin ${userName}! Sizi aramızda görmek çok güzel, keyifli saatler! 🎙️✨\n`
+    ]);
+  }
+
+  // 2. KAHVE KOMUTU ☕
+  if (m.includes("kahve") || m.includes("☕")) {
+    botResponse += getRandomReply([
+      `☕ Sayın ${userName}, bol köpüklü taze kahveniz hazır! Afiyet olsun! 😋`,
+      `☕ Krallara layık bir orta kahve ${userName} için geldi! Afiyetle içiniz! 📻✨`,
+      `☕ Kahve kokusu tüm sohbet odasını sardı! Sayın ${userName} için sıcacık bir kahve ikramımızdır! ☕❤️`
+    ]);
+    return botResponse;
+  }
+
+  // 3. KALP / SEVGİ KOMUTU ❤️
+  if (m.includes("kalp") || m.includes("❤️") || m.includes("love") || m.includes("sevgi")) {
+    botResponse += getRandomReply([
+      `❤️ Sayın ${userName}, Kral FM ailesinden size kucak dolusu sevgiler ve kalpler! 💖✨`,
+      `💕 Kalbiniz sevgiyle, kulağınız Kral FM'le dolsun Sayın ${userName}! 🎙️❤️`,
+      `💖 Ooo odamıza aşk ve sevgi doldu! ${userName} size kocamannnn bir kalp! ❤️🎉`
+    ]);
+    return botResponse;
+  }
+
+  // 4. ISLIK / FIYTT KOMUTU 😙
+  if (m.includes("ıslık") || m.includes("islik") || m.includes("fıtt") || m.includes("fuyyt") || m.includes("😙")) {
+    botResponse += getRandomReply([
+      `😙 FUYYYT! Sayın yayıncımıza ${userName} isimli dinleyicimizden coşkulu bir ıslık geldi! 🎶🎙️`,
+      `😙 fıyyyüttt! Harika performans! ${userName} harika bir ıslık çalarak tempoyu yükseltti! 💃🕺`,
+      `😙 FUYYYT! Kral FM stüdyolarında ıslık sesleri yükseliyor! Teşekkürler ${userName}! 📻🔥`
+    ]);
+    return botResponse;
+  }
+
+  // 5. İSTEK ŞARKI CEVABI 🎵
   if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki") || m.includes("parça")) {
-    return getRandomReply([
-      `🎵 Harika seçim Sayın ${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı. Kral FM ailesi olarak keyifli dinlemeler dileriz! 🎧☕`,
-      `🎶 İstek notunuzu aldık ${userName}! Yayıncımız birazdan şarkınızı sırayla buluşturacak. Radyonuz açık, çayınız demli olsun! Keyifli dinlemeler! 📻✨`,
-      `🎼 Mükemmel bir tercih Sayın ${userName}! Şarkı isteğiniz yayıncımız tarafından sıraya dahil edildi. Kulağınız Kral FM'de olsun, keyifli saatler! 🎙️❤️`
+    botResponse += getRandomReply([
+      `🎵 Harika seçim Sayın ${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı! 🎧☕`,
+      `🎶 İstek notunuzu aldık ${userName}! Yayıncımız birazdan şarkınızı sırayla buluşturacak! 📻✨`
     ]);
+    return botResponse;
   }
 
-  if (!m.includes("bot")) return null;
-
-  if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
-    return getRandomReply([
-      `👋 Selam ${userName}! Bana mı seslendin? Radyo Kral FM dinlerken buradayım! 💜`,
-      `✨ Merhaba ${userName}! Benimle konuştuğun için teşekkürler, nasılsın? 🤖`
-    ]);
+  // 6. BOT İLE SOHBET
+  if (m.includes("bot")) {
+    if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
+      botResponse += getRandomReply([
+        `👋 Selam ${userName}! Bana mı seslendin? Kral FM dinlerken buradayım! 💜`,
+        `✨ Merhaba ${userName}! Benimle konuştuğun için teşekkürler, nasılsın? 🤖`
+      ]);
+    } else if(m.includes("nasıl") || m.includes("nasilsin") || m.includes("naber")) {
+      botResponse += getRandomReply([
+        `🤖 Pillerim full, Kral FM ritimleriyle şarj oluyorum! Sen nasılsın ${userName}?`,
+        `🤖 Çok iyiyim! Sohbet odasını izleyip müziğin tadını çıkarıyorum. Sen nasılsın?`
+      ]);
+    } else {
+      botResponse += getRandomReply([
+        `🤖 Efendim ${userName}, beni mi çağırdın? 💜`,
+        `🤖 Buradayım ${userName}! İletini aldım, keyifli dinlemeler! 📻`
+      ]);
+    }
+    return botResponse;
   }
 
-  if(m.includes("nasıl") || m.includes("nasilsin") || m.includes("naber")) {
-    return getRandomReply([
-      `🤖 Pillerim full, Kral FM ritimleriyle şarj oluyorum! Sen nasılsın ${userName}?`,
-      `🤖 Çok iyiyim! Sohbet odasını izleyip müziğin tadını çıkarıyorum. Sen nasılsın?`
-    ]);
-  }
-
-  if(m.includes("ne yapıyorsun") || m.includes("ne napiyon") || m.includes("napıyon")) {
-    return "🤖 Odadaki harika insanları izliyor ve yayına tempo tutuyorum! 🎧";
-  }
-
-  if(m.includes("sağol") || m.includes("teşekkür") || m.includes("eyvallah")) {
-    return `❤️ Ne demek ${userName}, her zaman buradayım! Müzikle kal! 🎉`;
-  }
-
-  return getRandomReply([
-    `🤖 Efendim ${userName}, beni mi çağırdın? 💜`,
-    `🤖 Buradayım ${userName}! İletini aldım, keyifli dinlemeler! 📻`,
-    `🤖 Sesini duydum ${userName}! Kral FM muhabbetine eşlik etmeye hazırım!`
-  ]);
+  return botResponse || null;
 }
 
 async function announceJoin(username) {
@@ -520,6 +583,7 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
   if(!n || !t) return;
 
+  const isFirstMsg = !hasJoined;
   if (!hasJoined) await announceJoin(n);
 
   try {
@@ -533,11 +597,12 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
     document.getElementById("text").value = "";
 
-    const reply = getBotReply(t, n);
+    // Bot cevabını ve Hoş geldin mesajını kontrol eder
+    const reply = getBotReply(t, n, isFirstMsg);
     if(reply) {
       setTimeout(() => {
         showMessage({ name: "Kral Bot", text: reply, createdAt: Date.now() }, true);
-      }, 500);
+      }, 600);
     }
 
   } catch(e) {
