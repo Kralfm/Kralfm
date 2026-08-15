@@ -197,6 +197,7 @@ import {
   ref,
   push,
   onChildAdded,
+  remove,
   onDisconnect
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
@@ -475,46 +476,16 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
   requestModal.style.display = "none";
 });
 
-document.getElementById("clear").addEventListener("click", () => box.innerHTML = "");
+// SOHBETİ TEMİZLE BUTONU (Veritabanındaki her şeyi kalıcı olarak siler ve ekranı boşaltır)
+document.getElementById("clear").addEventListener("click", async () => {
+  try {
+    await remove(messagesRef);
+    box.innerHTML = "";
+  } catch (error) {
+    box.innerHTML = "";
+  }
+});
 
 const simulatedUsers = [
   { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
-  { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
-  { name: "NostaljiKralı", avatar: "👑", color: "#f1c40f" },
-  { name: "GeceYildizi", avatar: "🌟", color: "#9b59b6" },
-  { name: "KahveSever", avatar: "☕", color: "#d35400" }
-];
-
-const simulatedMessages = [
-  "Keyifli dinlemeler herkese ☕ Harika bir parça çalıyor!",
-  "Radyonun sesini biraz daha açtım, bu şarkı efsane 🎶🔥",
-  "Herkese iyi akşamlar, muhabbetiniz bol olsun dostlar ✨",
-  "Ağzına sağlık yayıncım, süper gidiyor 📻",
-  "Odadaki herkese benden bol köpüklü kahve ikramı ☕😋"
-];
-
-function startIdleSimulation() {
-  setInterval(async () => {
-    const now = Date.now();
-    if (now - lastActivityTime > 180000) {
-      const randomUser = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
-      const randomMsg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
-
-      await push(messagesRef, {
-        name: randomUser.name,
-        text: randomMsg,
-        color: randomUser.color,
-        avatar: randomUser.avatar,
-        type: "user",
-        createdAt: Date.now()
-      });
-
-      lastActivityTime = Date.now();
-    }
-  }, 30000);
-}
-
-startIdleSimulation();
-</script>
-</body>
-</html>
+  { name: "Selin_Gulu", avatar: "👩", color: "#e91e
