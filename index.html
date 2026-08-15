@@ -12,7 +12,7 @@ header{background:#b00000;padding:18px;text-align:center;font-size:22px;font-wei
 main{max-width:850px;margin:auto;padding:15px}
 .card{background:#1e1e1e;border-radius:14px;padding:18px;margin-bottom:15px}
 
-/* --- RADYO KRAL FM TEMA & KART DÜZENİ --- */
+/* RADYO KRAL FM TEMA & KART DÜZENİ */
 .radio-player-card {
   background: linear-gradient(145deg, #180303 0%, #2a0808 100%);
   border: 1px solid #aa0000;
@@ -148,11 +148,9 @@ main{max-width:850px;margin:auto;padding:15px}
 .play-btn:hover { filter: brightness(1.2); }
 .play-btn:active { transform: scale(0.98); }
 
-/* --- SOHBET VE MESAJ ALANI STİLLERİ --- */
+/* SOHBET KUTUSU VE MESAJLAR */
 #messages {
-  height: 50dvh;
-  min-height: 280px;
-  max-height: 500px;
+  height: 380px;
   overflow-y: auto;
   background: #0b0b0b;
   border-radius: 10px;
@@ -168,16 +166,6 @@ main{max-width:850px;margin:auto;padding:15px}
   word-break: break-word;
   font-size: 15px;
   line-height: 1.4;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.msg:hover { background: #333333; }
-
-.msg.mentioned-msg {
-  background: linear-gradient(135deg, #3d3100 0%, #1f1800 100%) !important;
-  border: 1px solid #f59e0b !important;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
 .msg.bot-msg {
@@ -206,11 +194,10 @@ main{max-width:850px;margin:auto;padding:15px}
   letter-spacing: 0.5px;
 }
 
-.msg.system-msg{background:#222;border:1px dashed #555;color:#aaa;font-style:italic;font-size:13px;text-align:center;cursor:default}
+.msg.system-msg{background:#222;border:1px dashed #555;color:#aaa;font-style:italic;font-size:13px;text-align:center}
 .time{font-size:11px;color:#888;margin-right:6px}
 .avatar{margin-right:4px;font-size:16px}
-.name{font-weight:bold;color:#ff5555;margin-right:6px;cursor:pointer}
-.name:hover{text-decoration:underline}
+.name{font-weight:bold;color:#ff5555;margin-right:6px}
 .bot-name{color:#c084fc !important; font-weight: 900;}
 
 form {
@@ -219,7 +206,6 @@ form {
   margin-top: 12px;
   align-items: center;
   flex-wrap: wrap;
-  position: relative;
 }
 
 select#userAvatar, input#name, input#text {
@@ -244,76 +230,12 @@ input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 input[type="color"]::-webkit-color-swatch { border: 2px solid #444; border-radius: 8px; }
 
 input#name { width: 120px; padding: 12px; font-size: 15px; }
-
-.input-container {
-  flex: 1;
-  display: flex;
-  position: relative;
-  min-width: 200px;
-}
-
-input#text {
-  width: 100%;
-  padding: 14px 50px 14px 15px;
-  border: 1px solid #444;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-input#text:focus { outline: none; border-color: #ff3333; }
-
-/* EMOJİ BUTONU VE KESİN GÖRÜNÜR PANEL */
-.emoji-btn {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #333;
-  border: 1px solid #555;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.emoji-picker {
-  display: none;
-  position: absolute;
-  bottom: 60px;
-  right: 0;
-  background: #222;
-  border: 2px solid #555;
-  border-radius: 12px;
-  padding: 12px;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.9);
-  z-index: 99999;
-}
-
-.emoji-picker.active { display: grid; }
-
-.emoji-picker span {
-  font-size: 24px;
-  cursor: pointer;
-  text-align: center;
-  padding: 6px;
-  background: #333;
-  border-radius: 6px;
-  user-select: none;
-}
-
-.emoji-picker span:hover { background: #444; }
+input#text { flex: 1; padding: 12px; min-width: 180px; font-size: 15px; }
 
 button[type="submit"] {
   border: 0;
   border-radius: 8px;
-  padding: 14px 20px;
+  padding: 12px 20px;
   background: #e00000;
   color: #fff;
   font-weight: bold;
@@ -404,16 +326,7 @@ button.applause-btn:hover { background: #b45309; }
     
     <input type="color" id="userColor" value="#ff5555" title="İsim Renginizi Seçin">
     <input type="text" id="name" maxlength="30" placeholder="Adınız" required>
-    
-    <div class="input-container">
-      <input type="text" id="text" maxlength="300" placeholder="Mesajınızı buraya yazın..." required>
-      <button type="button" class="emoji-btn" id="emojiToggle" title="Emoji Ekle">😀</button>
-      <div class="emoji-picker" id="emojiPicker">
-        <span>😀</span><span>😂</span><span>😍</span><span>🔥</span><span>☕</span><span>❤️</span>
-        <span>🎧</span><span>🎶</span><span>📻</span><span>🎙️</span><span>👏</span><span>💃</span>
-        <span>🕺</span><span>👑</span><span>✨</span><span>👍</span><span>🎉</span><span>🥳</span>
-      </div>
-    </div>
+    <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
 
     <button type="submit">Gönder</button>
   </form>
@@ -463,24 +376,6 @@ const colorInput = document.getElementById("userColor");
 const avatarInput = document.getElementById("userAvatar");
 const toggleRadioBtn = document.getElementById("toggleRadio");
 const applauseAudio = document.getElementById("applauseSound");
-const emojiToggle = document.getElementById("emojiToggle");
-const emojiPicker = document.getElementById("emojiPicker");
-
-function playNotificationSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(880, ctx.currentTime);
-    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.3);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.3);
-  } catch(e) {}
-}
 
 toggleRadioBtn.addEventListener("click", () => {
   window.open(
@@ -488,22 +383,6 @@ toggleRadioBtn.addEventListener("click", () => {
     "KralFMPopupWindow",
     "width=500,height=380,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no"
   );
-});
-
-emojiToggle.addEventListener("click", (e) => {
-  e.stopPropagation();
-  emojiPicker.classList.toggle("active");
-});
-
-document.addEventListener("click", () => {
-  emojiPicker.classList.remove("active");
-});
-
-emojiPicker.querySelectorAll("span").forEach(emoji => {
-  emoji.addEventListener("click", () => {
-    textInput.value += emoji.textContent;
-    textInput.focus();
-  });
 });
 
 let hasJoined = false;
@@ -552,21 +431,6 @@ function showMessage(d, isBot = false) {
   n.textContent = (d.name || "Misafir") + ": ";
   t.textContent = d.text || "";
 
-  const myName = nameInput.value.trim().toLowerCase();
-  if (myName && myName.length >= 2 && d.text) {
-    if (d.text.toLowerCase().includes(`@${myName}`)) {
-      r.classList.add("mentioned-msg");
-      playNotificationSound();
-    }
-  }
-
-  r.addEventListener("click", () => {
-    if(!isBot && d.name) {
-      textInput.value = `@${d.name} ${textInput.value}`;
-      textInput.focus();
-    }
-  });
-
   if (isBot) {
     const badge = document.createElement("span");
     badge.className = "bot-badge";
@@ -584,28 +448,82 @@ function getRandomReply(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+/* KRAL BOT AKILLI YANIT SİSTEMİ */
 function getBotReply(text, userName, isFirstMessage = false) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
   let botResponse = "";
 
+  // 1. İLK GİRİŞ KARŞILAMA
   if (isFirstMessage && !welcomedUsers.has(userName.toLowerCase())) {
     welcomedUsers.add(userName.toLowerCase());
     botResponse += getRandomReply([
-      `👋 Ooo Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler ve bol sohbetler dileriz! 🎧☕\n`,
-      `✨ Aramıza hoş geldin @${userName}! Sefalar getirdin, radyonuz açık muhabbetiniz bol olsun! 📻❤️\n`,
+      `👋 Ooo Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler ve bol sohbetler dileriz! (İpucu: Komutlar için 'yardım' yazabilirsin) 🎧☕\n`,
+      `✨ Aramıza hoş geldin @${userName}! Sefalar getirdin, radyonuz açık muhabbetiniz bol olsun! (Öğrenmek için 'yardım' yazabilirsin) 📻❤️\n`,
       `🎉 Ailemize hoş geldin @${userName}! Sizi aramızda görmek çok güzel, keyifli saatler! 🎙️✨\n`
     ]);
   }
 
+  // YARDIM / KOMUTLAR BİLGİLENDİRMESİ
+  if (m === "yardım" || m === "yardim" || m === "komutlar" || m.includes("bot yardım") || m.includes("bot yardim")) {
+    return `📜 Sayın @${userName}, Kral Bot Komut Rehberi:\n
+☕ Kahve İkramı: '@İsim kahve' veya '@herkes kahve'\n
+🔍 Kişi Sorma: '@İsim neredesin' veya 'nerelerdesin'\n
+❤️ Kalp / Sevgi: Mesajında 'kalp' veya '❤️' kullanabilirsin\n
+😙 Islık Çalma: 'ıslık' veya 'fuyyt' yazarak coşkuyu arttır\n
+🎵 İstek Parça: Mesajında 'istek' veya 'şarkı' yazabilirsin\n
+🤖 Botla Sohbet: 'bot selam', 'bot nasılsın' yazarak benimle konuşabilirsin! 🎧✨`;
+  }
+
+  // ETİKETLENEN İSMİ BULMA (Örn: @Ayşe kahve)
+  const mentionMatch = text.match(/@([a-zA-Z0-9çğıöşüÇĞİÖŞÜ_]+)/);
+  const mentionedUser = mentionMatch ? mentionMatch[1] : null;
+
+  // 2. KAHVE İKRAM SİSTEMİ (@İsim kahve VEYA @herkes kahve)
   if (m.includes("kahve") || m.includes("☕")) {
-    botResponse += getRandomReply([
-      `☕ Sayın @${userName}, bol köpüklü taze kahveniz hazır! Afiyet olsun! 😋`,
-      `☕ Krallara layık bir orta kahve @${userName} için geldi! Afiyetle içiniz! 📻✨`,
-      `☕ Kahve kokusu tüm sohbet odasını sardı! Sayın @${userName} için sıcacık bir kahve ikramımızdır! ☕❤️`
-    ]);
+    if (mentionedUser) {
+      if (mentionedUser.toLowerCase() === "herkes") {
+        botResponse += getRandomReply([
+          `☕ Ooo Krallara layık hareket! Sayın @${userName} odadaki HERKESE mis kokulu taze kahve ikram etti! Afiyet olsun arkadaşlar! ☕🎉`,
+          `☕ Kral FM stüdyosundan duyuru: Sayın @${userName} @herkes için bol köpüklü kahveleri ısmarladı! Keyifli dinlemeler! 📻☕`,
+          `☕ Taze kahve kokusu tüm odayı sardı! @${userName} dostumuz @herkesi kahveye davet ediyor, afiyetler olsun! ❤️☕`
+        ]);
+      } else {
+        botResponse += getRandomReply([
+          `☕ Sayın @${mentionedUser}, @${userName} size özel bol köpüklü taze bir kahve ikram etti! Afiyet olsun! 😋☕`,
+          `☕ Harika bir jest! @${userName} dostumuzdan Sayın @${mentionedUser} için krallara layık orta kahve geldi! 📻✨`,
+          `☕ Kalpten kalbe bir kahve köprüsü! @${userName} hazırladı, Sayın @${mentionedUser} için ikram ediyor. Afiyetle içiniz! ❤️☕`
+        ]);
+      }
+    } else {
+      botResponse += getRandomReply([
+        `☕ Sayın @${userName}, bol köpüklü taze kahveniz hazır! Afiyet olsun! 😋`,
+        `☕ Krallara layık bir orta kahve @${userName} için geldi! Afiyetle içiniz! 📻✨`,
+        `☕ Kahve kokusu tüm sohbet odasını sardı! Sayın @${userName} için sıcacık bir kahve ikramımızdır! ☕❤️`
+      ]);
+    }
     return botResponse;
   }
 
+  // 3. NEREDESİN SORMAMA SİSTEMİ (@İsim neredesin / nerelerdesin)
+  if (m.includes("neredesin") || m.includes("nerelerdesin") || m.includes("nerdesin")) {
+    if (mentionedUser) {
+      botResponse += getRandomReply([
+        `💬 Sayın @${mentionedUser}, neredesiniz acaba? @${userName} gözleri yollarda sizi arıyor, sohbetin tadı sizsiz çıkmıyor! 🔍❤️`,
+        `✨ @${mentionedUser} neredelerdesiniz? @${userName} dostumuz yokluğunu hissetti, ses verin de neşemiz yerine gelsin! 📻🎙️`,
+        `🌸 "Gözden ırak olan gönülden ırak olmazmış..." Sayın @${mentionedUser}, @${userName} sizi sordu, kulaklarınız çınlasın! 🎶💬`,
+        `🌟 Bir tatlı esinti gibi bekleniyorsunuz Sayın @${mentionedUser}! @${userName} merakla gelişinizi bekliyor, neredesiniz? ☕✨`,
+        `🎵 "Neredesin sen..." şarkısı stüdyoda çalarken @${userName} tam da sizi soruyordu Sayın @${mentionedUser}! 🎧❤️`
+      ]);
+    } else {
+      botResponse += getRandomReply([
+        `💬 Neredesiniz ey dostlar? @${userName} sohbeti başlattı, katılanları bekliyoruz! 🎙️✨`,
+        `🔍 Buralar sizsiz sessiz kalır! @${userName} ile birlikte sesinizi duymak için bekliyoruz! 📻❤️`
+      ]);
+    }
+    return botResponse;
+  }
+
+  // 4. KALP VE SEVGİ
   if (m.includes("kalp") || m.includes("❤️") || m.includes("love") || m.includes("sevgi")) {
     botResponse += getRandomReply([
       `❤️ Sayın @${userName}, Kral FM ailesinden size kucak dolusu sevgiler ve kalpler! 💖✨`,
@@ -615,6 +533,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
+  // 5. ISLIK
   if (m.includes("ıslık") || m.includes("islik") || m.includes("fıtt") || m.includes("fuyyt") || m.includes("😙")) {
     botResponse += getRandomReply([
       `😙 FUYYYT! Sayın yayıncımıza @${userName} isimli dinleyicimizden coşkulu bir ıslık geldi! 🎶🎙️`,
@@ -624,6 +543,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
+  // 6. İSTEK PARÇA
   if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki") || m.includes("parça")) {
     botResponse += getRandomReply([
       `🎵 Harika seçim Sayın @${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı! 🎧☕`,
@@ -632,6 +552,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
+  // 7. BOTLA SOHBET
   if (m.includes("bot")) {
     if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
       botResponse += getRandomReply([
