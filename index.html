@@ -136,22 +136,24 @@ main{max-width:850px;margin:auto;padding:15px}
 .play-btn:hover { filter: brightness(1.1); }
 .play-btn:active { transform: scale(0.98); }
 
-/* --- CANLI KULLANICI SAYACI BAŞLIĞI --- */
-.chat-header-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+/* --- KÜÇÜK PENCEREDE AÇILAN HARİCİ LINK STİLİ --- */
+.external-link { 
+  display: inline-block; 
+  margin-top: 14px; 
+  padding: 8px 16px;
+  background: rgba(255, 0, 0, 0.15);
+  border: 1px solid #ff3333;
+  border-radius: 8px;
+  color: #ff4d4d; 
+  text-decoration: none; 
+  font-size: 14px; 
+  font-weight: bold; 
+  transition: all 0.2s ease;
 }
-
-.online-counter {
-  background: #111;
-  border: 1px solid #333;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  color: #4ade80;
-  font-weight: bold;
+.external-link:hover { 
+  background: #ff3333;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
 }
 
 /* --- SOHBET VE MESAJ ALANI STİLLERİ --- */
@@ -254,8 +256,6 @@ button[type="submit"] {
 
 #clear { margin-top: 12px; background: #444; color: #fff; border: 0; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
 .note { color: #aaa; font-size: 13px; }
-.external-link { display: inline-block; margin-top: 12px; color: #ff7777; text-decoration: none; font-size: 13px; font-weight: bold; }
-.external-link:hover { text-decoration: underline; }
 </style>
 </head>
 
@@ -285,14 +285,14 @@ button[type="submit"] {
   <audio id="radioAudio" preload="none"></audio>
   <button type="button" class="play-btn" id="toggleRadio">▶ Radyoyu Başlat</button>
   <br>
-  <a href="http://kralfm.radio12345.com/" target="_blank" rel="noopener" class="external-link">🔗 Harici Sekmede Dinle</a>
+  <!-- Küçük pencere olarak açılması sağlandı -->
+  <a href="http://kralfm.radio12345.com/" 
+     onclick="window.open(this.href, 'KralFMPopup', 'width=520,height=420,resizable=yes,scrollbars=yes'); return false;" 
+     class="external-link">📻 KralFM Harici Pencerede Dinle</a>
 </div>
 
 <div class="card">
-  <div class="chat-header-flex">
-    <h2 style="margin:0;">💬 Canlı Muhabbet</h2>
-    <div class="online-counter" id="onlineCount">🟢 Çevrimiçi: 0</div>
-  </div>
+  <h2 style="margin-top:0; margin-bottom:12px;">💬 Canlı Muhabbet</h2>
 
   <div id="messages"></div>
 
@@ -337,10 +337,7 @@ import {
   query,
   orderByChild,
   startAt,
-  onDisconnect,
-  onValue,
-  set,
-  remove
+  onDisconnect
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -355,7 +352,6 @@ const firebaseConfig = {
 
 const db = getDatabase(initializeApp(firebaseConfig));
 const messagesRef = ref(db, "messages");
-const onlineRef = ref(db, "online_users");
 
 const box = document.getElementById("messages");
 const status = document.getElementById("status");
@@ -364,26 +360,6 @@ const colorInput = document.getElementById("userColor");
 const avatarInput = document.getElementById("userAvatar");
 const radioAudio = document.getElementById("radioAudio");
 const toggleRadioBtn = document.getElementById("toggleRadio");
-const onlineCountEl = document.getElementById("onlineCount");
-
-// --- ÇEVRİMİÇİ KULLANICI SAYICI (DÜZELTİLDİ) ---
-let myUserSessionRef = null;
-
-function trackOnlineUser(userName) {
-  if (myUserSessionRef) return; // Zaten odaya eklenmişse tekrar ekleme
-  
-  myUserSessionRef = push(onlineRef);
-  set(myUserSessionRef, { name: userName, joinedAt: Date.now() });
-
-  // Sekme kapandığında veya ayrıldığında sayı otomatik düşer
-  onDisconnect(myUserSessionRef).remove();
-}
-
-// Çevrimiçi olanları anlık takip et
-onValue(onlineRef, (snap) => {
-  const count = snap.exists() ? Object.keys(snap.val()).length : 0;
-  onlineCountEl.textContent = `🟢 Çevrimiçi: ${count}`;
-});
 
 // HLS Radyo Yayın Ayarı
 const streamUrl = "https://ssllive.kralfm.com.tr/kralfm/kralfm.stream/playlist.m3u8";
@@ -404,7 +380,7 @@ toggleRadioBtn.addEventListener("click", () => {
       toggleRadioBtn.textContent = "⏸️ Radyoyu Durdur";
       toggleRadioBtn.style.background = "linear-gradient(180deg, #444 0%, #222 100%)";
     }).catch(() => {
-      window.open("http://kralfm.radio12345.com/", "_blank");
+      window.open("http://kralfm.radio12345.com/", "KralFMPopup", "width=520,height=420");
     });
   } else {
     radioAudio.pause();
@@ -469,11 +445,11 @@ function getRandomReply(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// --- BOT CEVAP SİSTEMİ (İSTEKLER DÜZELTİLDİ) ---
+// --- BOT CEVAP SİSTEMİ ---
 function getBotReply(text, userName) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
 
-  // 1. İSTEK CEVABI (Mesajda "bot" şartı aranmaz, direkt cevap verir)
+  // 1. İSTEK ŞARKI CEVABI (Otomatik Algılama)
   if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki") || m.includes("parça")) {
     return getRandomReply([
       `🎵 Harika seçim Sayın ${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı. Kral FM ailesi olarak keyifli dinlemeler dileriz! 🎧☕`,
@@ -517,9 +493,6 @@ function getBotReply(text, userName) {
 async function announceJoin(username) {
   if (hasJoined || !username) return;
   hasJoined = true;
-
-  // Çevrimiçi sayacına kullanıcıyı kaydet
-  trackOnlineUser(username);
 
   await push(messagesRef, {
     text: `🚪 ${username} sohbet odasına katıldı.`,
