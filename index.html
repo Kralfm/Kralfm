@@ -136,26 +136,6 @@ main{max-width:850px;margin:auto;padding:15px}
 .play-btn:hover { filter: brightness(1.1); }
 .play-btn:active { transform: scale(0.98); }
 
-/* --- UFAK PENCERE BUTONU STİLİ --- */
-.popup-btn { 
-  display: inline-block; 
-  margin-top: 14px; 
-  padding: 10px 20px;
-  background: rgba(255, 0, 0, 0.2);
-  border: 1px solid #ff3333;
-  border-radius: 8px;
-  color: #ff6666; 
-  font-size: 14px; 
-  font-weight: bold; 
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.popup-btn:hover { 
-  background: #ff3333;
-  color: #fff;
-  box-shadow: 0 0 12px rgba(255, 51, 51, 0.6);
-}
-
 /* --- SOHBET VE MESAJ ALANI STİLLERİ --- */
 #messages {
   height: 60vh;
@@ -310,12 +290,7 @@ button.applause-btn:hover { background: #b45309; }
     ✨ Müziğin ritmi, dostluğun adresi! En güzel şarkılar, sıcacık sohbetler ve unutulmaz anlar için doğru yerdesiniz. Keyifli dinlemeler, hoş sohbetler dileriz... 🎶☕
   </div>
 
-  <audio id="radioAudio" preload="none"></audio>
-  <button type="button" class="play-btn" id="toggleRadio">▶ Radyoyu Başlat</button>
-  <br>
-  
-  <!-- GARANTİLİ UFAK PENCERE BUTONU -->
-  <button type="button" id="openMiniPlayer" class="popup-btn">📻 KralFM Ufak Pencerede Aç</button>
+  <button type="button" class="play-btn" id="toggleRadio">▶ Radyoyu Başlat (Küçük Pencerede Dinle)</button>
 </div>
 
 <div class="card">
@@ -358,7 +333,6 @@ button.applause-btn:hover { background: #b45309; }
 </div>
 </main>
 
-<!-- ÇALIŞAN ALKIŞ SESİ SES DOSYASI -->
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 
 <script type="module">
@@ -392,46 +366,16 @@ const status = document.getElementById("status");
 const nameInput = document.getElementById("name");
 const colorInput = document.getElementById("userColor");
 const avatarInput = document.getElementById("userAvatar");
-const radioAudio = document.getElementById("radioAudio");
 const toggleRadioBtn = document.getElementById("toggleRadio");
 const applauseAudio = document.getElementById("applauseSound");
 
-// --- UFAK PENCERE AÇMA İŞLEVİ ---
-document.getElementById("openMiniPlayer").addEventListener("click", () => {
+// RADYOYU BAŞLAT BUTONU ARTIK DOĞRUDAN UFAK PENCEREYİ AÇAR
+toggleRadioBtn.addEventListener("click", () => {
   window.open(
     "http://kralfm.radio12345.com/",
     "KralFMPopupWindow",
     "width=500,height=380,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no"
   );
-});
-
-// HLS Radyo Yayın Ayarı
-const streamUrl = "https://ssllive.kralfm.com.tr/kralfm/kralfm.stream/playlist.m3u8";
-let isPlaying = false;
-
-if (Hls.isSupported()) {
-  const hls = new Hls();
-  hls.loadSource(streamUrl);
-  hls.attachMedia(radioAudio);
-} else if (radioAudio.canPlayType('application/vnd.apple.mpegurl')) {
-  radioAudio.src = streamUrl;
-}
-
-toggleRadioBtn.addEventListener("click", () => {
-  if (!isPlaying) {
-    radioAudio.play().then(() => {
-      isPlaying = true;
-      toggleRadioBtn.textContent = "⏸️ Radyoyu Durdur";
-      toggleRadioBtn.style.background = "linear-gradient(180deg, #444 0%, #222 100%)";
-    }).catch(() => {
-      document.getElementById("openMiniPlayer").click();
-    });
-  } else {
-    radioAudio.pause();
-    isPlaying = false;
-    toggleRadioBtn.textContent = "▶ Radyoyu Başlat";
-    toggleRadioBtn.style.background = "linear-gradient(180deg, #ff1a1a 0%, #990000 100%)";
-  }
 });
 
 let hasJoined = false;
@@ -464,7 +408,6 @@ function showMessage(d, isBot = false) {
 
   if(d.type === "applause") {
     r.className = "msg applause-msg";
-    // Alkış gelince sesi çal
     applauseAudio.currentTime = 0;
     applauseAudio.play().catch(()=>{});
   } else {
@@ -501,7 +444,6 @@ function getRandomReply(arr) {
 function getBotReply(text, userName) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
 
-  // 1. İSTEK ŞARKI CEVABI (Otomatik Algılama)
   if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki") || m.includes("parça")) {
     return getRandomReply([
       `🎵 Harika seçim Sayın ${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı. Kral FM ailesi olarak keyifli dinlemeler dileriz! 🎧☕`,
@@ -510,7 +452,6 @@ function getBotReply(text, userName) {
     ]);
   }
 
-  // 2. SADECE İÇİNDE "BOT" GEÇEN DİĞER MESAJLAR
   if (!m.includes("bot")) return null;
 
   if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
