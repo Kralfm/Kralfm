@@ -413,10 +413,12 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
   lastActivityTime = Date.now();
   if (!hasJoined) await announceJoin(n);
 
+  // Önce kullanıcı mesajını gönder
   await push(messagesRef, {
     name: n, text: t, color: c, avatar: a, type: "user", createdAt: Date.now()
   });
 
+  // Bot yanıt mantığı doğrudan tetikleniyor
   const isFirst = !welcomedUsers.has(n.toLowerCase());
   const botReply = getBotReply(t, n, isFirst);
   
@@ -476,7 +478,6 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
   requestModal.style.display = "none";
 });
 
-// SOHBETİ TEMİZLE BUTONU (Veritabanındaki her şeyi kalıcı olarak siler ve ekranı boşaltır)
 document.getElementById("clear").addEventListener("click", async () => {
   try {
     await remove(messagesRef);
@@ -488,4 +489,5 @@ document.getElementById("clear").addEventListener("click", async () => {
 
 const simulatedUsers = [
   { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
-  { name: "Selin_Gulu", avatar: "👩", color: "#e91e
+  { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
+  { 
