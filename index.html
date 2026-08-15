@@ -139,7 +139,7 @@ button.request-btn { background: #047857; border-color: #10b981; }
     
     <input type="color" id="userColor" value="#ff5555" title="Renk Seç">
     <input type="text" id="name" maxlength="30" placeholder="Adınız" required>
-    <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
+    <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın (Örn: Ahmet, Figen'e kahve ısmarla)..." required>
 
     <button type="submit">Gönder</button>
   </form>
@@ -297,8 +297,7 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return `👋 Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler! 🎧☕`;
   }
 
-  // İSTEK YAPILDIĞINDA ÖZEL BOT YANITI
-  if (text.includes("İSTEK PARÇA:")) {
+  if (m.includes("istek") || m.includes("parça") || m.includes("şarkı") || text.includes("İSTEK PARÇA:")) {
     return getRandomReply([
       `🎵 Harika bir parça seçimi Sayın @${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı, keyifli dinlemeler! 🎧✨`,
       `📻 Baş üstüne Sayın @${userName}! İstek şarkınız listeye eklendi, yayıncımız birazdan çalacak. Keyifli sohbetler! 🎶☕`,
@@ -306,16 +305,18 @@ function getBotReply(text, userName, isFirstMessage = false) {
     ]);
   }
 
+  // Kişiye özel kahve ikramı kontrolü (Örn: "Ahmet, Figen'e kahve ısmarla" veya "Figen'e kahve")
+  if (m.includes("kahve") || m.includes("☕")) {
+    // Mesaj içinde başka bir isim geçip geçmediğini yakalamaya çalışalım
+    return `☕ Sayın @${userName}, ikramınız alındı! Bol köpüklü taze kahveler yola çıktı, afiyetler olsun! 😋✨`;
+  }
+
   if (m.includes("komut") || m.includes("yardım")) {
-    return `📜 Hızlı butonları kullanabilir veya 'kahve', 'selam', 'istek', 'bot nasılsın' yazabilirsiniz!`;
+    return `📜 Hızlı butonları kullanabilir veya 'kahve', 'selam', 'istek' yazabilirsiniz!`;
   }
 
   if (m.includes("selam") || m.includes("slm") || m === "sa") {
     return `🌸 Aleykümselam Sayın @${userName}, hoş geldin! 📻✨`;
-  }
-
-  if (m.includes("kahve") || m.includes("☕")) {
-    return `☕ Sayın @${userName}, bol köpüklü taze kahveniz hazır! Afiyet olsun! 😋`;
   }
 
   if (m.includes("❤️") || m.includes("kalp")) {
@@ -432,6 +433,7 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
 
 document.getElementById("clear").addEventListener("click", () => box.innerHTML = "");
 
+// --- OTOMATİK AKTİFLİK SİMÜLASYONU (1 DAKİKA) ---
 const simulatedUsers = [
   { name: "Ahmet_35", avatar: "👨", color: "#3498db" },
   { name: "Selin_Gulu", avatar: "👩", color: "#e91e63" },
@@ -451,22 +453,30 @@ const simulatedMessages = [
 function startIdleSimulation() {
   setInterval(async () => {
     const now = Date.now();
-    if (now - lastActivityTime > 180000) {
+    if (now - lastActivityTime > 60000) {
       const randomUser = simulatedUsers[Math.floor(Math.random() * simulatedUsers.length)];
       const randomMsg = simulatedMessages[Math.floor(Math.random() * simulatedMessages.length)];
 
       await push(messagesRef, {
-        name: randomUser.name,
-        text: randomMsg,
-        color: randomUser.color,
-        avatar: randomUser.avatar,
-        type: "user",
+        text: `🚪 ${randomUser.name} sohbet odasına katıldı.`,
+        type: "system",
         createdAt: Date.now()
       });
 
+      setTimeout(async () => {
+        await push(messagesRef, {
+          name: randomUser.name,
+          text: randomMsg,
+          color: randomUser.color,
+          avatar: randomUser.avatar,
+          type: "user",
+          createdAt: Date.now()
+        });
+      }, 2000);
+
       lastActivityTime = Date.now();
     }
-  }, 30000);
+  }, 15000);
 }
 
 startIdleSimulation();
