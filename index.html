@@ -118,19 +118,23 @@ main{max-width:850px;margin:auto;padding:15px}
   100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
 }
 
+/* KUTUYA VE DİKDÖRTGENE DÜZGÜN SIĞAN YENİ PLAYER ALANI */
 .popup-player-box {
   display: flex;
-  gap: 10px;
-  background: rgba(0,0,0,0.5);
-  padding: 10px;
+  gap: 12px;
+  background: rgba(0,0,0,0.6);
+  padding: 12px 15px;
   border-radius: 10px;
-  border: 1px dashed #555;
+  border: 1px solid #444;
   align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .play-btn {
   flex: 1;
-  padding: 14px;
+  padding: 12px 20px;
   font-size: 16px;
   background: linear-gradient(180deg, #ff1a1a 0%, #990000 100%);
   border: 0;
@@ -144,17 +148,18 @@ main{max-width:850px;margin:auto;padding:15px}
   align-items: center;
   justify-content: center;
   gap: 8px;
+  white-space: nowrap;
 }
 
 .play-btn:hover { filter: brightness(1.2); }
 .play-btn:active { transform: scale(0.98); }
 
 .popup-hint {
-  font-size: 12px;
-  color: #aaa;
+  font-size: 13px;
+  color: #ccc;
   text-align: right;
-  line-height: 1.2;
-  padding-right: 5px;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
 /* --- SOHBET VE MESAJ ALANI STİLLERİ --- */
@@ -313,10 +318,10 @@ button.applause-btn:hover { background: #b45309; }
 
   <div class="popup-player-box">
     <button type="button" class="play-btn" id="toggleRadio">
-      <span>🚀</span> Radyoyu Açılır Pencerede Başlat
+      <span>📻</span> Radyo Dinle
     </button>
     <div class="popup-hint">
-      🗔 Kesintisiz Dinleme<br><small style="color:#777;">Ayrı pencerede çalar</small>
+      🗔 Açılır Pencerede Dinle<br><small style="color:#888;">Ayrı pencerede açılır</small>
     </div>
   </div>
 </div>
@@ -406,7 +411,7 @@ toggleRadioBtn.addEventListener("click", () => {
 });
 
 let hasJoined = false;
-let welcomedUsers = new Set(); // Botun daha önce hoş geldin dediği kişileri tutar
+let welcomedUsers = new Set(); 
 
 function getTimeString(timestamp) {
   return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
@@ -468,12 +473,10 @@ function getRandomReply(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// --- AKILLI BOT VE HOŞ GELDİN SİSTEMİ ---
 function getBotReply(text, userName, isFirstMessage = false) {
   const m = text.toLocaleLowerCase("tr-TR").trim();
   let botResponse = "";
 
-  // 1. İLK DEFA MESAJ ATAN KULLANICIYI KARŞILAMA 👋
   if (isFirstMessage && !welcomedUsers.has(userName.toLowerCase())) {
     welcomedUsers.add(userName.toLowerCase());
     botResponse += getRandomReply([
@@ -483,7 +486,6 @@ function getBotReply(text, userName, isFirstMessage = false) {
     ]);
   }
 
-  // 2. KAHVE KOMUTU ☕
   if (m.includes("kahve") || m.includes("☕")) {
     botResponse += getRandomReply([
       `☕ Sayın ${userName}, bol köpüklü taze kahveniz hazır! Afiyet olsun! 😋`,
@@ -493,7 +495,6 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 3. KALP / SEVGİ KOMUTU ❤️
   if (m.includes("kalp") || m.includes("❤️") || m.includes("love") || m.includes("sevgi")) {
     botResponse += getRandomReply([
       `❤️ Sayın ${userName}, Kral FM ailesinden size kucak dolusu sevgiler ve kalpler! 💖✨`,
@@ -503,7 +504,6 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 4. ISLIK / FIYTT KOMUTU 😙
   if (m.includes("ıslık") || m.includes("islik") || m.includes("fıtt") || m.includes("fuyyt") || m.includes("😙")) {
     botResponse += getRandomReply([
       `😙 FUYYYT! Sayın yayıncımıza ${userName} isimli dinleyicimizden coşkulu bir ıslık geldi! 🎶🎙️`,
@@ -513,7 +513,6 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 5. İSTEK ŞARKI CEVABI 🎵
   if(m.includes("istek") || m.includes("çal") || m.includes("cal") || m.includes("şarkı") || m.includes("sarki") || m.includes("parça")) {
     botResponse += getRandomReply([
       `🎵 Harika seçim Sayın ${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı! 🎧☕`,
@@ -522,7 +521,6 @@ function getBotReply(text, userName, isFirstMessage = false) {
     return botResponse;
   }
 
-  // 6. BOT İLE SOHBET
   if (m.includes("bot")) {
     if(m.includes("selam") || m.includes("merhaba") || m.includes("slm")) {
       botResponse += getRandomReply([
@@ -597,7 +595,6 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
     document.getElementById("text").value = "";
 
-    // Bot cevabını ve Hoş geldin mesajını kontrol eder
     const reply = getBotReply(t, n, isFirstMsg);
     if(reply) {
       setTimeout(() => {
@@ -610,7 +607,6 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
   }
 });
 
-// --- ALKIŞ GÖNDERME BUTONU ---
 document.getElementById("sendApplause").addEventListener("click", async () => {
   const n = nameInput.value.trim() || "Bir Dinleyici";
   const c = colorInput.value;
