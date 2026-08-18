@@ -140,7 +140,7 @@ const uid="user_"+Math.random().toString(36).slice(2,10);
 const notification=$("notificationSound"), applause=$("applauseSound");
 const defaultGuestName = "Misafir_" + Math.floor(Math.random() * 900 + 100);
 
-// Sabit Çevrimiçi Botlar
+// Sabit Çevrimiçi Üyeler (Yanında bot yazmıyor)
 const staticBots = [
   { name: "DuRu", avatar: "👩" },
   { name: "Eren", avatar: "👨" },
@@ -199,7 +199,6 @@ function appendMessage(d){
  }
 }
 
-// Mesajları anlık dinle ve ekranda göster
 onValue(messagesRef, snap => {
   const data = snap.val() || {};
   $("messages").innerHTML = "";
@@ -242,11 +241,11 @@ onValue(presenceRef,snap=>{
  const users=snap.val()||{},arr=Object.values(users);
  $("onlineUsersList").innerHTML="";
  
- // Sabit Botları En Başa Ekle
+ // Sabit Üyeleri Ekle (Yanında yazı olmadan)
  staticBots.forEach(bot => {
   const d=document.createElement("div");
   d.className="user-list-item";
-  d.textContent=bot.avatar+" "+bot.name+" (Bot)";
+  d.textContent=bot.avatar+" "+bot.name;
   $("onlineUsersList").appendChild(d);
  });
 
@@ -289,7 +288,6 @@ $("sendCoffee").onclick=()=>sendMsg("☕ Herkese sıcacık kahve ikram etti!");
 $("sendHeart").onclick=()=>sendMsg("❤️ Kucak dolusu sevgiler gönderdi!");
 $("sendFire").onclick=()=>sendMsg("🔥 Ortamı alevlendirdi!", "action");
 
-// HERKESTE SİLME (Veritabanından temizler, herkesin ekranı tertemiz olur)
 $("clearChat").onclick=async()=>{
   if(confirm("Sohbet odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?")) {
     await set(messagesRef, null);
