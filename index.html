@@ -134,7 +134,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase,ref,push,onChildAdded,onValue,set,onDisconnect,remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase,ref,push,query,limitToLast,onChildAdded,onValue,set,onDisconnect,remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -154,6 +154,9 @@ let sound=true;
 const uid="user_"+Math.random().toString(36).slice(2,10);
 let nick="";
 const notification=$("notificationSound"), applause=$("applauseSound");
+
+// Sayfa açıldığı an otomatik misafir ismi atama
+nameInput.value="Misafir_"+Math.floor(Math.random()*900+100);
 
 document.querySelectorAll(".room-tab").forEach(tab=>tab.onclick=()=>{
  document.querySelectorAll(".room-tab").forEach(x=>x.classList.remove("active"));
@@ -209,7 +212,14 @@ function showMessage(d){
  }
 }
 
-onChildAdded(messagesRef,s=>showMessage(s.val()));
+// SAYFAYI YENİLEYENLER VEYA YENİ GİRENLER İÇİN ESKİ MESAJLARI GETİRMEYEN YAPI (Sadece yeni eklenenler dinlenir)
+let initialLoadDone = false;
+onChildAdded(messagesRef, s => {
+  if (!initialLoadDone) return; // Sayfa açıldığında veritabanında var olan eski mesajları atlar, ekrana basmaz.
+  showMessage(s.val());
+});
+// Bağlantı kurulduğunda mevcut eski mesajları pas geçip sadece bundan sonrakileri dinlemek için bayrağı açıyoruz
+setTimeout(() => { initialLoadDone = true; }, 1000);
 
 function botReply(text,user){
  const m=text.toLowerCase();
@@ -237,7 +247,8 @@ async function registerPresence(username){
  }
 }
 
-// İsim alanına yazı yazıldığı an veya odak çıkıldığında çevrimiçi listeye kaydetme
+registerPresence(nameInput.value.trim());
+
 nameInput.addEventListener("input",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
 nameInput.addEventListener("change",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
 avatarInput.addEventListener("change",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
