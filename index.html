@@ -96,7 +96,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
         <option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option><option value="🎉">🎉 Parti</option>
       </select>
       <input type="color" id="userColor" value="#ff5555">
-      <input type="text" id="name" maxlength="30" placeholder="Adınız" required>
+      <input type="text" id="name" maxlength="30" placeholder="Adınız">
       <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
       <button type="submit">Gönder</button>
     </form>
@@ -155,8 +155,8 @@ const uid="user_"+Math.random().toString(36).slice(2,10);
 let nick="";
 const notification=$("notificationSound"), applause=$("applauseSound");
 
-// Otomatik misafir ismi ver
-nameInput.value="Misafir_"+Math.floor(Math.random()*900+100);
+// Arka planda otomatik misafir ismi üret (Kutuyu boş bırakıyoruz)
+const defaultGuestName = "Misafir_" + Math.floor(Math.random() * 900 + 100);
 
 document.querySelectorAll(".room-tab").forEach(tab=>tab.onclick=()=>{
  document.querySelectorAll(".room-tab").forEach(x=>x.classList.remove("active"));
@@ -212,7 +212,7 @@ function showMessage(d){
  }
 }
 
-// Eski mesajları es geçip sadece yeni gelen mesajları dinleme (Sayfa ilk açıldığında boş olur)
+// Eski mesajları es geçip sadece yeni gelen mesajları dinleme (Sayfa ilk açıldığında sohbet boş olur)
 let initialLoadDone = false;
 onChildAdded(messagesRef, s => {
   if (!initialLoadDone) return;
@@ -230,28 +230,27 @@ function botReply(text,user){
  return null;
 }
 
-// Çevrimiçi listesine kullanıcıyı kesin olarak yazdıran fonksiyon
-async function registerPresence(username){
- if(!username)return;
+// Çevrimiçi listesine kullanıcıyı kaydeden fonksiyon
+async function registerPresence(){
+ const currentName = nameInput.value.trim() || defaultGuestName;
  const uref=ref(db,"presence/"+uid);
  try {
-   await set(uref,{name:username,avatar:avatarInput.value,color:colorInput.value,createdAt:Date.now()});
+   await set(uref,{name:currentName,avatar:avatarInput.value,color:colorInput.value,createdAt:Date.now()});
    onDisconnect(uref).remove();
-   console.log("Kullanıcı çevrimiçi kaydedildi:", username);
  } catch(e) {
-   console.error("Presence yazma hatası (Firebase Rules kontrol edin):", e);
+   console.error("Presence yazma hatası:", e);
  }
 }
 
-// Sayfa açılır açılmaz ve input değiştikçe tetikle
-registerPresence(nameInput.value.trim());
+// Sayfa açılır açılmaz ve inputlar değiştikçe çevrimiçi listesini güncelle
+registerPresence();
 
-nameInput.addEventListener("input",()=>registerPresence(nameInput.value.trim()));
-nameInput.addEventListener("change",()=>registerPresence(nameInput.value.trim()));
-avatarInput.addEventListener("change",()=>registerPresence(nameInput.value.trim()));
-colorInput.addEventListener("change",()=>registerPresence(nameInput.value.trim()));
+nameInput.addEventListener("input",registerPresence);
+nameInput.addEventListener("change",registerPresence);
+avatarInput.addEventListener("change",registerPresence);
+colorInput.addEventListener("change",registerPresence);
 
-// Çevrimiçi kullanıcıları anlık dinle ve listele
+// Çevrimiçi kullanıcıları dinle ve ekrana yansıt
 onValue(presenceRef,snap=>{
  const users=snap.val()||{},arr=Object.values(users);
  const text=arr.length?arr.map(u=>(u.avatar||"🎧")+" "+u.name).join(" • "):"Kimse yok...";
@@ -264,8 +263,8 @@ onValue(presenceRef,snap=>{
 });
 
 async function send(text,type="user"){
- const n=nameInput.value.trim()||"Misafir";
- await registerPresence(n);
+ const n=nameInput.value.trim()||defaultGuestName;
+ await registerPresence();
  await push(messagesRef,{name:n,text,color:colorInput.value,avatar:avatarInput.value,type,createdAt:Date.now()});
  const reply=botReply(text,n);
  if(reply)setTimeout(()=>push(messagesRef,{name:"Kral Bot",text:reply,type:"bot",createdAt:Date.now()}),500);
