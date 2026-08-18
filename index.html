@@ -24,7 +24,7 @@ main{max-width:850px;margin:auto;padding:15px}
 .radio-description{background:rgba(0,0,0,.4);border-left:4px solid red;padding:12px;border-radius:6px;margin-bottom:15px;font-size:14px;color:#ddd}
 .popup-player-box{background:rgba(0,0,0,.5);padding:10px;border-radius:10px;border:1px solid #333}
 .play-btn{width:100%;padding:15px;font-size:17px;background:linear-gradient(180deg,#ff1a1a,#990000);border:0;border-radius:8px;color:#fff;font-weight:bold;cursor:pointer}
-#messages{height:380px;overflow-y:auto;background:#0b0b0b;border-radius:10px;padding:12px;border:1px solid #333}
+.chat-box-area{height:380px;overflow-y:auto;background:#0b0b0b;border-radius:10px;padding:12px;border:1px solid #333}
 .msg{background:#292929;border-radius:9px;padding:10px 12px;margin:8px 0;word-break:break-word;font-size:15px}
 .bot-msg{background:linear-gradient(135deg,#1e1b4b,#31103f);border:1px solid #7c3aed}
 .applause-msg{background:linear-gradient(135deg,#3f2b10,#2a1a08);border:1px solid #f59e0b;color:#fef08a;font-weight:bold}
@@ -33,11 +33,11 @@ main{max-width:850px;margin:auto;padding:15px}
 .action-msg{background:linear-gradient(135deg,#1e3a8a,#172554);border:1px solid #3b82f6;color:#93c5fd;font-style:italic}
 .system-msg{background:#222;border:1px dashed #555;color:#aaa;font-style:italic;text-align:center;font-size:13px}
 .time{font-size:11px;color:#888;margin-right:6px}.avatar{margin-right:4px}.name{font-weight:bold;color:#ff5555;margin-right:6px;cursor:pointer}.bot-name{color:#c084fc!important}
-.bot-badge,.whisper-badge{font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;margin-right:6px}.bot-badge{background:#7c3aed}.whisper-badge{background:#c084fc;color:#000}
+.bot-badge{font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;margin-right:6px;background:#7c3aed}
 form{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
-select#userAvatar,input#name,input#text{background:#2a2a2a;color:#fff;border-radius:8px;border:0}
-select#userAvatar{padding:12px 8px;font-size:18px}input[type=color]{width:48px;height:48px;border:0}
-input#name{width:120px;padding:12px;font-size:15px}input#text{flex:1;padding:12px;min-width:180px;font-size:15px}
+select#userAvatar,input#name,input#text,select#chatUserAvatar,input#chatName,input#chatText{background:#2a2a2a;color:#fff;border-radius:8px;border:0}
+select#userAvatar,select#chatUserAvatar{padding:12px 8px;font-size:18px}input[type=color]{width:48px;height:48px;border:0}
+input#name,input#chatName{width:120px;padding:12px;font-size:15px}input#text,input#chatText{flex:1;padding:12px;min-width:180px;font-size:15px}
 button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00000;color:#fff;font-weight:bold}
 .action-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .action-btn{background:#333;color:#fff;border:1px solid #555;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:bold}
@@ -68,6 +68,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 </div>
 
 <main>
+<!-- RADYO ODASI -->
 <section id="radioRoom" class="room-content active">
   <div class="card radio-player-card">
     <div class="radio-banner">
@@ -77,27 +78,24 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
       </div>
       <div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div>
     </div>
-    <div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Sohbetimize katılın ve keyifli dinlemeler. 🎶☕</div>
+    <div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div>
     <div class="popup-player-box">
       <button class="play-btn" id="toggleRadio" type="button">📻 Radyoyu Dinle</button>
       <audio id="radioAudio" controls style="display:none;width:100%;margin-top:10px"></audio>
       <div id="radioStatus" class="note" style="margin-top:8px;text-align:center"></div>
     </div>
   </div>
-  <div class="card"><h3 style="margin-top:0">🎧 Radyo Odasındaki Dinleyiciler</h3><div id="radioRoomUsers">Bağlanılıyor...</div></div>
-</section>
 
-<section id="chatRoom" class="room-content">
   <div class="card">
-    <h2 style="margin-top:0">💬 Canlı Muhabbet Odası</h2>
-    <div id="messages"></div>
-    <form id="chatForm" autocomplete="off">
+    <h3 style="margin-top:0">💬 Radyo Odası Sohbeti</h3>
+    <div id="radioMessages" class="chat-box-area"></div>
+    <form id="radioForm" autocomplete="off">
       <select id="userAvatar" title="Avatar">
         <option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option><option value="🎉">🎉 Parti</option>
       </select>
       <input type="color" id="userColor" value="#ff5555">
       <input type="text" id="name" maxlength="30" placeholder="Adınız">
-      <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
+      <input type="text" id="text" maxlength="300" placeholder="Radyo odasına mesaj yaz..." required>
       <button type="submit">Gönder</button>
     </form>
     <div class="action-btns">
@@ -106,9 +104,30 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
       <button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
       <button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
       <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
-      <button id="clear" class="action-btn" type="button">🗑️ Temizle</button>
+      <button id="clearRadio" class="action-btn" type="button">🗑️ Temizle</button>
     </div>
-    <p id="status" class="note">Sohbet hazır. 🤖</p>
+    <p id="radioStatusText" class="note">Radyo sohbeti hazır. 🤖</p>
+  </div>
+</section>
+
+<!-- SOHBET ODASI -->
+<section id="chatRoom" class="room-content">
+  <div class="card">
+    <h2 style="margin-top:0">💬 Genel Muhabbet Odası</h2>
+    <div id="chatMessages" class="chat-box-area"></div>
+    <form id="chatForm" autocomplete="off">
+      <select id="chatUserAvatar" title="Avatar">
+        <option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option><option value="🎉">🎉 Parti</option>
+      </select>
+      <input type="color" id="chatUserColor" value="#ff5555">
+      <input type="text" id="chatName" maxlength="30" placeholder="Adınız">
+      <input type="text" id="chatText" maxlength="300" placeholder="Sohbet odasına mesaj yaz..." required>
+      <button type="submit">Gönder</button>
+    </form>
+    <div class="action-btns">
+      <button id="clearChat" class="action-btn" type="button">🗑️ Temizle</button>
+    </div>
+    <p id="chatStatusText" class="note">Genel sohbet hazır. 🤖</p>
   </div>
 </section>
 </main>
@@ -134,7 +153,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase,ref,push,onChildAdded,onValue,set,onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase,ref,push,onChildAdded,set,onDisconnect,onValue} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -149,20 +168,24 @@ const app=initializeApp(firebaseConfig),db=getDatabase(app);
 const messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
-const box=$("messages"),nameInput=$("name"),textInput=$("text"),colorInput=$("userColor"),avatarInput=$("userAvatar");
 let sound=true;
 const uid="user_"+Math.random().toString(36).slice(2,10);
-let nick="";
 const notification=$("notificationSound"), applause=$("applauseSound");
 
-// Arka planda otomatik misafir ismi üret (Kutuyu boş bırakıyoruz)
 const defaultGuestName = "Misafir_" + Math.floor(Math.random() * 900 + 100);
+
+let currentActiveRoom = "radioRoom";
 
 document.querySelectorAll(".room-tab").forEach(tab=>tab.onclick=()=>{
  document.querySelectorAll(".room-tab").forEach(x=>x.classList.remove("active"));
  document.querySelectorAll(".room-content").forEach(x=>x.classList.remove("active"));
- tab.classList.add("active");$(tab.dataset.target).classList.add("active");
+ tab.classList.add("active");
+ const target=tab.dataset.target;
+ $(target).classList.add("active");
+ currentActiveRoom = target;
+ registerPresence();
 });
+
 $("soundToggle").onclick=()=>{sound=!sound;$("soundToggle").textContent=sound?"🔔 Ses Açık":"🔕 Sessiz"};
 
 function openDrawer(){ $("userDrawer").classList.add("open");$("drawerOverlay").style.display="block" }
@@ -186,8 +209,10 @@ audio.onpause=()=>{$("toggleRadio").textContent="📻 Radyoyu Dinle"};
 audio.onerror=()=>{window.open(RADIO_URL,"_blank");$("radioStatus").textContent="📻 Yayın yeni sekmede açıldı."};
 
 function time(t){return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})}
-function showMessage(d){
- if(!d)return;
+
+function appendMessage(containerId, d){
+ const box=$(containerId);
+ if(!box || !d)return;
  const r=document.createElement("div"),ts=document.createElement("span");
  ts.className="time";ts.textContent="["+time(d.createdAt)+"] ";
  if(d.type==="system"){r.className="msg system-msg";r.textContent=ts.textContent+" "+d.text;box.appendChild(r);box.scrollTop=box.scrollHeight;return}
@@ -200,11 +225,11 @@ function showMessage(d){
  else if(d.type==="whisper")r.className="msg whisper-msg";
  else if(d.type==="action")r.className="msg action-msg";
  else r.className=d.type==="bot"?"msg bot-msg":"msg";
- if(d.type==="whisper"){
-   const b=document.createElement("span");b.className="whisper-badge";b.textContent="ÖZEL → "+d.target;r.append(ts,b,av,n,t);
- }else if(d.type==="bot"){
+ 
+ if(d.type==="bot"){
    const b=document.createElement("span");b.className="bot-badge";b.textContent="BOT";r.append(ts,b,av,n,t);
  }else r.append(ts,av,n,t);
+ 
  if(d.type!=="bot"&&d.color)n.style.color=d.color;
  box.appendChild(r);box.scrollTop=box.scrollHeight;
  if(sound){
@@ -212,11 +237,15 @@ function showMessage(d){
  }
 }
 
-// Eski mesajları es geçip sadece yeni gelen mesajları dinleme (Sayfa ilk açıldığında sohbet boş olur)
 let initialLoadDone = false;
 onChildAdded(messagesRef, s => {
   if (!initialLoadDone) return;
-  showMessage(s.val());
+  const d = s.val();
+  if(d.room === "chat") {
+    appendMessage("chatMessages", d);
+  } else {
+    appendMessage("radioMessages", d);
+  }
 });
 setTimeout(() => { initialLoadDone = true; }, 800);
 
@@ -230,66 +259,88 @@ function botReply(text,user){
  return null;
 }
 
-// Çevrimiçi listesine kullanıcıyı kaydeden fonksiyon
 async function registerPresence(){
- const currentName = nameInput.value.trim() || defaultGuestName;
+ const activeName = currentActiveRoom === "radioRoom" ? ($("name").value.trim() || defaultGuestName) : ($("chatName").value.trim() || defaultGuestName);
+ const activeAvatar = currentActiveRoom === "radioRoom" ? $("userAvatar").value : $("chatUserAvatar").value;
+ const activeColor = currentActiveRoom === "radioRoom" ? $("userColor").value : $("chatUserColor").value;
+
  const uref=ref(db,"presence/"+uid);
  try {
-   await set(uref,{name:currentName,avatar:avatarInput.value,color:colorInput.value,createdAt:Date.now()});
+   await set(uref,{name:activeName,avatar:activeAvatar,color:activeColor,room:currentActiveRoom,createdAt:Date.now()});
    onDisconnect(uref).remove();
  } catch(e) {
-   console.error("Presence yazma hatası:", e);
+   console.error("Presence hata:", e);
  }
 }
 
-// Sayfa açılır açılmaz ve inputlar değiştikçe çevrimiçi listesini güncelle
 registerPresence();
 
-nameInput.addEventListener("input",registerPresence);
-nameInput.addEventListener("change",registerPresence);
-avatarInput.addEventListener("change",registerPresence);
-colorInput.addEventListener("change",registerPresence);
+$("name").addEventListener("input",registerPresence);
+$("userAvatar").addEventListener("change",registerPresence);
+$("userColor").addEventListener("change",registerPresence);
 
-// Çevrimiçi kullanıcıları dinle ve ekrana yansıt
+$("chatName").addEventListener("input",registerPresence);
+$("chatUserAvatar").addEventListener("change",registerPresence);
+$("chatUserColor").addEventListener("change",registerPresence);
+
 onValue(presenceRef,snap=>{
  const users=snap.val()||{},arr=Object.values(users);
- const text=arr.length?arr.map(u=>(u.avatar||"🎧")+" "+u.name).join(" • "):"Kimse yok...";
- $("radioRoomUsers").textContent=arr.length+" dinleyici: "+text;
+ const currentRoomUsers = arr.filter(u => u.room === currentActiveRoom);
+ const text=currentRoomUsers.length?currentRoomUsers.map(u=>(u.avatar||"🎧")+" "+u.name).join(" • "):"Kimse yok...";
+ 
+ const roomTitle = currentActiveRoom === "radioRoom" ? "Radyo Odası" : "Sohbet Odası";
  $("onlineUsersList").innerHTML="";
- if(!arr.length){$("onlineUsersList").innerHTML='<div style="color:#777">Kimse yok...</div>';return}
- arr.forEach(u=>{
+ if(!currentRoomUsers.length){$("onlineUsersList").innerHTML='<div style="color:#777">Bu odada kimse yok...</div>';return}
+ currentRoomUsers.forEach(u=>{
   const d=document.createElement("div");d.className="user-list-item";d.textContent=(u.avatar||"🎧")+" "+u.name;$("onlineUsersList").appendChild(d);
  });
 });
 
-async function send(text,type="user"){
- const n=nameInput.value.trim()||defaultGuestName;
+async function sendToRoom(text, room, type="user", customName=null, customAvatar=null, customColor=null){
+ const n = customName || (room === "radioRoom" ? ($("name").value.trim() || defaultGuestName) : ($("chatName").value.trim() || defaultGuestName));
+ const av = customAvatar || (room === "radioRoom" ? $("userAvatar").value : $("chatUserAvatar").value);
+ const col = customColor || (room === "radioRoom" ? $("userColor").value : $("chatUserColor").value);
+
  await registerPresence();
- await push(messagesRef,{name:n,text,color:colorInput.value,avatar:avatarInput.value,type,createdAt:Date.now()});
+ await push(messagesRef,{name:n,text,color:col,avatar:av,room:room === "radioRoom" ? "radio" : "chat",type,createdAt:Date.now()});
+ 
  const reply=botReply(text,n);
- if(reply)setTimeout(()=>push(messagesRef,{name:"Kral Bot",text:reply,type:"bot",createdAt:Date.now()}),500);
+ if(reply)setTimeout(()=>push(messagesRef,{name:"Kral Bot",text:reply,room:room === "radioRoom" ? "radio" : "chat",type:"bot",createdAt:Date.now()}),500);
 }
 
-$("chatForm").onsubmit=async e=>{
+$("radioForm").onsubmit=async e=>{
  e.preventDefault();
- const t=textInput.value.trim();
+ const t=$("text").value.trim();
  if(!t)return;
  try{
-   await send(t);
-   $("status").textContent="Sohbet hazır. 🤖";
-   textInput.value="";
+   await sendToRoom(t, "radioRoom");
+   $("radioStatusText").textContent="Radyo sohbeti hazır. 🤖";
+   $("text").value="";
  }catch(err){
-   $("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli.";
-   console.error(err);
+   $("radioStatusText").textContent="Mesaj gönderilemedi.";
  }
 };
 
-$("sendApplause").onclick=()=>send("👏 Coşkulu bir alkış gönderdi!","applause").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
-$("sendCoffee").onclick=()=>send("☕ Herkese sıcacık kahve ikram etti!").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
-$("sendHeart").onclick=()=>send("❤️ Kucak dolusu sevgiler gönderdi!").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
-$("sendFire").onclick=()=>send("🔥 Ortamı alevlendirdi!","action").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
+$("chatForm").onsubmit=async e=>{
+ e.preventDefault();
+ const t=$("chatText").value.trim();
+ if(!t)return;
+ try{
+   await sendToRoom(t, "chatRoom");
+   $("chatStatusText").textContent="Genel sohbet hazır. 🤖";
+   $("chatText").value="";
+ }catch(err){
+   $("chatStatusText").textContent="Mesaj gönderilemedi.";
+ }
+};
 
-$("clear").onclick=()=>{box.innerHTML="";$("status").textContent="Ekrandaki sohbet temizlendi.";};
+$("sendApplause").onclick=()=>sendToRoom("👏 Coşkulu bir alkış gönderdi!", "radioRoom", "applause");
+$("sendCoffee").onclick=()=>sendToRoom("☕ Herkese sıcacık kahve ikram etti!", "radioRoom");
+$("sendHeart").onclick=()=>sendToRoom("❤️ Kucak dolusu sevgiler gönderdi!", "radioRoom");
+$("sendFire").onclick=()=>sendToRoom("🔥 Ortamı alevlendirdi!", "radioRoom", "action");
+
+$("clearRadio").onclick=()=>{$("radioMessages").innerHTML="";$("radioStatusText").textContent="Ekran temizlendi.";};
+$("clearChat").onclick=()=>{$("chatMessages").innerHTML="";$("chatStatusText").textContent="Ekran temizlendi.";};
 
 $("openRequestModal").onclick=()=>{$("requestModal").style.display="flex"};
 $("closeRequestModal").onclick=()=>{$("requestModal").style.display="none"};
@@ -297,15 +348,4 @@ $("sendRequest").onclick=async()=>{
  const a=$("songArtist").value.trim(),t=$("songTitle").value.trim();
  if(!a||!t){alert("Lütfen sanatçı ve şarkı adını yazın.");return}
  try {
-   await send("🎵 İSTEK PARÇA: "+a+" - \""+t+"\"","request");
-   $("songArtist").value="";
-   $("songTitle").value="";
-   $("requestModal").style.display="none";
-   $("status").textContent="Sohbet hazır. 🤖";
- } catch(err) {
-   $("status").textContent="Mesaj gönderilemedi.";
- }
-};
-</script>
-</body>
-</html>
+   await sendToRoom("🎵 İSTEK PARÇA: "+a+" - \""+t+"\"", "radioRoom", "req
