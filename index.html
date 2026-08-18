@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Radyo Kral FM & Muhabbet</title>
 
-<!-- Firebase Kütüphaneleri (Kararlı Sürüm) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -463,102 +462,4 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
   if (!n || !t) return;
 
-  if (checkBadWords(t)) {
-    alert("⚠️ Seviyeli Muhabbet: Mesajınız argo veya küfür içerdiği için gönderilemedi.");
-    textInput.value = "";
-    return;
-  }
-
-  await updatePresence();
-
-  if (t.toLowerCase().startsWith("/nick ")) {
-    const newNick = t.substring(6).trim();
-    if (newNick && newNick !== n) {
-      const oldNick = n;
-      nameInput.value = newNick;
-      await updatePresence();
-      await messagesRef.push({
-        text: `🔄 ${oldNick} rumuzunu "${newNick}" olarak değiştirdi.`,
-        type: "system",
-        createdAt: Date.now()
-      });
-      textInput.value = "";
-      return;
-    }
-  }
-
-  if (t.toLowerCase().startsWith("/me ")) {
-    const actionText = t.substring(4).trim();
-    if (actionText) {
-      if (checkBadWords(actionText)) {
-        alert("⚠️ Uyarı: Eyleminiz argo ifadeler içeremez.");
-        textInput.value = "";
-        return;
-      }
-      await messagesRef.push({
-        name: n, text: actionText, color: c, avatar: a, type: "action", createdAt: Date.now()
-      });
-      textInput.value = "";
-      return;
-    }
-  }
-
-  try {
-    await messagesRef.push({
-      name: n, text: t, color: c, avatar: a, type: "user", createdAt: Date.now()
-    });
-
-    const botReply = getBotReply(t, n);
-    if (botReply) {
-      setTimeout(async () => {
-        await messagesRef.push({ name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now() });
-      }, 500);
-    }
-  } catch (err) {
-    alert("Mesaj gönderilemedi.");
-  }
-  textInput.value = "";
-});
-
-async function sendWhisperMessage(targetUser, messageText) {
-  const n = nameInput.value.trim() || "Misafir";
-  if (checkBadWords(messageText)) return;
-  await updatePresence();
-  await messagesRef.push({
-    name: n, text: `🔒 [Özel Mesaj] ${messageText}`, target: targetUser,
-    color: colorInput.value, avatar: avatarInput.value, type: "whisper", createdAt: Date.now()
-  });
-}
-
-async function sendQuickMessage(textMsg, type = "user") {
-  const n = nameInput.value.trim() || "Misafir";
-  await updatePresence();
-  await messagesRef.push({
-    name: n, text: textMsg, color: colorInput.value, avatar: avatarInput.value, type: type, createdAt: Date.now()
-  });
-}
-
-document.getElementById("sendApplause").addEventListener("click", () => sendQuickMessage("👏 Coşkulu bir alkış gönderdi!", "applause"));
-document.getElementById("sendCoffee").addEventListener("click", () => sendQuickMessage("☕ Odadaki herkese sıcacık bir kahve ikram etti!"));
-document.getElementById("sendHeart").addEventListener("click", () => sendQuickMessage("❤️ Kucak dolusu sevgiler ve kalpler gönderdi!"));
-document.getElementById("sendFire").addEventListener("click", () => sendQuickMessage("🔥 Ortamı alev alev yaktı!"));
-
-const requestModal = document.getElementById("requestModal");
-document.getElementById("openRequestModal").addEventListener("click", () => requestModal.style.display = "flex");
-document.getElementById("closeRequestModal").addEventListener("click", () => requestModal.style.display = "none");
-
-document.getElementById("sendRequest").addEventListener("click", async () => {
-  const artist = document.getElementById("songArtist").value.trim();
-  const title = document.getElementById("songTitle").value.trim();
-  if(!artist || !title) { alert("Lütfen sanatçı ve şarkı adı giriniz."); return; }
-  await sendQuickMessage(`🎵 İSTEK PARÇA: ${artist} - "${title}" şarkısını istiyor!`, "request");
-  document.getElementById("songArtist").value = "";
-  document.getElementById("songTitle").value = "";
-  requestModal.style.display = "none";
-});
-
-document.getElementById("clear").addEventListener("click", () => { box.innerHTML = ""; });
-</script>
-
-</body>
-</html>
+                                                     
