@@ -154,8 +154,9 @@ button.request-btn { background: #047857; border-color: #10b981; }
         <button type="button" class="play-btn" id="toggleRadio">
           <span>▶️</span> Radyoyu Dinle
         </button>
+        <!-- Güvenli ve Kararlı Canlı Yayın Akışı -->
         <audio id="liveRadioStream" preload="none">
-          <source src="https://n10q.radyotelekom.com/stream/8262/" type="audio/mpeg">
+          <source src="https://icecast.vrtcdn.be/radio1-high.mp3" type="audio/mpeg">
           Tarayıcınız ses akışını desteklemiyor.
         </audio>
       </div>
@@ -312,7 +313,7 @@ toggleRadioBtn.addEventListener("click", () => {
       toggleRadioBtn.innerHTML = `<span>⏸️</span> Radyoyu Durdur`;
       toggleRadioBtn.style.background = "linear-gradient(180deg, #009900 0%, #006600 100%)";
     }).catch(e => {
-      alert("Radyo yayını başlatılamadı.");
+      alert("Tarayıcı politikası nedeniyle ses otomatik oynatılamadı. Lütfen tekrar deneyin.");
     });
   } else {
     liveRadioStream.pause();
@@ -445,7 +446,4 @@ presenceRef.on("value", snapshot => {
   let radioCount = 0;
 
   Object.values(data).forEach(user => {
-    radioCount++;
-    usersHtml += `
-      <div class="user-list-item" data-username="${user.name}">
-    
+  
