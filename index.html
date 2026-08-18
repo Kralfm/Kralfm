@@ -134,7 +134,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase,ref,push,query,limitToLast,onChildAdded,onValue,set,onDisconnect,remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase,ref,push,onChildAdded,onValue,set,onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -155,7 +155,7 @@ const uid="user_"+Math.random().toString(36).slice(2,10);
 let nick="";
 const notification=$("notificationSound"), applause=$("applauseSound");
 
-// Sayfa açıldığı an otomatik misafir ismi atama
+// Otomatik misafir ismi ver
 nameInput.value="Misafir_"+Math.floor(Math.random()*900+100);
 
 document.querySelectorAll(".room-tab").forEach(tab=>tab.onclick=()=>{
@@ -212,14 +212,13 @@ function showMessage(d){
  }
 }
 
-// SAYFAYI YENİLEYENLER VEYA YENİ GİRENLER İÇİN ESKİ MESAJLARI GETİRMEYEN YAPI (Sadece yeni eklenenler dinlenir)
+// Eski mesajları es geçip sadece yeni gelen mesajları dinleme (Sayfa ilk açıldığında boş olur)
 let initialLoadDone = false;
 onChildAdded(messagesRef, s => {
-  if (!initialLoadDone) return; // Sayfa açıldığında veritabanında var olan eski mesajları atlar, ekrana basmaz.
+  if (!initialLoadDone) return;
   showMessage(s.val());
 });
-// Bağlantı kurulduğunda mevcut eski mesajları pas geçip sadece bundan sonrakileri dinlemek için bayrağı açıyoruz
-setTimeout(() => { initialLoadDone = true; }, 1000);
+setTimeout(() => { initialLoadDone = true; }, 800);
 
 function botReply(text,user){
  const m=text.toLowerCase();
@@ -231,28 +230,28 @@ function botReply(text,user){
  return null;
 }
 
+// Çevrimiçi listesine kullanıcıyı kesin olarak yazdıran fonksiyon
 async function registerPresence(username){
  if(!username)return;
  const uref=ref(db,"presence/"+uid);
  try {
    await set(uref,{name:username,avatar:avatarInput.value,color:colorInput.value,createdAt:Date.now()});
    onDisconnect(uref).remove();
-   if(nick!==username){
-     if(nick)await push(messagesRef,{type:"system",text:"🚪 "+nick+" odadan ayrıldı.",createdAt:Date.now()});
-     await push(messagesRef,{type:"system",text:"🚪 "+username+" sohbete katıldı.",createdAt:Date.now()});
-     nick=username;
-   }
+   console.log("Kullanıcı çevrimiçi kaydedildi:", username);
  } catch(e) {
-   console.error("Presence error:", e);
+   console.error("Presence yazma hatası (Firebase Rules kontrol edin):", e);
  }
 }
 
+// Sayfa açılır açılmaz ve input değiştikçe tetikle
 registerPresence(nameInput.value.trim());
 
-nameInput.addEventListener("input",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
-nameInput.addEventListener("change",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
-avatarInput.addEventListener("change",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
+nameInput.addEventListener("input",()=>registerPresence(nameInput.value.trim()));
+nameInput.addEventListener("change",()=>registerPresence(nameInput.value.trim()));
+avatarInput.addEventListener("change",()=>registerPresence(nameInput.value.trim()));
+colorInput.addEventListener("change",()=>registerPresence(nameInput.value.trim()));
 
+// Çevrimiçi kullanıcıları anlık dinle ve listele
 onValue(presenceRef,snap=>{
  const users=snap.val()||{},arr=Object.values(users);
  const text=arr.length?arr.map(u=>(u.avatar||"🎧")+" "+u.name).join(" • "):"Kimse yok...";
@@ -286,12 +285,12 @@ $("chatForm").onsubmit=async e=>{
  }
 };
 
-$("sendApplause").onclick=()=>send("👏 Coşkulu bir alkış gönderdi!","applause").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
-$("sendCoffee").onclick=()=>send("☕ Herkese sıcacık kahve ikram etti!").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
-$("sendHeart").onclick=()=>send("❤️ Kucak dolusu sevgiler gönderdi!").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
-$("sendFire").onclick=()=>send("🔥 Ortamı alevlendirdi!","action").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
+$("sendApplause").onclick=()=>send("👏 Coşkulu bir alkış gönderdi!","applause").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
+$("sendCoffee").onclick=()=>send("☕ Herkese sıcacık kahve ikram etti!").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
+$("sendHeart").onclick=()=>send("❤️ Kucak dolusu sevgiler gönderdi!").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
+$("sendFire").onclick=()=>send("🔥 Ortamı alevlendirdi!","action").catch(()=>{$("status").textContent="Mesaj gönderilemedi."});
 
-$("clear").onclick=()=>{box.innerHTML="";$("status").textContent="Ekrandaki sohbet temizlendi. Yeni mesajlar gelmeye devam eder.";};
+$("clear").onclick=()=>{box.innerHTML="";$("status").textContent="Ekrandaki sohbet temizlendi.";};
 
 $("openRequestModal").onclick=()=>{$("requestModal").style.display="flex"};
 $("closeRequestModal").onclick=()=>{$("requestModal").style.display="none"};
@@ -305,7 +304,7 @@ $("sendRequest").onclick=async()=>{
    $("requestModal").style.display="none";
    $("status").textContent="Sohbet hazır. 🤖";
  } catch(err) {
-   $("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli.";
+   $("status").textContent="Mesaj gönderilemedi.";
  }
 };
 </script>
