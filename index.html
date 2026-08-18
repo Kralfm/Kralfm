@@ -9,7 +9,11 @@
 body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
 header{background:#b00000;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:bold}
 .menu-trigger{background:none;border:0;color:#fff;font-size:25px;cursor:pointer}
+.room-tabs{display:flex;background:#1a1a1a;border-bottom:2px solid #333}
+.room-tab{flex:1;padding:12px;text-align:center;background:#1e1e1e;color:#aaa;cursor:pointer;font-weight:bold}
+.room-tab.active{background:#b00000;color:#fff}
 main{max-width:850px;margin:auto;padding:15px}
+.room-content{display:none}.room-content.active{display:block}
 .card{background:#1e1e1e;border-radius:14px;padding:18px;margin-bottom:15px}
 .radio-player-card{background:linear-gradient(145deg,#180303,#2a0808);border:1px solid #aa0000;box-shadow:0 4px 20px rgba(224,0,0,.3)}
 .radio-banner{background:linear-gradient(90deg,#f00,#800000);border-radius:10px;padding:15px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -25,15 +29,14 @@ main{max-width:850px;margin:auto;padding:15px}
 .bot-msg{background:linear-gradient(135deg,#1e1b4b,#31103f);border:1px solid #7c3aed}
 .applause-msg{background:linear-gradient(135deg,#3f2b10,#2a1a08);border:1px solid #f59e0b;color:#fef08a;font-weight:bold}
 .request-msg{background:linear-gradient(135deg,#064e3b,#022c22);border:1px solid #10b981;color:#a7f3d0;font-weight:bold}
-.whisper-msg{background:linear-gradient(135deg,#3b0764,#581c87);border:1px solid #c084fc}
 .action-msg{background:linear-gradient(135deg,#1e3a8a,#172554);border:1px solid #3b82f6;color:#93c5fd;font-style:italic}
 .system-msg{background:#222;border:1px dashed #555;color:#aaa;font-style:italic;text-align:center;font-size:13px}
 .time{font-size:11px;color:#888;margin-right:6px}.avatar{margin-right:4px}.name{font-weight:bold;color:#ff5555;margin-right:6px;cursor:pointer}.bot-name{color:#c084fc!important}
 .bot-badge{font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;margin-right:6px;background:#7c3aed}
 form{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
-select#userAvatar,input#name,input#text{background:#2a2a2a;color:#fff;border-radius:8px;border:0}
-select#userAvatar{padding:12px 8px;font-size:18px}input[type=color]{width:48px;height:48px;border:0}
-input#name{width:120px;padding:12px;font-size:15px}input#text{flex:1;padding:12px;min-width:180px;font-size:15px}
+select#userAvatar,input#name,input#text,select#chatUserAvatar,input#chatName,input#chatText{background:#2a2a2a;color:#fff;border-radius:8px;border:0}
+select#userAvatar,select#chatUserAvatar{padding:12px 8px;font-size:18px}input[type=color]{width:48px;height:48px;border:0}
+input#name,input#chatName{width:120px;padding:12px;font-size:15px}input#text,input#chatText{flex:1;padding:12px;min-width:180px;font-size:15px}
 button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00000;color:#fff;font-weight:bold}
 .action-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .action-btn{background:#333;color:#fff;border:1px solid #555;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:bold}
@@ -58,7 +61,14 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
   </div>
 </header>
 
+<div class="room-tabs">
+  <div class="room-tab active" data-target="radioRoom">📻 Radyo Odası</div>
+  <div class="room-tab" data-target="chatRoom">💬 Sohbet Odası</div>
+</div>
+
 <main>
+<!-- RADYO ODASI -->
+<section id="radioRoom" class="room-content active">
   <div class="card radio-player-card">
     <div class="radio-banner">
       <div class="radio-logo-box">
@@ -76,15 +86,15 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
   </div>
 
   <div class="card">
-    <h3 style="margin-top:0">💬 Canlı Sohbet Odası</h3>
-    <div id="messages" class="chat-box-area"></div>
-    <form id="form" autocomplete="off">
+    <h3 style="margin-top:0">💬 Radyo Odası Sohbeti</h3>
+    <div id="radioMessages" class="chat-box-area"></div>
+    <form id="radioForm" autocomplete="off">
       <select id="userAvatar" title="Avatar">
         <option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option><option value="🎉">🎉 Parti</option>
       </select>
       <input type="color" id="userColor" value="#ff5555">
       <input type="text" id="name" maxlength="30" placeholder="Adınız">
-      <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
+      <input type="text" id="text" maxlength="300" placeholder="Radyo odasına mesaj yaz..." required>
       <button type="submit">Gönder</button>
     </form>
     <div class="action-btns">
@@ -93,10 +103,32 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
       <button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
       <button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
       <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
-      <button id="clearChat" class="action-btn" type="button">🗑️ Temizle</button>
+      <button id="clearRadio" class="action-btn" type="button">🗑️ Herkeste Temizle</button>
     </div>
-    <p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
+    <p id="radioStatusText" class="note">Radyo sohbeti hazır. 🤖</p>
   </div>
+</section>
+
+<!-- SOHBET ODASI -->
+<section id="chatRoom" class="room-content">
+  <div class="card">
+    <h2 style="margin-top:0">💬 Genel Muhabbet Odası</h2>
+    <div id="chatMessages" class="chat-box-area"></div>
+    <form id="chatForm" autocomplete="off">
+      <select id="chatUserAvatar" title="Avatar">
+        <option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option><option value="🎉">🎉 Parti</option>
+      </select>
+      <input type="color" id="chatUserColor" value="#ff5555">
+      <input type="text" id="chatName" maxlength="30" placeholder="Adınız">
+      <input type="text" id="chatText" maxlength="300" placeholder="Sohbet odasına mesaj yaz..." required>
+      <button type="submit">Gönder</button>
+    </form>
+    <div class="action-btns">
+      <button id="clearChat" class="action-btn" type="button">🗑️ Herkeste Temizle</button>
+    </div>
+    <p id="chatStatusText" class="note">Genel sohbet hazır. 🤖</p>
+  </div>
+</section>
 </main>
 
 <div id="drawerOverlay" class="drawer-overlay"></div>
@@ -120,7 +152,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase,ref,push,onChildAdded,set,onDisconnect,onValue} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase,ref,push,onChildAdded,set,onDisconnect,onValue,remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
  apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -139,12 +171,31 @@ let sound=true;
 const uid="user_"+Math.random().toString(36).slice(2,10);
 const notification=$("notificationSound"), applause=$("applauseSound");
 const defaultGuestName = "Misafir_" + Math.floor(Math.random() * 900 + 100);
+let currentActiveRoom = "radioRoom";
+
+// Sabit Çevrimiçi Botlar
+const staticBots = [
+  { name: "DuRu", avatar: "👩" },
+  { name: "Eren", avatar: "👨" },
+  { name: "LeyLi", avatar: "🌟" },
+  { name: "RadyoDinliyorum", avatar: "🎧" }
+];
+
+document.querySelectorAll(".room-tab").forEach(tab=>tab.onclick=()=>{
+ document.querySelectorAll(".room-tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".room-content").forEach(x=>x.classList.remove("active"));
+ tab.classList.add("active");
+ const target=tab.dataset.target;
+ $(target).classList.add("active");
+ currentActiveRoom = target;
+ registerPresence();
+});
 
 $("soundToggle").onclick=()=>{sound=!sound;$("soundToggle").textContent=sound?"🔔 Ses Açık":"🔕 Sessiz"};
 
 function openDrawer(){ $("userDrawer").classList.add("open");$("drawerOverlay").style.display="block" }
 function closeDrawer(){ $("userDrawer").classList.remove("open");$("drawerOverlay").style.display="none" }
-$("menuTrigger").onclick=openDrawer;$("closeDrawer").onclick=closeDrawer;$("drawerOverlay").onclick=closeDrawer;
+$("menuTrigger").onclick=openDrawer;$("closeDrawer").onclick=closeDrawer;$("drawerOverlay").onclick=drawerOverlay.onclick=closeDrawer;
 
 const RADIO_URL="http://kralfm.radiostream321.com/";
 const audio=$("radioAudio");
@@ -164,8 +215,8 @@ audio.onerror=()=>{window.open(RADIO_URL,"_blank");$("radioStatus").textContent=
 
 function time(t){return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})}
 
-function appendMessage(d){
- const box=$("messages");
+function appendMessage(containerId, d){
+ const box=$(containerId);
  if(!box || !d)return;
  const r=document.createElement("div"),ts=document.createElement("span");
  ts.className="time";ts.textContent="["+time(d.createdAt)+"] ";
@@ -176,7 +227,6 @@ function appendMessage(d){
  t.textContent=d.text||"";
  if(d.type==="applause")r.className="msg applause-msg";
  else if(d.type==="request")r.className="msg request-msg";
- else if(d.type==="whisper")r.className="msg whisper-msg";
  else if(d.type==="action")r.className="msg action-msg";
  else r.className=d.type==="bot"?"msg bot-msg":"msg";
  
@@ -191,12 +241,20 @@ function appendMessage(d){
  }
 }
 
-let initialLoadDone = false;
-onChildAdded(messagesRef, s => {
-  if (!initialLoadDone) return;
-  appendMessage(s.val());
+// Mesaj dinleme (Firebase)
+onValue(messagesRef, snap => {
+  const data = snap.val() || {};
+  $("radioMessages").innerHTML = "";
+  $("chatMessages").innerHTML = "";
+  
+  Object.values(data).forEach(d => {
+    if(d.room === "chat") {
+      appendMessage("chatMessages", d);
+    } else {
+      appendMessage("radioMessages", d);
+    }
+  });
 });
-setTimeout(() => { initialLoadDone = true; }, 800);
 
 function botReply(text,user){
  const m=text.toLowerCase();
@@ -209,13 +267,13 @@ function botReply(text,user){
 }
 
 async function registerPresence(){
- const activeName = $("name").value.trim() || defaultGuestName;
- const activeAvatar = $("userAvatar").value;
- const activeColor = $("userColor").value;
+ const activeName = currentActiveRoom === "radioRoom" ? ($("name").value.trim() || defaultGuestName) : ($("chatName").value.trim() || defaultGuestName);
+ const activeAvatar = currentActiveRoom === "radioRoom" ? $("userAvatar").value : $("chatUserAvatar").value;
+ const activeColor = currentActiveRoom === "radioRoom" ? $("userColor").value : $("chatUserColor").value;
 
  const uref=ref(db,"presence/"+uid);
  try {
-   await set(uref,{name:activeName,avatar:activeAvatar,color:activeColor,createdAt:Date.now()});
+   await set(uref,{name:activeName,avatar:activeAvatar,color:activeColor,room:currentActiveRoom,createdAt:Date.now()});
    onDisconnect(uref).remove();
  } catch(e) {
    console.error("Presence hata:", e);
@@ -227,62 +285,88 @@ registerPresence();
 $("name").addEventListener("input",registerPresence);
 $("userAvatar").addEventListener("change",registerPresence);
 $("userColor").addEventListener("change",registerPresence);
+$("chatName").addEventListener("input",registerPresence);
+$("chatUserAvatar").addEventListener("change",registerPresence);
+$("chatUserColor").addEventListener("change",registerPresence);
 
 onValue(presenceRef,snap=>{
  const users=snap.val()||{},arr=Object.values(users);
+ const currentRoomUsers = arr.filter(u => u.room === currentActiveRoom);
+ 
  $("onlineUsersList").innerHTML="";
- if(!arr.length){$("onlineUsersList").innerHTML='<div style="color:#777">Kimse yok...</div>';return}
- arr.forEach(u=>{
-  const d=document.createElement("div");d.className="user-list-item";d.textContent=(u.avatar||"🎧")+" "+u.name;$("onlineUsersList").appendChild(d);
+ 
+ // Sabit Botları Listeye Ekle
+ staticBots.forEach(bot => {
+  const d=document.createElement("div");
+  d.className="user-list-item";
+  d.textContent=bot.avatar+" "+bot.name+" (Bot)";
+  $("onlineUsersList").appendChild(d);
+ });
+
+ // Gerçek Kullanıcıları Ekle
+ currentRoomUsers.forEach(u=>{
+  const d=document.createElement("div");
+  d.className="user-list-item";
+  d.textContent=(u.avatar||"🎧")+" "+u.name;
+  $("onlineUsersList").appendChild(d);
  });
 });
 
-async function sendMsg(text, type="user", customName=null, customAvatar=null, customColor=null){
- const n = customName || ($("name").value.trim() || defaultGuestName);
- const av = customAvatar || $("userAvatar").value;
- const col = customColor || $("userColor").value;
+async function sendToRoom(text, room, type="user", customName=null, customAvatar=null, customColor=null){
+ const n = customName || (room === "radioRoom" ? ($("name").value.trim() || defaultGuestName) : ($("chatName").value.trim() || defaultGuestName));
+ const av = customAvatar || (room === "radioRoom" ? $("userAvatar").value : $("chatUserAvatar").value);
+ const col = customColor || (room === "radioRoom" ? $("userColor").value : $("chatUserColor").value);
 
  await registerPresence();
- await push(messagesRef,{name:n,text,color:col,avatar:av,type,createdAt:Date.now()});
+ await push(messagesRef,{name:n,text,color:col,avatar:av,room:room === "radioRoom" ? "radio" : "chat",type,createdAt:Date.now()});
  
  const reply=botReply(text,n);
- if(reply)setTimeout(()=>push(messagesRef,{name:"Kral Bot",text:reply,type:"bot",createdAt:Date.now()}),500);
+ if(reply)setTimeout(()=>push(messagesRef,{name:"Kral Bot",text:reply,room:room === "radioRoom" ? "radio" : "chat",type:"bot",createdAt:Date.now()}),500);
 }
 
-$("form").onsubmit=async e=>{
+$("radioForm").onsubmit=async e=>{
  e.preventDefault();
  const t=$("text").value.trim();
  if(!t)return;
  try{
-   await sendMsg(t);
-   $("statusText").textContent="Sohbet odası hazır. 🤖";
+   await sendToRoom(t, "radioRoom");
+   $("radioStatusText").textContent="Radyo sohbeti hazır. 🤖";
    $("text").value="";
  }catch(err){
-   $("statusText").textContent="Mesaj gönderilemedi.";
+   $("radioStatusText").textContent="Mesaj gönderilemedi.";
  }
 };
 
-$("sendApplause").onclick=()=>sendMsg("👏 Coşkulu bir alkış gönderdi!", "applause");
-$("sendCoffee").onclick=()=>sendMsg("☕ Herkese sıcacık kahve ikram etti!");
-$("sendHeart").onclick=()=>sendMsg("❤️ Kucak dolusu sevgiler gönderdi!");
-$("sendFire").onclick=()=>sendMsg("🔥 Ortamı alevlendirdi!", "action");
-$("clearChat").onclick=()=>{$("messages").innerHTML="";$("statusText").textContent="Ekran temizlendi.";};
-
-$("openRequestModal").onclick=()=>{$("requestModal").style.display="flex"};
-$("closeRequestModal").onclick=()=>{$("requestModal").style.display="none"};
-$("sendRequest").onclick=async()=>{
- const a=$("songArtist").value.trim(),t=$("songTitle").value.trim();
- if(!a||!t){alert("Lütfen sanatçı ve şarkı adını yazın.");return}
- try {
-   await sendMsg("🎵 İSTEK PARÇA: "+a+" - \""+t+"\"", "request");
-   $("songArtist").value="";
-   $("songTitle").value="";
-   $("requestModal").style.display="none";
-   $("statusText").textContent="Sohbet odası hazır. 🤖";
- } catch(err) {
-   $("statusText").textContent="Mesaj gönderilemedi.";
+$("chatForm").onsubmit=async e=>{
+ e.preventDefault();
+ const t=$("chatText").value.trim();
+ if(!t)return;
+ try{
+   await sendToRoom(t, "chatRoom");
+   $("chatStatusText").textContent="Genel sohbet hazır. 🤖";
+   $("chatText").value="";
+ }catch(err){
+   $("chatStatusText").textContent="Mesaj gönderilemedi.";
  }
 };
-</script>
-</body>
-</html>
+
+$("sendApplause").onclick=()=>sendToRoom("👏 Coşkulu bir alkış gönderdi!", "radioRoom", "applause");
+$("sendCoffee").onclick=()=>sendToRoom("☕ Herkese sıcacık kahve ikram etti!", "radioRoom");
+$("sendHeart").onclick=()=>sendRoom("❤️ Kucak dolusu sevgiler gönderdi!", "radioRoom");
+$("sendFire").onclick=()=>sendRoom("🔥 Ortamı alevlendirdi!", "radioRoom", "action");
+
+// HERKESTE SİLMEK İÇİN (Firebase Veritabanından Temizleme)
+$("clearRadio").onclick = async () => {
+  if(confirm("Radyo odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?")) {
+    await set(messagesRef, null);
+    $("radioStatusText").textContent = "Radyo sohbeti temizlendi.";
+  }
+};
+$("clearChat").onclick = async () => {
+  if(confirm("Sohbet odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?")) {
+    await set(messagesRef, null);
+    $("chatStatusText").textContent = "Genel sohbet temizlendi.";
+  }
+};
+
+$("openRequestModal").o
