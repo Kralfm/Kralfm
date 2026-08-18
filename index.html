@@ -57,8 +57,8 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 <header>
   <div>🎙️ Kral FM & Muhabbet</div>
   <div>
-    <button id="soundToggle" class="action-btn">🔔 Ses Açık</button>
-    <button id="menuTrigger" class="menu-trigger">☰</button>
+    <button id="soundToggle" class="action-btn" type="button">🔔 Ses Açık</button>
+    <button id="menuTrigger" class="menu-trigger" type="button">☰</button>
   </div>
 </header>
 
@@ -79,7 +79,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
     </div>
     <div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Sohbetimize katılın ve keyifli dinlemeler. 🎶☕</div>
     <div class="popup-player-box">
-      <button class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</button>
+      <button class="play-btn" id="toggleRadio" type="button">📻 Radyoyu Dinle</button>
       <audio id="radioAudio" controls style="display:none;width:100%;margin-top:10px"></audio>
       <div id="radioStatus" class="note" style="margin-top:8px;text-align:center"></div>
     </div>
@@ -115,7 +115,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 
 <div id="drawerOverlay" class="drawer-overlay"></div>
 <aside id="userDrawer" class="user-drawer">
-  <div class="drawer-header"><h3>👥 Çevrimiçi Üyeler</h3><button id="closeDrawer" class="close-drawer">✕</button></div>
+  <div class="drawer-header"><h3>👥 Çevrimiçi Üyeler</h3><button id="closeDrawer" class="close-drawer" type="button">✕</button></div>
   <div id="onlineUsersList">Kimse yok...</div>
 </aside>
 
@@ -237,7 +237,10 @@ async function registerPresence(username){
  }
 }
 
+// İsim alanına yazı yazıldığı an veya odak çıkıldığında çevrimiçi listeye kaydetme
+nameInput.addEventListener("input",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
 nameInput.addEventListener("change",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
+avatarInput.addEventListener("change",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
 
 onValue(presenceRef,snap=>{
  const users=snap.val()||{},arr=Object.values(users);
@@ -252,7 +255,7 @@ onValue(presenceRef,snap=>{
 
 async function send(text,type="user"){
  const n=nameInput.value.trim()||"Misafir";
- if(nameInput.value.trim())await registerPresence(n);
+ await registerPresence(n);
  await push(messagesRef,{name:n,text,color:colorInput.value,avatar:avatarInput.value,type,createdAt:Date.now()});
  const reply=botReply(text,n);
  if(reply)setTimeout(()=>push(messagesRef,{name:"Kral Bot",text:reply,type:"bot",createdAt:Date.now()}),500);
