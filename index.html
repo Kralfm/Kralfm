@@ -101,12 +101,12 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
       <button type="submit">Gönder</button>
     </form>
     <div class="action-btns">
-      <button id="sendApplause" class="action-btn applause-btn">👏 Alkış</button>
-      <button id="sendCoffee" class="action-btn coffee-btn">☕ Kahve Ismarla</button>
-      <button id="sendHeart" class="action-btn heart-btn">❤️ Kalp At</button>
-      <button id="sendFire" class="action-btn fire-btn">🔥 Alev Et</button>
-      <button id="openRequestModal" class="action-btn request-btn">🎵 İstek Yap</button>
-      <button id="clear" class="action-btn">🗑️ Temizle</button>
+      <button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
+      <button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
+      <button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
+      <button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
+      <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
+      <button id="clear" class="action-btn" type="button">🗑️ Temizle</button>
     </div>
     <p id="status" class="note">Sohbet hazır. 🤖</p>
   </div>
@@ -125,7 +125,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
     <p style="font-size:13px;color:#ccc">Yayıncıya duyurmak istediğiniz şarkıyı yazın:</p>
     <input id="songArtist" placeholder="Sanatçı Adı">
     <input id="songTitle" placeholder="Şarkı Adı">
-    <div class="modal-actions"><button id="closeRequestModal" class="action-btn">İptal</button><button id="sendRequest" class="action-btn request-btn">Gönder 🎶</button></div>
+    <div class="modal-actions"><button id="closeRequestModal" class="action-btn" type="button">İptal</button><button id="sendRequest" class="action-btn request-btn" type="button">Gönder 🎶</button></div>
   </div>
 </div>
 
@@ -169,8 +169,6 @@ $("menuTrigger").onclick=openDrawer;$("closeDrawer").onclick=closeDrawer;$("draw
 const RADIO_URL="http://kralfm.radiostream321.com/";
 const audio=$("radioAudio");
 $("toggleRadio").onclick=()=>{
-  // GitHub Pages HTTPS sayfasında HTTP yayınlar tarayıcı tarafından engellenebilir.
-  // Önce doğrudan ses olarak deniyoruz; olmazsa yayın sayfasını yeni sekmede açıyoruz.
   audio.src=RADIO_URL;
   audio.style.display="block";
   audio.play().then(()=>{
@@ -226,12 +224,16 @@ function botReply(text,user){
 async function registerPresence(username){
  if(!username)return;
  const uref=ref(db,"presence/"+uid);
- await set(uref,{name:username,avatar:avatarInput.value,color:colorInput.value,createdAt:Date.now()});
- onDisconnect(uref).remove();
- if(nick!==username){
-   if(nick)await push(messagesRef,{type:"system",text:"🚪 "+nick+" odadan ayrıldı.",createdAt:Date.now()});
-   await push(messagesRef,{type:"system",text:"🚪 "+username+" sohbete katıldı.",createdAt:Date.now()});
-   nick=username;
+ try {
+   await set(uref,{name:username,avatar:avatarInput.value,color:colorInput.value,createdAt:Date.now()});
+   onDisconnect(uref).remove();
+   if(nick!==username){
+     if(nick)await push(messagesRef,{type:"system",text:"🚪 "+nick+" odadan ayrıldı.",createdAt:Date.now()});
+     await push(messagesRef,{type:"system",text:"🚪 "+username+" sohbete katıldı.",createdAt:Date.now()});
+     nick=username;
+   }
+ } catch(e) {
+   console.error("Presence error:", e);
  }
 }
 
@@ -257,14 +259,23 @@ async function send(text,type="user"){
 }
 
 $("chatForm").onsubmit=async e=>{
- e.preventDefault();const t=textInput.value.trim();if(!t)return;
- try{await send(t)}catch(err){$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."}
- textInput.value="";
+ e.preventDefault();
+ const t=textInput.value.trim();
+ if(!t)return;
+ try{
+   await send(t);
+   $("status").textContent="Sohbet hazır. 🤖";
+   textInput.value="";
+ }catch(err){
+   $("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli.";
+   console.error(err);
+ }
 };
-$("sendApplause").onclick=()=>send("👏 Coşkulu bir alkış gönderdi!","applause");
-$("sendCoffee").onclick=()=>send("☕ Herkese sıcacık kahve ikram etti!");
-$("sendHeart").onclick=()=>send("❤️ Kucak dolusu sevgiler gönderdi!");
-$("sendFire").onclick=()=>send("🔥 Ortamı alevlendirdi!","action");
+
+$("sendApplause").onclick=()=>send("👏 Coşkulu bir alkış gönderdi!","applause").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
+$("sendCoffee").onclick=()=>send("☕ Herkese sıcacık kahve ikram etti!").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
+$("sendHeart").onclick=()=>send("❤️ Kucak dolusu sevgiler gönderdi!").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
+$("sendFire").onclick=()=>send("🔥 Ortamı alevlendirdi!","action").catch(()=>{$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."});
 
 $("clear").onclick=()=>{box.innerHTML="";$("status").textContent="Ekrandaki sohbet temizlendi. Yeni mesajlar gelmeye devam eder.";};
 
@@ -273,11 +284,16 @@ $("closeRequestModal").onclick=()=>{$("requestModal").style.display="none"};
 $("sendRequest").onclick=async()=>{
  const a=$("songArtist").value.trim(),t=$("songTitle").value.trim();
  if(!a||!t){alert("Lütfen sanatçı ve şarkı adını yazın.");return}
- await send("🎵 İSTEK PARÇA: "+a+" - \""+t+"\"","request");
- $("songArtist").value="";$("songTitle").value="";$("requestModal").style.display="none";
+ try {
+   await send("🎵 İSTEK PARÇA: "+a+" - \""+t+"\"","request");
+   $("songArtist").value="";
+   $("songTitle").value="";
+   $("requestModal").style.display="none";
+   $("status").textContent="Sohbet hazır. 🤖";
+ } catch(err) {
+   $("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli.";
+ }
 };
-
-window.addEventListener("beforeunload",()=>{});
 </script>
 </body>
 </html>
