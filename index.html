@@ -11,7 +11,6 @@ body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif; overflow-
 header{background:#b00000;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:bold;box-shadow: 0 2px 10px rgba(255, 0, 0, 0.3); position: relative; z-index: 100;}
 .menu-trigger { background: none; border: 0; color: #fff; font-size: 24px; cursor: pointer; }
 
-/* Sekmeler (Tabs) */
 .room-tabs { display: flex; background: #1a1a1a; border-bottom: 2px solid #333; }
 .room-tab { flex: 1; padding: 12px; text-align: center; background: #1e1e1e; color: #aaa; cursor: pointer; font-weight: bold; border-right: 1px solid #333; transition: all 0.2s; }
 .room-tab.active { background: #b00000; color: #fff; border-bottom: 2px solid #ff0000; }
@@ -88,7 +87,6 @@ button.request-btn { background: #047857; border-color: #10b981; }
 
 .note { color: #aaa; font-size: 13px; }
 
-/* Sağ Çekmece (Drawer) Menü */
 .drawer-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 998; display: none;
 }
@@ -257,7 +255,6 @@ const db = getDatabase(app);
 const messagesRef = ref(db, "messages");
 const presenceRef = ref(db, "presence");
 
-// 🚫 KÜFÜR VE ARGO KONTROL LİSTESİ
 const badWords = [
   "amk", "aq", "orospu", "piç", "sik", "anan", "amina", "oc", 
   "gerizekalı", "mal", "salak", "aptal", "kahpe", "yavşak"
@@ -294,22 +291,7 @@ menuTrigger.addEventListener("click", toggleDrawer);
 closeDrawer.addEventListener("click", toggleDrawer);
 drawerOverlay.addEventListener("click", toggleDrawer);
 
-let touchStartX = 0;
-document.addEventListener("touchstart", e => { touchStartX = e.changedTouches[0].screenX; });
-document.addEventListener("touchend", e => {
-  let touchEndX = e.changedTouches[0].screenX;
-  if (touchEndX < touchStartX - 80 && touchStartX > window.innerWidth - 60) {
-    userDrawer.classList.add("open");
-    drawerOverlay.style.display = "block";
-  }
-  if (touchEndX > touchStartX + 80 && userDrawer.classList.contains("open")) {
-    userDrawer.classList.remove("open");
-    drawerOverlay.style.display = "none";
-  }
-});
-
 const box = document.getElementById("messages");
-const status = document.getElementById("status");
 const nameInput = document.getElementById("name");
 const textInput = document.getElementById("text");
 const colorInput = document.getElementById("userColor");
@@ -373,19 +355,14 @@ function showMessage(d) {
 
   if (d.type === "whisper") {
     r.className = "msg whisper-msg";
-    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
   } else if (d.type === "action") {
     r.className = "msg action-msg";
-    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
   } else if (d.type === "applause") {
     r.className = "msg applause-msg";
-    if(isSoundEnabled) { applauseAudio.currentTime = 0; applauseAudio.play().catch(()=>{}); }
   } else if (d.type === "request") {
     r.className = "msg request-msg";
-    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
   } else {
     r.className = isBot ? "msg bot-msg" : "msg";
-    if(isSoundEnabled && !isBot) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
   }
 
   n.className = isBot ? "name bot-name" : "name";
@@ -399,10 +376,10 @@ function showMessage(d) {
     t.textContent = d.text || "";
     
     if (!isBot) {
-      n.title = "Bu kişiye özel mesaj (fısıltı) gönder";
+      n.title = "Bu kişiye özel mesaj gönder";
       n.addEventListener("click", () => {
         const whisperedUser = d.name;
-        const pmText = prompt(`${whisperedUser} adlı kullanıcıya özel mesajınızı yazın (Fısıltı):`);
+        const pmText = prompt(`${whisperedUser} adlı kullanıcıya özel mesajınızı yazın:`);
         if (pmText && pmText.trim() !== "") {
           sendWhisperMessage(whisperedUser, pmText.trim());
         }
@@ -431,7 +408,6 @@ function showMessage(d) {
 function getBotReply(text, userName) {
   const m = (text || "").toLowerCase().trim();
   if (userName.toLowerCase() === "kral bot") return null;
-
   if (m.includes("selam") || m === "sa") return `Aleykümselam @${userName}`;
   if (m.includes("kahve")) return `☕ Sayın @${userName}, bol köpüklü taze kahven hazır! Afiyet olsun! 😋`;
   return null;
@@ -443,11 +419,51 @@ onDisconnect(userRef).remove();
 async function updatePresence() {
   const username = nameInput.value.trim();
   if (!username) return;
-
   if (currentRegisteredNick !== username) {
     currentRegisteredNick = username;
     await set(userRef, { name: username, time: Date.now() });
   }
 }
 
-na
+nameInput.addEventListener("input", updatePresence);
+
+onValue(presenceRef, snapshot => {
+  const data = snapshot.val();
+  onlineUsersList.innerHTML = "";
+  
+  if (!data) {
+    onlineUsersList.innerHTML = `<div style="color: #777; font-size: 13px;">Kimse yok...</div>`;
+    radioRoomUsers.innerHTML = `Şu an radyo odasında dinleyen kimse yok, ilk dinleyici siz olun! 🎶`;
+    return;
+  }
+
+  let usersHtml = "";
+  let radioCount = 0;
+
+  Object.values(data).forEach(user => {
+    radioCount++;
+    usersHtml += `
+      <div class="user-list-item" data-username="${user.name}">
+        🎧 <span>${user.name}</span>
+      </div>
+    `;
+  });
+
+  onlineUsersList.innerHTML = usersHtml;
+  radioRoomUsers.innerHTML = `Şu an radyo odasında ve çevrimiçi olan <b>${radioCount}</b> kişi dinliyor. Keyifli sohbetler!`;
+
+  document.querySelectorAll(".user-list-item").forEach(item => {
+    item.addEventListener("click", () => {
+      textInput.value = `@${item.dataset.username} `;
+      userDrawer.classList.remove("open");
+      drawerOverlay.style.display = "none";
+      textInput.focus();
+    });
+  });
+});
+
+onChildAdded(messagesRef, s => {
+  showMessage(s.val());
+});
+
+document
