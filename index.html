@@ -154,7 +154,6 @@ button.request-btn { background: #047857; border-color: #10b981; }
         <button type="button" class="play-btn" id="toggleRadio">
           <span>▶️</span> Radyoyu Dinle
         </button>
-        <!-- Canlı Yayın Ses Kaynağı -->
         <audio id="liveRadioStream" preload="none">
           <source src="https://n10q.radyotelekom.com/stream/8262/" type="audio/mpeg">
           Tarayıcınız ses akışını desteklemiyor.
@@ -448,4 +447,5 @@ presenceRef.on("value", snapshot => {
   Object.values(data).forEach(user => {
     radioCount++;
     usersHtml += `
-      <div class="user-list
+      <div class="user-list-item" data-username="${user.name}">
+    
