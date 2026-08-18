@@ -3,498 +3,281 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Radyo Kral FM Muhabbet</title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
+<title>Radyo Kral FM & Muhabbet</title>
 <style>
-body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif}
-header{background:#b00000;padding:18px;text-align:center;font-size:22px;font-weight:bold;box-shadow: 0 2px 10px rgba(255, 0, 0, 0.3); position: relative;}
+*{box-sizing:border-box}
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
+header{background:#b00000;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-size:20px;font-weight:bold}
+.menu-trigger{background:none;border:0;color:#fff;font-size:25px;cursor:pointer}
+.room-tabs{display:flex;background:#1a1a1a;border-bottom:2px solid #333}
+.room-tab{flex:1;padding:12px;text-align:center;background:#1e1e1e;color:#aaa;cursor:pointer;font-weight:bold}
+.room-tab.active{background:#b00000;color:#fff}
 main{max-width:850px;margin:auto;padding:15px}
+.room-content{display:none}.room-content.active{display:block}
 .card{background:#1e1e1e;border-radius:14px;padding:18px;margin-bottom:15px}
-
-.radio-player-card {
-  background: linear-gradient(145deg, #180303 0%, #2a0808 100%);
-  border: 1px solid #aa0000;
-  box-shadow: 0 4px 20px rgba(224, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.radio-banner {
-  background: linear-gradient(90deg, #ff0000, #800000);
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.radio-logo-box { display: flex; align-items: center; gap: 12px; }
-.l2mr-logo { width: 45px; height: 45px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.l2mr-logo svg { width: 28px; height: 28px; fill: #b00000; }
-.radio-logo-text h1 { margin: 0; font-size: 22px; font-weight: 900; color: #fff; }
-.radio-logo-text span { font-size: 13px; color: #ffcccc; font-weight: bold; }
-
-.radio-description { background: rgba(0, 0, 0, 0.4); border-left: 4px solid #ff0000; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 14px; color: #ddd; }
-.live-badge { background: #000; color: #ff3333; border: 1px solid #ff3333; font-size: 11px; font-weight: bold; padding: 5px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
-.live-dot { width: 8px; height: 8px; background-color: #ff3333; border-radius: 50%; display: inline-block; }
-
-.popup-player-box { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; border: 1px solid #333; width: 100%; box-sizing: border-box;}
-.play-btn { width: 100%; padding: 14px 20px; font-size: 17px; background: linear-gradient(180deg, #ff1a1a 0%, #990000 100%); border: 0; border-radius: 8px; color: #fff; font-weight: bold; cursor: pointer; }
-
-#messages { height: 380px; overflow-y: auto; background: #0b0b0b; border-radius: 10px; padding: 12px; border: 1px solid #333; }
-.msg { background: #292929; border-radius: 9px; padding: 10px 12px; margin: 8px 0; word-break: break-word; font-size: 15px; }
-.msg.bot-msg { background: linear-gradient(135deg, #1e1b4b 0%, #31103f 100%); border: 1px solid #7c3aed; border-left: 5px solid #a855f7; }
-.msg.applause-msg { background: linear-gradient(135deg, #3f2b10 0%, #2a1a08 100%); border: 1px solid #f59e0b; color: #fef08a; font-weight: bold; }
-.msg.request-msg { background: linear-gradient(135deg, #064e3b 0%, #022c22 100%); border: 1px solid #10b981; color: #a7f3d0; font-weight: bold; }
-.bot-badge { background: #7c3aed; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-right: 6px; }
-.msg.system-msg{ background:#222; border:1px dashed #555; color:#aaa; font-style:italic; font-size:13px; text-align:center }
-
-.msg.mentioned-msg {
-  background: linear-gradient(135deg, #451a03 0%, #78350f 100%) !important;
-  border: 2px solid #f59e0b !important;
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
-  animation: pulseGlow 1.5s infinite alternate;
-}
-
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.4); }
-  100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.9); }
-}
-
-.time{ font-size:11px; color:#888; margin-right:6px }
-.avatar{ margin-right:4px; font-size:16px }
-.name{ font-weight:bold; color:#ff5555; margin-right:6px }
-.bot-name{ color:#c084fc !important; font-weight: 900; }
-
-form { display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap; }
-select#userAvatar, input#name, input#text { background: #2a2a2a; color: #fff; border-radius: 8px; border: 0; }
-select#userAvatar { padding: 12px 8px; font-size: 18px; }
-input[type="color"] { width: 48px; height: 48px; border: 0; cursor: pointer; }
-input#name { width: 120px; padding: 12px; font-size: 15px; }
-input#text { flex: 1; padding: 12px; min-width: 180px; font-size: 15px; }
-button[type="submit"] { border: 0; border-radius: 8px; padding: 12px 20px; background: #e00000; color: #fff; font-weight: bold; cursor: pointer; }
-
-.action-btns { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-button.action-btn { background: #333; color: #fff; border: 1px solid #555; padding: 9px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.2s; }
-button.action-btn:hover { background: #444; }
-button.applause-btn { background: #d97706; border-color: #f59e0b; }
-button.coffee-btn { background: #78350f; border-color: #b45309; }
-button.heart-btn { background: #be123c; border-color: #fb7185; }
-button.fire-btn { background: #c2410c; border-color: #ea580c; }
-button.request-btn { background: #047857; border-color: #10b981; }
-
-.note { color: #aaa; font-size: 13px; }
-
-.sound-toggle-btn {
-  position: absolute; right: 15px; top: 15px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer;
-}
-
-.modal-overlay {
-  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;
-}
-.modal-box {
-  background: #1e1e1e; border: 1px solid #10b981; border-radius: 12px; padding: 20px; width: 90%; max-width: 400px; box-shadow: 0 5px 25px rgba(16, 185, 129, 0.3);
-}
-.modal-box h3 { margin-top: 0; color: #10b981; }
-.modal-box input { width: 100%; padding: 10px; margin: 8px 0; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px; box-sizing: border-box; }
-.modal-actions { display: flex; gap: 10px; margin-top: 15px; justify-content: flex-end; }
+.radio-player-card{background:linear-gradient(145deg,#180303,#2a0808);border:1px solid #aa0000;box-shadow:0 4px 20px rgba(224,0,0,.3)}
+.radio-banner{background:linear-gradient(90deg,#f00,#800000);border-radius:10px;padding:15px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.radio-logo-box{display:flex;align-items:center;gap:12px}.l2mr-logo{width:45px;height:45px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.l2mr-logo svg{width:28px;height:28px;fill:#b00000}
+.radio-logo-text h1{margin:0;font-size:22px}.radio-logo-text span{font-size:13px;color:#ffcccc}
+.live-badge{background:#000;color:#ff3333;border:1px solid #f33;font-size:11px;font-weight:bold;padding:5px 10px;border-radius:20px;white-space:nowrap}
+.live-dot{width:8px;height:8px;background:#f33;border-radius:50%;display:inline-block}
+.radio-description{background:rgba(0,0,0,.4);border-left:4px solid red;padding:12px;border-radius:6px;margin-bottom:15px;font-size:14px;color:#ddd}
+.popup-player-box{background:rgba(0,0,0,.5);padding:10px;border-radius:10px;border:1px solid #333}
+.play-btn{width:100%;padding:15px;font-size:17px;background:linear-gradient(180deg,#ff1a1a,#990000);border:0;border-radius:8px;color:#fff;font-weight:bold;cursor:pointer}
+#messages{height:380px;overflow-y:auto;background:#0b0b0b;border-radius:10px;padding:12px;border:1px solid #333}
+.msg{background:#292929;border-radius:9px;padding:10px 12px;margin:8px 0;word-break:break-word;font-size:15px}
+.bot-msg{background:linear-gradient(135deg,#1e1b4b,#31103f);border:1px solid #7c3aed}
+.applause-msg{background:linear-gradient(135deg,#3f2b10,#2a1a08);border:1px solid #f59e0b;color:#fef08a;font-weight:bold}
+.request-msg{background:linear-gradient(135deg,#064e3b,#022c22);border:1px solid #10b981;color:#a7f3d0;font-weight:bold}
+.whisper-msg{background:linear-gradient(135deg,#3b0764,#581c87);border:1px solid #c084fc}
+.action-msg{background:linear-gradient(135deg,#1e3a8a,#172554);border:1px solid #3b82f6;color:#93c5fd;font-style:italic}
+.system-msg{background:#222;border:1px dashed #555;color:#aaa;font-style:italic;text-align:center;font-size:13px}
+.time{font-size:11px;color:#888;margin-right:6px}.avatar{margin-right:4px}.name{font-weight:bold;color:#ff5555;margin-right:6px;cursor:pointer}.bot-name{color:#c084fc!important}
+.bot-badge,.whisper-badge{font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;margin-right:6px}.bot-badge{background:#7c3aed}.whisper-badge{background:#c084fc;color:#000}
+form{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
+select#userAvatar,input#name,input#text{background:#2a2a2a;color:#fff;border-radius:8px;border:0}
+select#userAvatar{padding:12px 8px;font-size:18px}input[type=color]{width:48px;height:48px;border:0}
+input#name{width:120px;padding:12px;font-size:15px}input#text{flex:1;padding:12px;min-width:180px;font-size:15px}
+button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00000;color:#fff;font-weight:bold}
+.action-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.action-btn{background:#333;color:#fff;border:1px solid #555;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:bold}
+.applause-btn{background:#d97706}.coffee-btn{background:#78350f}.heart-btn{background:#be123c}.fire-btn{background:#c2410c}.request-btn{background:#047857}
+.note{color:#aaa;font-size:13px}
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:998;display:none}
+.user-drawer{position:fixed;top:0;right:-290px;width:280px;height:100%;background:#181818;border-left:1px solid #333;z-index:999;transition:right .3s;padding:20px;overflow-y:auto}
+.user-drawer.open{right:0}.drawer-header{display:flex;justify-content:space-between;border-bottom:1px solid #333;padding-bottom:10px;margin-bottom:15px}.drawer-header h3{margin:0;color:#ff5555}.close-drawer{background:none;border:0;color:#fff;font-size:20px}
+.user-list-item{padding:9px 10px;margin:5px 0;background:#222;border-radius:6px;display:flex;gap:8px;align-items:center}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}
+.modal-box{background:#1e1e1e;border:1px solid #10b981;border-radius:12px;padding:20px;width:90%;max-width:400px}.modal-box h3{color:#10b981;margin-top:0}.modal-box input{width:100%;padding:10px;margin:8px 0;background:#2a2a2a;border:1px solid #444;color:#fff;border-radius:6px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}
+@media(max-width:600px){.radio-banner{align-items:flex-start;flex-direction:column}.live-badge{align-self:flex-end}.radio-logo-text h1{font-size:19px}}
 </style>
 </head>
-
 <body>
 
 <header>
-  🎙️ Kral FM Muhabbet
-  <button id="soundToggle" class="sound-toggle-btn">🔔 Ses Açık</button>
+  <div>🎙️ Kral FM & Muhabbet</div>
+  <div>
+    <button id="soundToggle" class="action-btn">🔔 Ses Açık</button>
+    <button id="menuTrigger" class="menu-trigger">☰</button>
+  </div>
 </header>
 
+<div class="room-tabs">
+  <div class="room-tab active" data-target="radioRoom">📻 Radyo Odası</div>
+  <div class="room-tab" data-target="chatRoom">💬 Sohbet Odası</div>
+</div>
+
 <main>
-<div class="card radio-player-card">
-  <div class="radio-banner">
-    <div class="radio-logo-box">
-      <div class="l2mr-logo">
-        <svg viewBox="0 0 24 24"><path d="M12,2A9,9 0 0,0 3,11V18A3,3 0 0,0 6,21H8V13H5V11A7,7 0 0,1 12,4A7,7 0 0,1 19,11V13H16V21H18A3,3 0 0,0 21,18V11A9,9 0 0,0 12,2Z"/></svg>
+<section id="radioRoom" class="room-content active">
+  <div class="card radio-player-card">
+    <div class="radio-banner">
+      <div class="radio-logo-box">
+        <div class="l2mr-logo"><svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg></div>
+        <div class="radio-logo-text"><h1>📻 Radyo Kral FM</h1><span>Kesintisiz Canlı Yayın</span></div>
       </div>
-      <div class="radio-logo-text">
-        <h1>📻 Radyo Kral FM</h1>
-        <span>Kesintisiz Canlı Yayın</span>
-      </div>
+      <div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div>
     </div>
-    <div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div>
+    <div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Sohbetimize katılın ve keyifli dinlemeler. 🎶☕</div>
+    <div class="popup-player-box">
+      <button class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</button>
+      <audio id="radioAudio" controls style="display:none;width:100%;margin-top:10px"></audio>
+      <div id="radioStatus" class="note" style="margin-top:8px;text-align:center"></div>
+    </div>
   </div>
+  <div class="card"><h3 style="margin-top:0">🎧 Radyo Odasındaki Dinleyiciler</h3><div id="radioRoomUsers">Bağlanılıyor...</div></div>
+</section>
 
-  <div class="radio-description">
-    ✨ Müziğin ritmi, dostluğun adresi! En güzel şarkılar, sıcacık sohbetler ve unutulmaz anlar için doğru yerdesiniz... 🎶☕
+<section id="chatRoom" class="room-content">
+  <div class="card">
+    <h2 style="margin-top:0">💬 Canlı Muhabbet Odası</h2>
+    <div id="messages"></div>
+    <form id="chatForm" autocomplete="off">
+      <select id="userAvatar" title="Avatar">
+        <option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option><option value="🎉">🎉 Parti</option>
+      </select>
+      <input type="color" id="userColor" value="#ff5555">
+      <input type="text" id="name" maxlength="30" placeholder="Adınız" required>
+      <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
+      <button type="submit">Gönder</button>
+    </form>
+    <div class="action-btns">
+      <button id="sendApplause" class="action-btn applause-btn">👏 Alkış</button>
+      <button id="sendCoffee" class="action-btn coffee-btn">☕ Kahve Ismarla</button>
+      <button id="sendHeart" class="action-btn heart-btn">❤️ Kalp At</button>
+      <button id="sendFire" class="action-btn fire-btn">🔥 Alev Et</button>
+      <button id="openRequestModal" class="action-btn request-btn">🎵 İstek Yap</button>
+      <button id="clear" class="action-btn">🗑️ Temizle</button>
+    </div>
+    <p id="status" class="note">Sohbet hazır. 🤖</p>
   </div>
-
-  <div class="popup-player-box">
-    <button type="button" class="play-btn" id="toggleRadio">
-      <span>📻</span> Radyoyu Dinle
-    </button>
-  </div>
-</div>
-
-<div class="card">
-  <h2 style="margin-top:0; margin-bottom:12px;">💬 Canlı Muhabbet</h2>
-  <div id="messages"></div>
-
-  <form id="chatForm" autocomplete="off">
-    <select id="userAvatar" title="Avatar Seç">
-      <option value="👩">👩 Kadın</option>
-      <option value="👨">👨 Erkek</option>
-      <option value="🕶️">🕶️ Karizmatik</option>
-      <option value="👑">👑 Kral</option>
-      <option value="☕">☕ Kahve</option>
-      <option value="🎶">🎶 Nota</option>
-      <option value="🎙️">🎙️ Mikrofon</option>
-      <option value="🌟">🌟 Yıldız</option>
-      <option value="🎧">🎧 Kulaklık</option>
-      <option value="🎉">🎉 Parti</option>
-    </select>
-    
-    <input type="color" id="userColor" value="#ff5555" title="Renk Seç">
-    <input type="text" id="name" maxlength="30" placeholder="Adınız" required>
-    <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
-
-    <button type="submit">Gönder</button>
-  </form>
-
-  <div class="action-btns">
-    <button id="sendApplause" type="button" class="action-btn applause-btn">👏 Alkış</button>
-    <button id="sendCoffee" type="button" class="action-btn coffee-btn">☕ Kahve Ismarla</button>
-    <button id="sendHeart" type="button" class="action-btn heart-btn">❤️ Kalp At</button>
-    <button id="sendFire" type="button" class="action-btn fire-btn">🔥 Alev Et</button>
-    <button id="openRequestModal" type="button" class="action-btn request-btn">🎵 İstek Yap</button>
-    <button id="clear" type="button" class="action-btn">🗑️ Temizle</button>
-  </div>
-
-  <p id="status" class="note">Sohbet hazır. 🤖</p>
-</div>
+</section>
 </main>
+
+<div id="drawerOverlay" class="drawer-overlay"></div>
+<aside id="userDrawer" class="user-drawer">
+  <div class="drawer-header"><h3>👥 Çevrimiçi Üyeler</h3><button id="closeDrawer" class="close-drawer">✕</button></div>
+  <div id="onlineUsersList">Kimse yok...</div>
+</aside>
 
 <div id="requestModal" class="modal-overlay">
   <div class="modal-box">
     <h3>🎵 İstek Parça Gönder</h3>
-    <p style="font-size: 13px; color: #ccc;">Yayıncıya duyurmak istediğiniz şarkıyı yazın:</p>
-    <input type="text" id="songArtist" placeholder="Sanatçı Adı (Örn: Müslüm Gürses)">
-    <input type="text" id="songTitle" placeholder="Şarkı Adı (Örn: Seni Yazdım)">
-    <div class="modal-actions">
-      <button id="closeRequestModal" type="button" class="action-btn" style="background:#444;">İptal</button>
-      <button id="sendRequest" type="button" class="action-btn request-btn">Gönder 🎶</button>
-    </div>
+    <p style="font-size:13px;color:#ccc">Yayıncıya duyurmak istediğiniz şarkıyı yazın:</p>
+    <input id="songArtist" placeholder="Sanatçı Adı">
+    <input id="songTitle" placeholder="Şarkı Adı">
+    <div class="modal-actions"><button id="closeRequestModal" class="action-btn">İptal</button><button id="sendRequest" class="action-btn request-btn">Gönder 🎶</button></div>
   </div>
 </div>
 
-<audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 <audio id="notificationSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+<audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {
-  getDatabase,
-  ref,
-  push,
-  onChildAdded,
-  remove,
-  onDisconnect
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {getDatabase,ref,push,onChildAdded,onValue,set,onDisconnect,remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
-  authDomain: "kralfm-muhabbet.firebaseapp.com",
-  databaseURL: "https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "kralfm-muhabbet",
-  storageBucket: "kralfm-muhabbet.firebasestorage.app",
-  messagingSenderId: "638769846511",
-  appId: "1:638769846511:web:f6d8abb91564873996"
+const firebaseConfig={
+ apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
+ authDomain:"kralfm-muhabbet.firebaseapp.com",
+ databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId:"kralfm-muhabbet",
+ storageBucket:"kralfm-muhabbet.firebasestorage.app",
+ messagingSenderId:"638769846511",
+ appId:"1:638769846511:web:f6d8abb91564873996"
+};
+const app=initializeApp(firebaseConfig),db=getDatabase(app);
+const messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence");
+
+const $=id=>document.getElementById(id);
+const box=$("messages"),nameInput=$("name"),textInput=$("text"),colorInput=$("userColor"),avatarInput=$("userAvatar");
+let sound=true;
+const uid="user_"+Math.random().toString(36).slice(2,10);
+let nick="";
+const notification=$("notificationSound"), applause=$("applauseSound");
+
+document.querySelectorAll(".room-tab").forEach(tab=>tab.onclick=()=>{
+ document.querySelectorAll(".room-tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".room-content").forEach(x=>x.classList.remove("active"));
+ tab.classList.add("active");$(tab.dataset.target).classList.add("active");
+});
+$("soundToggle").onclick=()=>{sound=!sound;$("soundToggle").textContent=sound?"🔔 Ses Açık":"🔕 Sessiz"};
+
+function openDrawer(){ $("userDrawer").classList.add("open");$("drawerOverlay").style.display="block" }
+function closeDrawer(){ $("userDrawer").classList.remove("open");$("drawerOverlay").style.display="none" }
+$("menuTrigger").onclick=openDrawer;$("closeDrawer").onclick=closeDrawer;$("drawerOverlay").onclick=closeDrawer;
+
+const RADIO_URL="http://kralfm.radiostream321.com/";
+const audio=$("radioAudio");
+$("toggleRadio").onclick=()=>{
+  // GitHub Pages HTTPS sayfasında HTTP yayınlar tarayıcı tarafından engellenebilir.
+  // Önce doğrudan ses olarak deniyoruz; olmazsa yayın sayfasını yeni sekmede açıyoruz.
+  audio.src=RADIO_URL;
+  audio.style.display="block";
+  audio.play().then(()=>{
+    $("toggleRadio").textContent="⏸️ Radyoyu Durdur";
+    $("radioStatus").textContent="🔴 Radyo çalıyor";
+  }).catch(()=>{
+    window.open(RADIO_URL,"_blank");
+    $("radioStatus").textContent="📻 Radyo yeni sekmede açıldı.";
+  });
+};
+audio.onpause=()=>{$("toggleRadio").textContent="📻 Radyoyu Dinle"};
+audio.onerror=()=>{window.open(RADIO_URL,"_blank");$("radioStatus").textContent="📻 Yayın yeni sekmede açıldı."};
+
+function time(t){return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})}
+function showMessage(d){
+ if(!d)return;
+ const r=document.createElement("div"),ts=document.createElement("span");
+ ts.className="time";ts.textContent="["+time(d.createdAt)+"] ";
+ if(d.type==="system"){r.className="msg system-msg";r.textContent=ts.textContent+" "+d.text;box.appendChild(r);box.scrollTop=box.scrollHeight;return}
+ const av=document.createElement("span"),n=document.createElement("span"),t=document.createElement("span");
+ av.className="avatar";av.textContent=(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
+ n.className=d.type==="bot"?"name bot-name":"name";n.textContent=(d.name||"Misafir")+": ";
+ t.textContent=d.text||"";
+ if(d.type==="applause")r.className="msg applause-msg";
+ else if(d.type==="request")r.className="msg request-msg";
+ else if(d.type==="whisper")r.className="msg whisper-msg";
+ else if(d.type==="action")r.className="msg action-msg";
+ else r.className=d.type==="bot"?"msg bot-msg":"msg";
+ if(d.type==="whisper"){
+   const b=document.createElement("span");b.className="whisper-badge";b.textContent="ÖZEL → "+d.target;r.append(ts,b,av,n,t);
+ }else if(d.type==="bot"){
+   const b=document.createElement("span");b.className="bot-badge";b.textContent="BOT";r.append(ts,b,av,n,t);
+ }else r.append(ts,av,n,t);
+ if(d.type!=="bot"&&d.color)n.style.color=d.color;
+ box.appendChild(r);box.scrollTop=box.scrollHeight;
+ if(sound){
+   const snd=d.type==="applause"?applause:notification;snd.currentTime=0;snd.play().catch(()=>{});
+ }
+}
+
+onChildAdded(messagesRef,s=>showMessage(s.val()));
+
+function botReply(text,user){
+ const m=text.toLowerCase();
+ if(user.toLowerCase()==="kral bot")return null;
+ if(m.includes("selam"))return "Aleykümselam @"+user+" 👋";
+ if(m.includes("merhaba"))return "Merhaba @"+user+"! Kral FM'e hoş geldin. 📻";
+ if(m.includes("kahve"))return "☕ Sayın @"+user+", kahveniz hazır! Afiyet olsun.";
+ if(m.includes("istek"))return "🎵 İstek mesajınız yayıncıya iletildi. Keyifli dinlemeler!";
+ return null;
+}
+
+async function registerPresence(username){
+ if(!username)return;
+ const uref=ref(db,"presence/"+uid);
+ await set(uref,{name:username,avatar:avatarInput.value,color:colorInput.value,createdAt:Date.now()});
+ onDisconnect(uref).remove();
+ if(nick!==username){
+   if(nick)await push(messagesRef,{type:"system",text:"🚪 "+nick+" odadan ayrıldı.",createdAt:Date.now()});
+   await push(messagesRef,{type:"system",text:"🚪 "+username+" sohbete katıldı.",createdAt:Date.now()});
+   nick=username;
+ }
+}
+
+nameInput.addEventListener("change",()=>{if(nameInput.value.trim())registerPresence(nameInput.value.trim())});
+
+onValue(presenceRef,snap=>{
+ const users=snap.val()||{},arr=Object.values(users);
+ const text=arr.length?arr.map(u=>(u.avatar||"🎧")+" "+u.name).join(" • "):"Kimse yok...";
+ $("radioRoomUsers").textContent=arr.length+" dinleyici: "+text;
+ $("onlineUsersList").innerHTML="";
+ if(!arr.length){$("onlineUsersList").innerHTML='<div style="color:#777">Kimse yok...</div>';return}
+ arr.forEach(u=>{
+  const d=document.createElement("div");d.className="user-list-item";d.textContent=(u.avatar||"🎧")+" "+u.name;$("onlineUsersList").appendChild(d);
+ });
+});
+
+async function send(text,type="user"){
+ const n=nameInput.value.trim()||"Misafir";
+ if(nameInput.value.trim())await registerPresence(n);
+ await push(messagesRef,{name:n,text,color:colorInput.value,avatar:avatarInput.value,type,createdAt:Date.now()});
+ const reply=botReply(text,n);
+ if(reply)setTimeout(()=>push(messagesRef,{name:"Kral Bot",text:reply,type:"bot",createdAt:Date.now()}),500);
+}
+
+$("chatForm").onsubmit=async e=>{
+ e.preventDefault();const t=textInput.value.trim();if(!t)return;
+ try{await send(t)}catch(err){$("status").textContent="Mesaj gönderilemedi. Firebase Rules kontrol edilmeli."}
+ textInput.value="";
+};
+$("sendApplause").onclick=()=>send("👏 Coşkulu bir alkış gönderdi!","applause");
+$("sendCoffee").onclick=()=>send("☕ Herkese sıcacık kahve ikram etti!");
+$("sendHeart").onclick=()=>send("❤️ Kucak dolusu sevgiler gönderdi!");
+$("sendFire").onclick=()=>send("🔥 Ortamı alevlendirdi!","action");
+
+$("clear").onclick=()=>{box.innerHTML="";$("status").textContent="Ekrandaki sohbet temizlendi. Yeni mesajlar gelmeye devam eder.";};
+
+$("openRequestModal").onclick=()=>{$("requestModal").style.display="flex"};
+$("closeRequestModal").onclick=()=>{$("requestModal").style.display="none"};
+$("sendRequest").onclick=async()=>{
+ const a=$("songArtist").value.trim(),t=$("songTitle").value.trim();
+ if(!a||!t){alert("Lütfen sanatçı ve şarkı adını yazın.");return}
+ await send("🎵 İSTEK PARÇA: "+a+" - \""+t+"\"","request");
+ $("songArtist").value="";$("songTitle").value="";$("requestModal").style.display="none";
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const messagesRef = ref(db, "messages");
-
-const box = document.getElementById("messages");
-const status = document.getElementById("status");
-const nameInput = document.getElementById("name");
-const textInput = document.getElementById("text");
-const colorInput = document.getElementById("userColor");
-const avatarInput = document.getElementById("userAvatar");
-const toggleRadioBtn = document.getElementById("toggleRadio");
-
-const applauseAudio = document.getElementById("applauseSound");
-const notifyAudio = document.getElementById("notificationSound");
-const soundToggleBtn = document.getElementById("soundToggle");
-
-let isSoundEnabled = true;
-
-soundToggleBtn.addEventListener("click", () => {
-  isSoundEnabled = !isSoundEnabled;
-  soundToggleBtn.textContent = isSoundEnabled ? "🔔 Ses Açık" : "🔕 Sessiz";
-  soundToggleBtn.style.opacity = isSoundEnabled ? "1" : "0.6";
-});
-
-toggleRadioBtn.addEventListener("click", () => {
-  window.open("http://kralfm.radio12345.com/", "_blank");
-});
-
-let hasJoined = false;
-let welcomedUsers = new Set(); 
-let lastActivityTime = Date.now();
-
-status.textContent = "Sohbet aktif ve hazır. 🤖";
-
-function getTimeString(timestamp) {
-  return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
-}
-
-function showMessage(d) {
-  if (!d) return;
-  const r = document.createElement("div");
-  const timeSpan = document.createElement("span");
-  const isBot = d.type === "bot";
-  
-  timeSpan.className = "time";
-  timeSpan.textContent = `[${getTimeString(d.createdAt)}] `;
-
-  if (d.type === "system") {
-    r.className = "msg system-msg";
-    r.textContent = `${timeSpan.textContent} ${d.text}`;
-    box.appendChild(r);
-    box.scrollTop = box.scrollHeight;
-    return;
-  }
-
-  const avatarSpan = document.createElement("span");
-  avatarSpan.className = "avatar";
-  avatarSpan.textContent = isBot ? "🤖 " : `${d.avatar || "🎧"} `;
-
-  const n = document.createElement("span");
-  const t = document.createElement("span");
-
-  const myCurrentName = nameInput.value.trim().toLowerCase();
-  const messageTextLower = (d.text || "").toLowerCase();
-  const isMentioned = myCurrentName && (
-    messageTextLower.includes(`@${myCurrentName}`) || 
-    messageTextLower.includes(`&${myCurrentName}`) ||
-    messageTextLower.includes(myCurrentName)
-  ) && d.name.toLowerCase() !== myCurrentName;
-
-  if (isMentioned) {
-    r.className = "msg mentioned-msg";
-    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
-  } else if(d.type === "applause") {
-    r.className = "msg applause-msg";
-    if(isSoundEnabled) { applauseAudio.currentTime = 0; applauseAudio.play().catch(()=>{}); }
-  } else if (d.type === "request") {
-    r.className = "msg request-msg";
-    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
-  } else {
-    r.className = isBot ? "msg bot-msg" : "msg";
-    if(isSoundEnabled && !isBot) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
-  }
-
-  n.className = isBot ? "name bot-name" : "name";
-  if(!isBot && d.color) n.style.color = d.color;
-
-  n.textContent = (d.name || "Misafir") + ": ";
-  t.textContent = d.text || "";
-
-  if (isBot) {
-    const badge = document.createElement("span");
-    badge.className = "bot-badge";
-    badge.textContent = "BOT";
-    r.append(timeSpan, badge, avatarSpan, n, t);
-  } else {
-    r.append(timeSpan, avatarSpan, n, t);
-  }
-
-  box.appendChild(r);
-  box.scrollTop = box.scrollHeight;
-}
-
-function getRandomReply(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function getBotReply(text, userName, isFirstMessage = false) {
-  const m = (text || "").toLowerCase().trim();
-
-  if (userName.toLowerCase() === "kral bot") {
-    return null;
-  }
-
-  if (m === "selam" || m === "sa" || m === "selamün aleyküm" || m === "selamunaleyküm" || m.includes("selam")) {
-    return `Aleykümselam @${userName}`;
-  }
-
-  if (m === "merhaba" || m === "mrb" || m.includes("merhaba")) {
-    return `Merhaba @${userName}`;
-  }
-
-  if (isFirstMessage && !welcomedUsers.has(userName.toLowerCase())) {
-    welcomedUsers.add(userName.toLowerCase());
-    return `👋 Hoş geldin Sayın @${userName}! Kral FM ailesine sefalar getirdin. Keyifli dinlemeler! 🎧☕`;
-  }
-
-  if (m.includes("bot") || m.includes("kral bot") || m.includes("kralfm bot")) {
-    return getRandomReply([
-      `🤖 Buyurayın Sayın @${userName}, seni dinliyorum! Radyo ve sohbet nasıl gidiyor? 📻✨`,
-      `Efendim @${userName}? Kral FM'in en sadık dinleyicilerinden biri olduğunu biliyorum! 🎧☕`,
-      `Buradayım @${userName}! İstek parça ya da kahve ikramı için yardımcı olabilirim! 🎶`
-    ]);
-  }
-
-  if (m.includes("@herkes") && m.includes("kahve")) {
-    return `☕ Hey herkes duydu! @${userName} odadaki herkese bol köpüklü taze kahve ikram etti! Afiyet olsun dostlar! 😋✨`;
-  }
-
-  if (m.includes("kahve") && (m.includes("@") || m.includes("&"))) {
-    return `☕ Müjde! @${userName}, sohbet arkadaşına tatlı bir kahve ısmarladı, afiyet olsun! ☕✨`;
-  }
-
-  if (text.includes("İSTEK PARÇA:")) {
-    return getRandomReply([
-      `🎵 Harika bir parça seçimi Sayın @${userName}! İstek parçanız yayıncımızın ekranına ulaştı ve sıraya alındı, keyifli dinlemeler! 🎧✨`,
-      `📻 Baş üstüne Sayın @${userName}! İstek şarkınız listeye eklendi, yayıncımız birazdan çalacak. Keyifli sohbetler! 🎶☕`,
-      `✨ Mükemmel bir seçim @${userName}! Şarkı isteğiniz sıraya alındı, kulağınız bizde olsun! 🎧❤️`
-    ]);
-  }
-
-  if (m.includes("komut") || m.includes("yardım")) {
-    return `📜 Hızlı butonları kullanabilir veya 'kahve', 'selam', 'istek' yazabilirsiniz!`;
-  }
-
-  if (m.includes("kahve") || m.includes("☕")) {
-    return `☕ Sayın @${userName}, bol köpüklü taze kahveniz hazır! Afiyet olsun! 😋`;
-  }
-
-  if (m.includes("❤️") || m.includes("kalp")) {
-    return `💖 Kral FM'den size de kucak dolusu sevgiler Sayın @${userName}! ❤️`;
-  }
-
-  if (m.includes("🔥") || m.includes("alev")) {
-    return `🔥 Sohbet alev aldı! Coşkuna ortak oluyoruz @${userName}! 🎙️🔥`;
-  }
-
-  return null;
-}
-
-async function announceJoin(username) {
-  if (hasJoined || !username) return;
-  hasJoined = true;
-
-  try {
-    await push(messagesRef, {
-      text: `🚪 ${username} sohbet odasına katıldı.`,
-      type: "system",
-      createdAt: Date.now()
-    });
-
-    const leaveMsgRef = push(messagesRef);
-    onDisconnect(leaveMsgRef).set({
-      text: `🚪 ${username} sohbet odasından ayrıldı.`,
-      type: "system",
-      createdAt: Date.now()
-    });
-  } catch (err) {
-    console.error("Katılımcı duyurusu hatası:", err);
-  }
-}
-
-onChildAdded(messagesRef, s => {
-  showMessage(s.val());
-});
-
-document.getElementById("chatForm").addEventListener("submit", async e => {
-  e.preventDefault();
-
-  const n = nameInput.value.trim();
-  const c = colorInput.value;
-  const a = avatarInput.value;
-  const t = textInput.value.trim();
-
-  if (!n || !t) return;
-
-  lastActivityTime = Date.now();
-  if (!hasJoined) await announceJoin(n);
-
-  try {
-    await push(messagesRef, {
-      name: n, text: t, color: c, avatar: a, type: "user", createdAt: Date.now()
-    });
-
-    const isFirst = !welcomedUsers.has(n.toLowerCase());
-    const botReply = getBotReply(t, n, isFirst);
-    
-    if (botReply) {
-      setTimeout(async () => {
-        await push(messagesRef, {
-          name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
-        });
-      }, 500);
-    }
-  } catch (err) {
-    alert("Mesaj gönderilemedi. Firebase Kurallarını (Rules) kontrol edin!");
-  }
-
-  textInput.value = "";
-});
-
-async function sendQuickMessage(textMsg, type = "user") {
-  const n = nameInput.value.trim() || "Misafir";
-  lastActivityTime = Date.now();
-  if (!hasJoined && nameInput.value.trim()) await announceJoin(n);
-
-  try {
-    await push(messagesRef, {
-      name: n, text: textMsg, color: colorInput.value, avatar: avatarInput.value, type: type, createdAt: Date.now()
-    });
-
-    const botReply = getBotReply(textMsg, n, false);
-    if (botReply) {
-      setTimeout(async () => {
-        await push(messagesRef, {
-          name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now()
-        });
-      }, 500);
-    }
-  } catch (err) {
-    console.error("Hızlı mesaj hatası:", err);
-  }
-}
-
-document.getElementById("sendApplause").addEventListener("click", () => sendQuickMessage("👏 Coşkulu bir alkış gönderdi!", "applause"));
-document.getElementById("sendCoffee").addEventListener("click", () => sendQuickMessage("☕ Odadaki herkese sıcacık bir kahve ikram etti!"));
-document.getElementById("sendHeart").addEventListener("click", () => sendQuickMessage("❤️ Kucak dolusu sevgiler ve kalpler gönderdi!"));
-document.getElementById("sendFire").addEventListener("click", () => sendQuickMessage("🔥 Ortamı alev alev yaktı!"));
-
-const requestModal = document.getElementById("requestModal");
-document.getElementById("openRequestModal").addEventListener("click", () => requestModal.style.display = "flex");
-document.getElementById("closeRequestModal").addEventListener("click", () => requestModal.style.display = "none");
-
-document.getElementById("sendRequest").addEventListener("click", async () => {
-  const artist = document.getElementById("songArtist").value.trim();
-  const title = document.getElementById("songTitle").value.trim();
-
-  if(!artist || !title) {
-    alert("Lütfen hem sanatçı hem de şarkı adını giriniz.");
-    return;
-  }
-
-  const requestText = `🎵 İSTEK PARÇA: ${artist} - "${title}" şarkısını yayıncımızdan istiyor!`;
-  await sendQuickMessage(requestText, "request");
-
-  document.getElementById("songArtist").value = "";
-  document.getElementById("songTitle").value = "";
-  requestModal.style.display = "none";
-});
-
-document.getElementById("clear").addEventListener("click", () => {
-  box.innerHTML = "";
-});
+window.addEventListener("beforeunload",()=>{});
 </script>
-
 </body>
 </html>
