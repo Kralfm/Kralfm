@@ -257,6 +257,17 @@ const db = getDatabase(app);
 const messagesRef = ref(db, "messages");
 const presenceRef = ref(db, "presence");
 
+// 🚫 KÜFÜR VE ARGO KONTROL LİSTESİ
+const badWords = [
+  "amk", "aq", "orospu", "piç", "sik", "anan", "amina", "oc", 
+  "gerizekalı", "mal", "salak", "aptal", "kahpe", "yavşak"
+];
+
+function checkBadWords(text) {
+  let lowerText = text.toLowerCase();
+  return badWords.some(word => lowerText.includes(word));
+}
+
 const tabs = document.querySelectorAll(".room-tab");
 const contents = document.querySelectorAll(".room-content");
 
@@ -426,36 +437,20 @@ function getBotReply(text, userName) {
   return null;
 }
 
-async function registerPresence(username) {
-  if (!username) return;
-  const userRef = ref(db, `presence/${myUserId}`);
-  
-  // Eğer daha önce başka bir nick ile kayıtlıysa eskisini temizle ve yeni katılımı duyur
-  if (currentRegisteredNick && currentRegisteredNick !== username) {
-    await push(messagesRef, {
-      text: `🚪 ${currentRegisteredNick} odadan ayrıldı.`,
-      type: "system",
-      createdAt: Date.now()
-    });
-    await push(messagesRef, {
-      text: `🚪 ${username} sohbete katıldı.`,
-      type: "system",
-      createdAt: Date.now()
-    });
-  } else if (!currentRegisteredNick) {
-    await push(messagesRef, {
-      text: `🚪 ${username} sohbete katıldı.`,
-      type: "system",
-      createdAt: Date.now()
-    });
-  }
+const userRef = ref(db, `presence/${myUserId}`);
+onDisconnect(userRef).remove();
 
-  currentRegisteredNick = username;
-  await set(userRef, { name: username, time: Date.now() });
-  
-  // Sekme kapandığında veya bağlantı koptuğunda listeden otomatik sil ve çıkış mesajı yaz
-  onDisconnect(userRef).remove();
+async function updatePresence() {
+  const username = nameInput.value.trim();
+  if (!username) return;
+
+  if (currentRegisteredNick !== username) {
+    currentRegisteredNick = username;
+    await set(userRef, { name: username, time: Date.now() });
+  }
 }
+
+nameInput.addEventListener("input", updatePresence);
 
 onValue(presenceRef, snapshot => {
   const data = snapshot.val();
@@ -474,7 +469,7 @@ onValue(presenceRef, snapshot => {
   Object.values(data).forEach(user => {
     radioCount++;
     usersHtml += `
-      <div class="user-list-item" onclick="document.getElementById('text').value='@${user.name} '; userDrawer.classList.remove('open'); drawerOverlay.style.display='none';">
+      <div class="user-list-item" data-username="${user.name}">
         🎧 <span>${user.name}</span>
       </div>
     `;
@@ -482,6 +477,15 @@ onValue(presenceRef, snapshot => {
 
   onlineUsersList.innerHTML = usersHtml;
   radioRoomUsers.innerHTML = `Şu an radyo odasında ve çevrimiçi olan <b>${radioCount}</b> kişi dinliyor. Keyifli sohbetler!`;
+
+  document.querySelectorAll(".user-list-item").forEach(item => {
+    item.addEventListener("click", () => {
+      textInput.value = `@${item.dataset.username} `;
+      userDrawer.classList.remove("open");
+      drawerOverlay.style.display = "none";
+      textInput.focus();
+    });
+  });
 });
 
 onChildAdded(messagesRef, s => {
@@ -497,10 +501,14 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
   if (!n || !t) return;
 
-  // İlk defa mesaj atılıyorsa veya form gönderiliyorsa varlığı (presence) kaydet
-  if (currentRegisteredNick !== n) {
-    await registerPresence(n);
+  // 🚫 KÜFÜR VE ARGO KONTROLÜ
+  if (checkBadWords(t)) {
+    alert("⚠️ Seviyeli Muhabbet: Mesajınız argo veya küfür içerdiği için gönderilemedi. Lütfen daha duyarlı olalım! 📻");
+    textInput.value = "";
+    return;
   }
+
+  await updatePresence();
 
   // 🛠️ MIRC KOMUTU: /nick YeniIsim
   if (t.toLowerCase().startsWith("/nick ")) {
@@ -508,7 +516,7 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
     if (newNick && newNick !== n) {
       const oldNick = n;
       nameInput.value = newNick;
-      await registerPresence(newNick);
+      await updatePresence();
       await push(messagesRef, {
         text: `🔄 ${oldNick} rumuzunu "${newNick}" olarak değiştirdi.`,
         type: "system",
@@ -523,6 +531,11 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
   if (t.toLowerCase().startsWith("/me ")) {
     const actionText = t.substring(4).trim();
     if (actionText) {
+      if (checkBadWords(actionText)) {
+        alert("⚠️ Uyarı: Eyleminiz argo ifadeler içeremez.");
+        textInput.value = "";
+        return;
+      }
       await push(messagesRef, {
         name: n, text: actionText, color: c, avatar: a, type: "action", createdAt: Date.now()
       });
@@ -550,7 +563,11 @@ document.getElementById("chatForm").addEventListener("submit", async e => {
 
 async function sendWhisperMessage(targetUser, messageText) {
   const n = nameInput.value.trim() || "Misafir";
-  if (currentRegisteredNick !== n) await registerPresence(n);
+  if (checkBadWords(messageText)) {
+    alert("⚠️ Özel mesajınız argo içerdiği için gönderilemedi.");
+    return;
+  }
+  await updatePresence();
 
   try {
     await push(messagesRef, {
@@ -569,7 +586,7 @@ async function sendWhisperMessage(targetUser, messageText) {
 
 async function sendQuickMessage(textMsg, type = "user") {
   const n = nameInput.value.trim() || "Misafir";
-  if (currentRegisteredNick !== n) await registerPresence(n);
+  await updatePresence();
 
   try {
     await push(messagesRef, {
@@ -595,6 +612,11 @@ document.getElementById("sendRequest").addEventListener("click", async () => {
 
   if(!artist || !title) {
     alert("Lütfen hem sanatçı hem de şarkı adını giriniz.");
+    return;
+  }
+
+  if (checkBadWords(artist) || checkBadWords(title)) {
+    alert("⚠️ İstek parça bilgileri argo içeremez.");
     return;
   }
 
