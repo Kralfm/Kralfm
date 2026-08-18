@@ -140,7 +140,6 @@ const uid="user_"+Math.random().toString(36).slice(2,10);
 const notification=$("notificationSound"), applause=$("applauseSound");
 const defaultGuestName = "Misafir_" + Math.floor(Math.random() * 900 + 100);
 
-// Sabit Çevrimiçi Üyeler (Yanında bot yazmıyor)
 const staticBots = [
   { name: "DuRu", avatar: "👩" },
   { name: "Eren", avatar: "👨" },
@@ -154,7 +153,7 @@ function openDrawer(){ $("userDrawer").classList.add("open");$("drawerOverlay").
 function closeDrawer(){ $("userDrawer").classList.remove("open");$("drawerOverlay").style.display="none" }
 $("menuTrigger").onclick=openDrawer;$("closeDrawer").onclick=closeDrawer;$("drawerOverlay").onclick=closeDrawer;
 
-const RADIO_URL="http://kralfm.radiostream321.com/";
+const RADIO_URL="http://kralfm.radio12345.com/";
 const audio=$("radioAudio");
 $("toggleRadio").onclick=()=>{
   audio.src=RADIO_URL;
@@ -241,7 +240,6 @@ onValue(presenceRef,snap=>{
  const users=snap.val()||{},arr=Object.values(users);
  $("onlineUsersList").innerHTML="";
  
- // Sabit Üyeleri Ekle (Yanında yazı olmadan)
  staticBots.forEach(bot => {
   const d=document.createElement("div");
   d.className="user-list-item";
@@ -249,7 +247,6 @@ onValue(presenceRef,snap=>{
   $("onlineUsersList").appendChild(d);
  });
 
- // Gerçek Bağlı Kullanıcıları Ekle
  arr.forEach(u=>{
   const d=document.createElement("div");
   d.className="user-list-item";
