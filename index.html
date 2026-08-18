@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Radyo Kral FM & Muhabbet</title>
 
+<!-- Firebase Kütüphaneleri -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -49,8 +50,8 @@ main{max-width:850px;margin:auto;padding:15px; position: relative;}
 .live-badge { background: #000; color: #ff3333; border: 1px solid #ff3333; font-size: 11px; font-weight: bold; padding: 5px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
 .live-dot { width: 8px; height: 8px; background-color: #ff3333; border-radius: 50%; display: inline-block; }
 
-.popup-player-box { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; border: 1px solid #333; width: 100%; box-sizing: border-box;}
-.play-btn { width: 100%; padding: 14px 20px; font-size: 17px; background: linear-gradient(180deg, #ff1a1a 0%, #990000 100%); border: 0; border-radius: 8px; color: #fff; font-weight: bold; cursor: pointer; }
+.popup-player-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border: 1px solid #333; width: 100%; box-sizing: border-box; text-align: center;}
+.play-btn { width: 100%; padding: 14px 20px; font-size: 17px; background: linear-gradient(180deg, #ff1a1a 0%, #990000 100%); border: 0; border-radius: 8px; color: #fff; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
 #messages { height: 380px; overflow-y: auto; background: #0b0b0b; border-radius: 10px; padding: 12px; border: 1px solid #333; }
 .msg { background: #292929; border-radius: 9px; padding: 10px 12px; margin: 8px 0; word-break: break-word; font-size: 15px; }
@@ -151,8 +152,13 @@ button.request-btn { background: #047857; border-color: #10b981; }
 
       <div class="popup-player-box">
         <button type="button" class="play-btn" id="toggleRadio">
-          <span>📻</span> Radyoyu Dinle
+          <span>▶️</span> Radyoyu Dinle
         </button>
+        <!-- Canlı Yayın Ses Kaynağı -->
+        <audio id="liveRadioStream" preload="none">
+          <source src="https://n10q.radyotelekom.com/stream/8262/" type="audio/mpeg">
+          Tarayıcınız ses akışını desteklemiyor.
+        </audio>
       </div>
     </div>
     
@@ -287,6 +293,7 @@ const textInput = document.getElementById("text");
 const colorInput = document.getElementById("userColor");
 const avatarInput = document.getElementById("userAvatar");
 const toggleRadioBtn = document.getElementById("toggleRadio");
+const liveRadioStream = document.getElementById("liveRadioStream");
 const onlineUsersList = document.getElementById("onlineUsersList");
 const radioRoomUsers = document.getElementById("radioRoomUsers");
 const soundToggleBtn = document.getElementById("soundToggle");
@@ -301,7 +308,18 @@ soundToggleBtn.addEventListener("click", () => {
 });
 
 toggleRadioBtn.addEventListener("click", () => {
-  window.open("http://kralfm.radio12345.com/", "_blank");
+  if (liveRadioStream.paused) {
+    liveRadioStream.play().then(() => {
+      toggleRadioBtn.innerHTML = `<span>⏸️</span> Radyoyu Durdur`;
+      toggleRadioBtn.style.background = "linear-gradient(180deg, #009900 0%, #006600 100%)";
+    }).catch(e => {
+      alert("Radyo yayını başlatılamadı.");
+    });
+  } else {
+    liveRadioStream.pause();
+    toggleRadioBtn.innerHTML = `<span>▶️</span> Radyoyu Dinle`;
+    toggleRadioBtn.style.background = "linear-gradient(180deg, #ff1a1a 0%, #990000 100%)";
+  }
 });
 
 function getTimeString(timestamp) {
@@ -430,36 +448,4 @@ presenceRef.on("value", snapshot => {
   Object.values(data).forEach(user => {
     radioCount++;
     usersHtml += `
-      <div class="user-list-item" data-username="${user.name}">
-        🎧 <span>${user.name}</span>
-      </div>
-    `;
-  });
-
-  onlineUsersList.innerHTML = usersHtml;
-  radioRoomUsers.innerHTML = `Şu an radyo odasında ve çevrimiçi olan <b>${radioCount}</b> kişi dinliyor. Keyifli sohbetler!`;
-
-  document.querySelectorAll(".user-list-item").forEach(item => {
-    item.addEventListener("click", () => {
-      textInput.value = `@${item.dataset.username} `;
-      userDrawer.classList.remove("open");
-      drawerOverlay.style.display = "none";
-      textInput.focus();
-    });
-  });
-});
-
-messagesRef.on("child_added", s => {
-  showMessage(s.val());
-});
-
-document.getElementById("chatForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  let n = nameInput.value.trim();
-  const c = colorInput.value;
-  const a = avatarInput.value;
-  let t = textInput.value.trim();
-
-  if (!n || !t) return;
-
-                                                     
+      <div class="user-list
