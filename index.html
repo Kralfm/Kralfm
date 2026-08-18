@@ -1,286 +1,374 @@
-<!doctype html>
-<html lang="tr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Kral FM - Web IRC Sohbet</title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<style>
-:root {
---bg-main: #111;
---panel-bg: #1e1e1e;
---accent-red: #b00000;
---irc-header: #2d2d2d;
---text-main: #fff;
---text-muted: #aaa;
-}
-
-body { margin: 0; background: var(--bg-main); color: var(--text-main); font-family: Arial, sans-serif; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-
-header { background: var(--accent-red); padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; font-size: 18px; font-weight: bold; box-shadow: 0 2px 10px rgba(255, 0, 0, 0.3); z-index: 10; }
-
-.sound-toggle-btn { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 5px 10px; border-radius: 15px; font-size: 11px; cursor: pointer; }
-
-/* Ana Layout (IRC Tarzı Yan Menü + Sohbet) */
-.irc-container { display: flex; flex: 1; overflow: hidden; position: relative; }
-
-/* Sol Sidebar: Kanallar ve Kullanıcılar */
-.irc-sidebar { width: 240px; background: #161616; border-right: 1px solid #333; display: flex; flex-direction: column; flex-shrink: 0; transition: transform 0.3s ease; }
-.sidebar-section { padding: 12px; border-bottom: 1px solid #252525; }
-.sidebar-section h3 { font-size: 12px; text-transform: uppercase; color: var(--text-muted); margin: 0 0 8px 0; letter-spacing: 1px; }
-
-.channel-list, .user-list { list-style: none; padding: 0; margin: 0; max-height: 150px; overflow-y: auto; }
-.channel-list li, .user-list li { padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-bottom: 2px; display: flex; align-items: center; gap: 8px; }
-.channel-list li:hover, .user-list li:hover { background: #252525; }
-.channel-list li.active { background: var(--accent-red); font-weight: bold; }
-
-/* Sağ Alan: Radyo + Mesajlar */
-.irc-main { flex: 1; display: flex; flex-direction: column; background: #0b0b0b; overflow: hidden; }
-
-.radio-mini-bar { background: linear-gradient(90deg, #180303, #2a0808); border-bottom: 1px solid #400; padding: 8px 15px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-.radio-info { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: bold; }
-.live-dot { width: 8px; height: 8px; background-color: #ff3333; border-radius: 50%; box-shadow: 0 0 8px #ff3333; display: inline-block; }
-.mini-play-btn { background: #e00000; border: 0; color: #fff; padding: 5px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; }
-
-/* Mesaj Ekranı */
-#messages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 6px; font-family: monospace; font-size: 14px; }
-.msg { word-break: break-word; line-height: 1.4; padding: 2px 4px; }
-.msg.system-msg { color: #f1c40f; font-style: italic; }
-.msg.action-msg { color: #3498db; font-style: italic; }
-.time { color: #666; font-size: 11px; margin-right: 6px; }
-.name { font-weight: bold; margin-right: 6px; }
-
-/* Alt Form ve Komut Satırı */
-.irc-input-bar { padding: 10px; background: #181818; border-top: 1px solid #333; display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
-.irc-input-bar input { flex: 1; background: #252525; border: 1px solid #444; color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 14px; outline: none; }
-.irc-input-bar input:focus { border-color: var(--accent-red); }
-.irc-input-bar button { background: var(--accent-red); border: 0; color: #fff; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-
-/* Mobil Uyumluluk için Çekmece (Drawer) Menü */
-.mobile-menu-toggle { display: none; background: transparent; border: 0; color: #fff; font-size: 20px; cursor: pointer; }
-
-@media (max-width: 768px) {
-.irc-sidebar { position: absolute; height: 100%; z-index: 100; transform: translateX(-100%); }
-.irc-sidebar.open { transform: translateX(0); }
-.mobile-menu-toggle { display: block; }
-}
-
-/* Modaller */
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
-.modal-box { background: #1e1e1e; border: 1px solid #555; border-radius: 10px; padding: 20px; width: 90%; max-width: 350px; }
-.modal-box h3 { margin-top: 0; color: #ff5555; }
-.modal-box input { width: 100%; padding: 10px; margin: 8px 0; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px; box-sizing: border-box; }
-</style>
-</head>
-
-<body>
-
-<header>
-<div style="display:flex; align-items:center; gap:10px;">
-<button class="mobile-menu-toggle" id="menuToggle">☰</button>
-<span>💬 KralNet IRC: #KralFM</span>
-</div>
-<button id="soundToggle" class="sound-toggle-btn">🔔 Ses Açık</button>
-</header>
-
-<div class="irc-container">
-<!-- Sol Panel: IRC Kanalları ve Kullanıcılar -->
-<div class="irc-sidebar" id="sidebar">
-<div class="sidebar-section">
-<h3>Kanallar</h3>
-<ul class="channel-list">
-<li class="active">#KralFM</li>
-<li>#Muhabbet</li>
-<li>#Nostalji</li>
-<li>#DJ-Istek</li>
-</ul>
-</div>
-<div class="sidebar-section" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
-<h3>Kullanıcılar (<span id="userCount">0</span>)</h3>
-<ul class="user-list" id="userList">
-<!-- Dinamik dolacak -->
-</ul>
-</div>
-</div>
-
-<!-- Sağ Panel: Radyo ve Sohbet Akışı -->
-<div class="irc-main">
-<div class="radio-mini-bar">
-<div class="radio-info">
-<span class="live-dot"></span> <span>Radyo Kral FM Canlı Yayın</span>
-</div>
-<button type="button" class="mini-play-btn" id="toggleRadio">📻 Radyoyu Dinle</button>
-</div>
-
-<div id="messages"></div>
-
-<form id="chatForm" class="irc-input-bar" autocomplete="off">
-<input type="text" id="text" maxlength="350" placeholder="Mesaj yazın veya IRC komutu girin (Örn: /nick YeniAd)" required>
-<button type="submit">Gönder</button>
-</form>
-</div>
-</div>
-
-<!-- İlk Giriş Nick / Rumuz Popup'ı -->
-<div id="nickModal" class="modal-overlay" style="display:flex;">
-<div class="modal-box">
-<h3>Rumuzu Belirle</h3>
-<p style="font-size:13px; color:#aaa;">Sohbete bağlanmak için geçerli bir rumuz (nick) girin:</p>
-<input type="text" id="modalNick" placeholder="Rumith (Örn: KralDinleyici)" maxlength="20" required>
-<button type="button" id="saveNickBtn" style="width:100%; margin-top:10px; background:#e00000; border:0; color:#fff; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer;">Sohbete Bağlan</button>
-</div>
-</div>
-
-<audio id="notificationSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, remove, onDisconnect } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  onChildAdded,
+  onDisconnect,
+  set,
+  remove,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
-authDomain: "kralfm-muhabbet.firebaseapp.com",
-databaseURL: "https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",
-projectId: "kralfm-muhabbet",
-storageBucket: "kralfm-muhabbet.firebasestorage.app",
-messagingSenderId: "638769846511",
-appId: "1:638769846511:web:f6d8abb91564873996"
+  apiKey: "AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
+  authDomain: "kralfm-muhabbet.firebaseapp.com",
+  databaseURL: "https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "kralfm-muhabbet",
+  storageBucket: "kralfm-muhabbet.firebasestorage.app",
+  messagingSenderId: "638769846511",
+  appId: "1:638769846511:web:f6d8abb91564873996"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const messagesRef = ref(db, "irc_messages");
+const messagesRef = ref(db, "messages");
+const presenceRef = ref(db, "presence");
 
-let currentNick = "";
-let isSoundEnabled = true;
-const box = document.getElementById("messages");
-const notifyAudio = document.getElementById("notificationSound");
+const tabs = document.querySelectorAll(".room-tab");
+const contents = document.querySelectorAll(".room-content");
 
-// UI elementleri
-const soundToggleBtn = document.getElementById("soundToggle");
-const menuToggle = document.getElementById("menuToggle");
-const sidebar = document.getElementById("sidebar");
-const nickModal = document.getElementById("nickModal");
-const modalNick = document.getElementById("modalNick");
-const saveNickBtn = document.getElementById("saveNickBtn");
-const chatForm = document.getElementById("chatForm");
-const textInput = document.getElementById("text");
-const toggleRadioBtn = document.getElementById("toggleRadio");
-
-soundToggleBtn.addEventListener("click", () => {
-isSoundEnabled = !isSoundEnabled;
-soundToggleBtn.textContent = isSoundEnabled ? "🔔 Ses Açık" : "🔕 Sessiz";
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    tabs.forEach(t => t.classList.remove("active"));
+    contents.forEach(c => c.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.target).classList.add("active");
+  });
 });
 
-menuToggle.addEventListener("click", () => {
-sidebar.classList.toggle("open");
+const menuTrigger = document.getElementById("menuTrigger");
+const userDrawer = document.getElementById("userDrawer");
+const drawerOverlay = document.getElementById("drawerOverlay");
+const closeDrawer = document.getElementById("closeDrawer");
+
+function toggleDrawer() {
+  userDrawer.classList.toggle("open");
+  drawerOverlay.style.display = userDrawer.classList.contains("open") ? "block" : "none";
+}
+
+menuTrigger.addEventListener("click", toggleDrawer);
+closeDrawer.addEventListener("click", toggleDrawer);
+drawerOverlay.addEventListener("click", toggleDrawer);
+
+let touchStartX = 0;
+document.addEventListener("touchstart", e => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener("touchend", e => {
+  let touchEndX = e.changedTouches[0].screenX;
+  if (touchEndX < touchStartX - 80 && touchStartX > window.innerWidth - 60) {
+    userDrawer.classList.add("open");
+    drawerOverlay.style.display = "block";
+  }
+  if (touchEndX > touchStartX + 80 && userDrawer.classList.contains("open")) {
+    userDrawer.classList.remove("open");
+    drawerOverlay.style.display = "none";
+  }
+});
+
+const box = document.getElementById("messages");
+const status = document.getElementById("status");
+const nameInput = document.getElementById("name");
+const textInput = document.getElementById("text");
+const colorInput = document.getElementById("userColor");
+const avatarInput = document.getElementById("userAvatar");
+const toggleRadioBtn = document.getElementById("toggleRadio");
+const onlineUsersList = document.getElementById("onlineUsersList");
+const radioRoomUsers = document.getElementById("radioRoomUsers");
+
+const applauseAudio = document.getElementById("applauseSound");
+const notifyAudio = document.getElementById("notificationSound");
+const soundToggleBtn = document.getElementById("soundToggle");
+
+let isSoundEnabled = true;
+let myUserId = 'user_' + Math.random().toString(36).substring(2, 9);
+let currentRegisteredNick = "";
+
+soundToggleBtn.addEventListener("click", () => {
+  isSoundEnabled = !isSoundEnabled;
+  soundToggleBtn.textContent = isSoundEnabled ? "🔔 Ses Açık" : "🔕 Sessiz";
 });
 
 toggleRadioBtn.addEventListener("click", () => {
-window.open("http://kralfm.radio12345.com/", "_blank");
+  window.open("http://kralfm.radio12345.com/", "_blank");
 });
 
-// Nick kaydetme ve IRC'ye giriş
-saveNickBtn.addEventListener("click", () => {
-const nick = modalNick.value.trim();
-if (!nick) {
-alert("Lütfen bir rumuz yazın!");
-return;
-}
-currentNick = nick;
-nickModal.style.display = "none";
-initIrcSession();
-});
-
-modalNick.addEventListener("keypress", (e) => {
-if (e.key === "Enter") saveNickBtn.click();
-});
-
-function getTimeString() {
-return new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-}
-
-async function initIrcSession() {
-appendSystemMessage(*** Oturum açıldı. IRC Sunucusuna bağlanıldı.);
-appendSystemMessage(*** Kanal: #KralFM | Rumuz: ${currentNick}`);
-
-await push(messagesRef, {
-type: "system",
-text: ***${currentNick} kanala giriş yaptı.`,
-createdAt: Date.now()
-});
-}
-
-function appendSystemMessage(txt) {
-const div = document.createElement("div");
-div.className = "msg system-msg";
-div.innerHTML = <span class="time"&gt;[${getTimeString()}]</span> ${txt};
-box.appendChild(div);
-box.scrollTop = box.scrollHeight;
+function getTimeString(timestamp) {
+  return new Date(timestamp || Date.now()).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
 }
 
 function showMessage(d) {
-if (!d) return;
-const div = document.createElement("div");
-const timeStr = <span class="time"&gt;[${new Date(d.createdAt || Date.now()).toLocaleTimeString("tr-TR", {hour:'2-digit', minute:'2-digit'})}]</span>`;
+  if (!d) return;
+  const currentMyName = nameInput.value.trim().toLowerCase();
+  
+  if (d.type === "whisper") {
+    const isSender = d.name.toLowerCase() === currentMyName;
+    const isReceiver = d.target && d.target.toLowerCase() === currentMyName;
+    if (!isSender && !isReceiver) return;
+  }
 
-if (d.type === "system") {
-div.className = "msg system-msg";
-div.innerHTML = ${timeStr} $`{d.text}`; } else if (d.type === "action") { div.className = "msg action-msg"; div.innerHTML =${timeStr} * <b> {d.text}; } else { div.className = "msg"; div.innerHTML =latex
-{timeStr} &lt;&lt;b style="color: #ff5555;"&gt;
+  const r = document.createElement("div");
+  const timeSpan = document.createElement("span");
+  const isBot = d.type === "bot";
+  
+  timeSpan.className = "time";
+  timeSpan.textContent = `[${getTimeString(d.createdAt)}] `;
 
-{d.name}</b>> ${d.text};
-if (isSoundEnabled && d.name !== currentNick) {
-notifyAudio.currentTime = 0;
-notifyAudio.play().catch(()=>{});
+  if (d.type === "system") {
+    r.className = "msg system-msg";
+    r.textContent = `${timeSpan.textContent} ${d.text}`;
+    box.appendChild(r);
+    box.scrollTop = box.scrollHeight;
+    return;
+  }
+
+  const avatarSpan = document.createElement("span");
+  avatarSpan.className = "avatar";
+  avatarSpan.textContent = isBot ? "🤖 " : `${d.avatar || "🎧"} `;
+
+  const n = document.createElement("span");
+  const t = document.createElement("span");
+
+  if (d.type === "whisper") {
+    r.className = "msg whisper-msg";
+    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
+  } else if (d.type === "action") {
+    r.className = "msg action-msg";
+    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
+  } else if (d.type === "applause") {
+    r.className = "msg applause-msg";
+    if(isSoundEnabled) { applauseAudio.currentTime = 0; applauseAudio.play().catch(()=>{}); }
+  } else if (d.type === "request") {
+    r.className = "msg request-msg";
+    if(isSoundEnabled) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
+  } else {
+    r.className = isBot ? "msg bot-msg" : "msg";
+    if(isSoundEnabled && !isBot) { notifyAudio.currentTime = 0; notifyAudio.play().catch(()=>{}); }
+  }
+
+  n.className = isBot ? "name bot-name" : "name";
+  if(!isBot && d.color) n.style.color = d.color;
+
+  if (d.type === "action") {
+    n.textContent = `* ${d.name} `;
+    t.textContent = d.text;
+  } else {
+    n.textContent = (d.name || "Misafir") + ": ";
+    t.textContent = d.text || "";
+    
+    if (!isBot) {
+      n.title = "Bu kişiye özel mesaj (fısıltı) gönder";
+      n.addEventListener("click", () => {
+        const whisperedUser = d.name;
+        const pmText = prompt(`${whisperedUser} adlı kullanıcıya özel mesajınızı yazın (Fısıltı):`);
+        if (pmText && pmText.trim() !== "") {
+          sendWhisperMessage(whisperedUser, pmText.trim());
+        }
+      });
+    }
+  }
+
+  if (isBot) {
+    const badge = document.createElement("span");
+    badge.className = "bot-badge";
+    badge.textContent = "BOT";
+    r.append(timeSpan, badge, avatarSpan, n, t);
+  } else if (d.type === "whisper") {
+    const badge = document.createElement("span");
+    badge.className = "whisper-badge";
+    badge.textContent = `ÖZEL -> ${d.target}`;
+    r.append(timeSpan, badge, avatarSpan, n, t);
+  } else {
+    r.append(timeSpan, avatarSpan, n, t);
+  }
+
+  box.appendChild(r);
+  box.scrollTop = box.scrollHeight;
 }
+
+function getBotReply(text, userName) {
+  const m = (text || "").toLowerCase().trim();
+  if (userName.toLowerCase() === "kral bot") return null;
+
+  if (m.includes("selam") || m === "sa") return `Aleykümselam @${userName}`;
+  if (m.includes("kahve")) return `☕ Sayın @${userName}, bol köpüklü taze kahven hazır! Afiyet olsun! 😋`;
+  return null;
 }
 
-box.appendChild(div);
-box.scrollTop = box.scrollHeight;
+const userRef = ref(db, `presence/${myUserId}`);
+onDisconnect(userRef).remove();
+
+async function updatePresence() {
+  const username = nameInput.value.trim();
+  if (!username) return;
+
+  if (currentRegisteredNick !== username) {
+    currentRegisteredNick = username;
+    await set(userRef, { name: username, time: Date.now() });
+  }
 }
 
-// IRC Komut Ayrıştırıcı (Parser)
-chatForm.addEventListener("submit", async (e) => {
-e.preventDefault();
-let val = textInput.value.trim();
-if (!val || !currentNick) return;
+// İsim kutusuna yazıldığı an listeye dahil olmasını sağla
+nameInput.addEventListener("input", updatePresence);
 
-if (val.startsWith("/")) {
-const args = val.split(" ");
-const cmd = args[0].toLowerCase();
-const param = args.slice(1).join(" ");
+onValue(presenceRef, snapshot => {
+  const data = snapshot.val();
+  onlineUsersList.innerHTML = "";
+  radioRoomUsers.innerHTML = "";
+  
+  if (!data) {
+    onlineUsersList.innerHTML = `<div style="color: #777; font-size: 13px;">Kimse yok...</div>`;
+    radioRoomUsers.innerHTML = `Odada kimse yok.`;
+    return;
+  }
 
-switch (cmd) {
-case "/nick":
-if (!param) {
-appendSystemMessage("*** Kullanım: /nick <yeni_rumuz>");
-} else {
-const oldNick = currentNick;
-currentNick = param;
-await push(messagesRef, { type: "system", text: ***${oldNick} rumuzunu latex
-{currentNick} olarak değiştirdi.`, createdAt: Date.now() }); } break; case "/me": if (!param) { appendSystemMessage("*** Kullanım: /me &lt;eylem&gt;"); } else { await push(messagesRef, { name: currentNick, text: param, type: "action", createdAt: Date.now() }); } break; case "/clear": box.innerHTML = ""; break; case "/help": appendSystemMessage("*** Geçerli IRC Komutları: /nick &lt;rumuz&gt;, /me &lt;eylem&gt;, /clear, /help"); break; default: appendSystemMessage(`*** Bilinmeyen komut: 
+  let usersHtml = "";
+  let radioCount = 0;
 
-{cmd}. Yardım için /help yazın.`);
-break;
-}
-} else {
-// Normal Kanal Mesajı
-await push(messagesRef, {
-name: currentNick,
-text: val,
-type: "chat",
-createdAt: Date.now()
+  Object.values(data).forEach(user => {
+    radioCount++;
+    usersHtml += `
+      <div class="user-list-item" data-username="${user.name}">
+        🎧 <span>${user.name}</span>
+      </div>
+    `;
+  });
+
+  onlineUsersList.innerHTML = usersHtml;
+  radioRoomUsers.innerHTML = `Şu an radyo odasında ve çevrimiçi olan <b>${radioCount}</b> kişi dinliyor. Keyifli sohbetler!`;
+
+  // Çekmecedeki kullanıcılara tıklanınca mesaj alanına @ ekleme
+  document.querySelectorAll(".user-list-item").forEach(item => {
+    item.addEventListener("click", () => {
+      textInput.value = `@${item.dataset.username} `;
+      userDrawer.classList.remove("open");
+      drawerOverlay.style.display = "none";
+      textInput.focus();
+    });
+  });
 });
+
+onChildAdded(messagesRef, s => {
+  showMessage(s.val());
+});
+
+document.getElementById("chatForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  let n = nameInput.value.trim();
+  const c = colorInput.value;
+  const a = avatarInput.value;
+  let t = textInput.value.trim();
+
+  if (!n || !t) return;
+
+  await updatePresence();
+
+  // 🛠️ MIRC KOMUTU: /nick YeniIsim
+  if (t.toLowerCase().startsWith("/nick ")) {
+    const newNick = t.substring(6).trim();
+    if (newNick && newNick !== n) {
+      const oldNick = n;
+      nameInput.value = newNick;
+      await updatePresence();
+      await push(messagesRef, {
+        text: `🔄 ${oldNick} rumuzunu "${newNick}" olarak değiştirdi.`,
+        type: "system",
+        createdAt: Date.now()
+      });
+      textInput.value = "";
+      return;
+    }
+  }
+
+  // 🛠️ MIRC KOMUTU: /me eylem
+  if (t.toLowerCase().startsWith("/me ")) {
+    const actionText = t.substring(4).trim();
+    if (actionText) {
+      await push(messagesRef, {
+        name: n, text: actionText, color: c, avatar: a, type: "action", createdAt: Date.now()
+      });
+      textInput.value = "";
+      return;
+    }
+  }
+
+  try {
+    await push(messagesRef, {
+      name: n, text: t, color: c, avatar: a, type: "user", createdAt: Date.now()
+    });
+
+    const botReply = getBotReply(t, n);
+    if (botReply) {
+      setTimeout(async () => {
+        await push(messagesRef, { name: "Kral Bot", text: botReply, type: "bot", createdAt: Date.now() });
+      }, 500);
+    }
+  } catch (err) {
+    alert("Mesaj gönderilemedi.");
+  }
+  textInput.value = "";
+});
+
+async function sendWhisperMessage(targetUser, messageText) {
+  const n = nameInput.value.trim() || "Misafir";
+  await updatePresence();
+
+  try {
+    await push(messagesRef, {
+      name: n,
+      text: `🔒 [Özel Mesaj] ${messageText}`,
+      target: targetUser,
+      color: colorInput.value,
+      avatar: avatarInput.value,
+      type: "whisper",
+      createdAt: Date.now()
+    });
+  } catch (err) {
+    console.error("Fısıltı hatası:", err);
+  }
 }
 
-textInput.value = "";
+async function sendQuickMessage(textMsg, type = "user") {
+  const n = nameInput.value.trim() || "Misafir";
+  await updatePresence();
+
+  try {
+    await push(messagesRef, {
+      name: n, text: textMsg, color: colorInput.value, avatar: avatarInput.value, type: type, createdAt: Date.now()
+    });
+  } catch (err) {
+    console.error("Hızlı mesaj hatası:", err);
+  }
+}
+
+document.getElementById("sendApplause").addEventListener("click", () => sendQuickMessage("👏 Coşkulu bir alkış gönderdi!", "applause"));
+document.getElementById("sendCoffee").addEventListener("click", () => sendQuickMessage("☕ Odadaki herkese sıcacık bir kahve ikram etti!"));
+document.getElementById("sendHeart").addEventListener("click", () => sendQuickMessage("❤️ Kucak dolusu sevgiler ve kalpler gönderdi!"));
+document.getElementById("sendFire").addEventListener("click", () => sendQuickMessage("🔥 Ortamı alev alev yaktı!"));
+
+const requestModal = document.getElementById("requestModal");
+document.getElementById("openRequestModal").addEventListener("click", () => requestModal.style.display = "flex");
+document.getElementById("closeRequestModal").addEventListener("click", () => requestModal.style.display = "none");
+
+document.getElementById("sendRequest").addEventListener("click", async () => {
+  const artist = document.getElementById("songArtist").value.trim();
+  const title = document.getElementById("songTitle").value.trim();
+
+  if(!artist || !title) {
+    alert("Lütfen hem sanatçı hem de şarkı adını giriniz.");
+    return;
+  }
+
+  const requestText = `🎵 İSTEK PARÇA: ${artist} - "${title}" şarkısını yayıncımızdan istiyor!`;
+  await sendQuickMessage(requestText, "request");
+
+  document.getElementById("songArtist").value = "";
+  document.getElementById("songTitle").value = "";
+  requestModal.style.display = "none";
 });
 
-onChildAdded(messagesRef, snapshot => {
-showMessage(snapshot.val());
+document.getElementById("clear").addEventListener("click", () => {
+  box.innerHTML = "";
 });
-</script>
-</body>
-</html>
+                              </script>
+                              
