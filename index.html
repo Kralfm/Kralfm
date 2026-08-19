@@ -293,7 +293,8 @@ color:#fff;
 font-weight:bold
 }
 
-/* YENİ TAMAMLAMA BUTONU */
+/* İSİM TAMAMLAMA BUTONU */
+
 .complete-btn{
 border:0;
 border-radius:8px;
@@ -302,7 +303,7 @@ background:linear-gradient(180deg,#2563eb,#1d4ed8);
 color:#fff;
 font-weight:bold;
 cursor:pointer;
-font-size:15px;
+font-size:14px;
 white-space:nowrap
 }
 
@@ -437,6 +438,7 @@ margin-top:15px
 }
 
 @media(max-width:600px){
+
 .radio-banner{
 align-items:flex-start;
 flex-direction:column
@@ -452,8 +454,9 @@ font-size:19px
 
 .complete-btn{
 padding:12px 10px;
-font-size:14px
+font-size:13px
 }
+
 }
 </style>
 </head>
@@ -592,14 +595,13 @@ maxlength="300"
 placeholder="Mesajınızı yazın..."
 required>
 
-<!-- YENİ TAMAMLAMA BUTONU -->
 <button
 id="completeName"
 class="complete-btn"
 type="button"
-title="Kullanıcı adını tamamla">
+title="Yazdığın kullanıcı adını tamamla">
 
-➜
+➜ Tamamla
 
 </button>
 
@@ -1113,23 +1115,59 @@ createdAt:Date.now()
 
 
 /* ===============================
-   İSİM TAMAMLAMA
+   GELİŞMİŞ İSİM TAMAMLAMA
 ================================ */
 
 $("completeName").onclick=()=>{
 
 const input=$("text");
 
-const typed=input.value.trim();
+const value=input.value;
 
-if(!typed)return;
-
-const search=typed.toLocaleLowerCase("tr-TR");
-
-let foundName=null;
+const cursor=input.selectionStart;
 
 
-/* Önce gerçek çevrim içi kullanıcıları kontrol et */
+/*
+   İmlecin bulunduğu kelimeyi buluyoruz.
+   Böylece kelime mesajın başında,
+   ortasında veya sonunda olabilir.
+*/
+
+let start=cursor;
+
+let end=cursor;
+
+
+/* Kelimenin başlangıcını bul */
+
+while(
+start>0 &&
+!/\s/.test(value[start-1])
+){
+start--;
+}
+
+
+/* Kelimenin sonunu bul */
+
+while(
+end<value.length &&
+!/\s/.test(value[end])
+){
+end++;
+}
+
+
+const currentWord=
+value.slice(start,end).trim();
+
+
+if(!currentWord)return;
+
+
+const search=
+currentWord.toLocaleLowerCase("tr-TR");
+
 
 onValue(
 presenceRef,
@@ -1139,11 +1177,17 @@ const users=snap.val()||{};
 
 const onlineUsers=Object.values(users);
 
+
+/*
+   Önce gerçek çevrim içi kullanıcılar
+*/
+
 const found=onlineUsers.find(u=>{
 
 const name=(u.name||"").trim();
 
-return name.toLocaleLowerCase("tr-TR")
+return name
+.toLocaleLowerCase("tr-TR")
 .startsWith(search);
 
 });
@@ -1151,36 +1195,65 @@ return name.toLocaleLowerCase("tr-TR")
 
 if(found){
 
-foundName=found.name;
+const newValue=
+value.slice(0,start)+
+found.name+
+value.slice(end);
 
-input.value=foundName;
+input.value=newValue;
+
+const newCursor=
+start+found.name.length;
 
 input.focus();
+
+input.setSelectionRange(
+newCursor,
+newCursor
+);
 
 return;
 
 }
 
 
-/* Gerçek kullanıcı yoksa bot isimlerini kontrol et */
+/*
+   Gerçek kullanıcı bulunmazsa
+   mevcut bot isimlerini kontrol et
+*/
 
 const bot=staticBots.find(b=>
-b.name.toLocaleLowerCase("tr-TR")
+
+b.name
+.toLocaleLowerCase("tr-TR")
 .startsWith(search)
+
 );
 
 
 if(bot){
 
-input.value=bot.name;
+const newValue=
+value.slice(0,start)+
+bot.name+
+value.slice(end);
+
+input.value=newValue;
+
+const newCursor=
+start+bot.name.length;
 
 input.focus();
+
+input.setSelectionRange(
+newCursor,
+newCursor
+);
 
 }
 
 },
 {onlyOnce:true}
-);
 
 };
 
