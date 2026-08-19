@@ -715,7 +715,8 @@ ref,
 push,
 onValue,
 set,
-onDisconnect
+onDisconnect,
+remove
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
@@ -752,7 +753,7 @@ const $=id=>document.getElementById(id);
 
 let sound=false;
 
-// Kalıcı UID (Sayfa yenilense bile aynı oturum/kullanıcı kimliği korunur)
+// Kalıcı UID
 let uid = localStorage.getItem("kralfm_uid");
 if(!uid){
   uid = "user_" + Math.random().toString(36).slice(2,10);
@@ -766,7 +767,7 @@ const applause=$("applauseSound");
 const defaultGuestName=
 "Misafir_"+Math.floor(Math.random()*900+100);
 
-// Sayfa yüklendiğinde daha önce kaydedilmiş ad/avatar/renk varsa inputlara doldur
+// localStorage verilerini yükle
 if(localStorage.getItem("kralfm_name")){
   $("name").value = localStorage.getItem("kralfm_name");
 }
@@ -982,6 +983,9 @@ return null;
 }
 
 
+// Oturum açma, giriş yapma ve çıkış yönetimi
+let hasJoinedLogged = false;
+
 async function registerPresence(){
 
 const activeName=
@@ -991,7 +995,6 @@ const activeAvatar=$("userAvatar").value;
 
 const activeColor=$("userColor").value;
 
-// Bilgileri localStorage'a kaydediyoruz ki sayfa yenilense de unutulmasın
 localStorage.setItem("kralfm_name", $("name").value.trim());
 localStorage.setItem("kralfm_avatar", activeAvatar);
 localStorage.setItem("kralfm_color", activeColor);
@@ -1008,7 +1011,27 @@ color:activeColor,
 createdAt:Date.now()
 });
 
+// Kullanıcı sekmeden tamamen ayrıldığında veritabanından silinir ve sohbet ekranına çıkış mesajı düşer
 onDisconnect(uref).remove();
+
+const disconnectMsgRef = push(messagesRef);
+onDisconnect(disconnectMsgRef).set({
+name: "Sistem",
+text: activeName + " sohbetten ayrıldı.",
+type: "system",
+createdAt: Date.now()
+});
+
+// İlk kez bu oturumda giriş yapıldıysa sohbet akışına giriş mesajı atıyoruz
+if(!hasJoinedLogged){
+  hasJoinedLogged = true;
+  await push(messagesRef,{
+    name: "Sistem",
+    text: activeName + " sohbete giriş yaptı.",
+    type: "system",
+    createdAt: Date.now()
+  });
+}
 
 }catch(e){
 
