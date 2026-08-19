@@ -256,7 +256,8 @@ display:flex;
 gap:8px;
 margin-top:12px;
 align-items:center;
-flex-wrap:wrap
+flex-wrap:wrap;
+position:relative;
 }
 
 select#userAvatar,
@@ -395,18 +396,67 @@ cursor:pointer;
 }
 
 .user-list-item{
-padding:9px 10px;
-margin:5px 0;
+padding:10px;
+margin:6px 0;
 background:#222;
-border-radius:6px;
+border-radius:8px;
 display:flex;
-gap:8px;
-align-items:center;
-cursor:pointer;
+flex-direction:column;
+gap:6px;
 transition: background 0.2s;
 }
 .user-list-item:hover{
+background:#2a2a2a;
+}
+.user-info-row{
+display:flex;
+align-items:center;
+gap:8px;
+font-weight:bold;
+}
+.user-action-row{
+display:flex;
+gap:6px;
+}
+.user-action-btn{
 background:#333;
+border:0;
+color:#fff;
+padding:4px 8px;
+border-radius:4px;
+font-size:11px;
+cursor:pointer;
+font-weight:bold;
+}
+.mention-action{background:#4338ca}
+.whisper-action{background:#7e22ce}
+
+/* Fısıltı Modu Göstergesi */
+.whisper-indicator {
+display: none;
+position: absolute;
+top: -28px;
+left: 170px;
+background: #581c87;
+color: #e9d5ff;
+font-size: 12px;
+padding: 4px 10px;
+border-radius: 6px;
+border: 1px solid #c084fc;
+align-items: center;
+gap: 6px;
+z-index: 10;
+}
+.whisper-indicator.active {
+display: flex;
+}
+.cancel-whisper {
+background: none;
+border: 0;
+color: #ff8080;
+font-weight: bold;
+cursor: pointer;
+font-size: 13px;
 }
 
 .modal-overlay{
@@ -511,6 +561,11 @@ font-size:19px
 <div id="messages" class="chat-box-area"></div>
 
 <form id="form" autocomplete="off">
+<div id="whisperIndicator" class="whisper-indicator">
+  <span>🔒 <b id="whisperTargetName"></b> kişisine fısıldıyorsunuz</span>
+  <button type="button" id="cancelWhisper" class="cancel-whisper">✕</button>
+</div>
+
 <select id="userAvatar" title="Avatar">
 <option value="👩">👩 Kadın</option>
 <option value="👨">👨 Erkek</option>
@@ -526,7 +581,7 @@ font-size:19px
 
 <input type="color" id="userColor" value="#ff5555">
 <input type="text" id="name" maxlength="30" placeholder="Adınız">
-<input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın... (Örn: @Kullanici)" required>
+<input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
 <button type="button" id="tabButton" class="tab-btn" title="Aktif kullanıcıyı etiketle">@ Tab</button>
 <button type="submit">Gönder</button>
 </form>
@@ -588,8 +643,8 @@ const messagesRef=ref(db,"messages");
 const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
-let sound=false;
 let onlineUserNames = [];
+let activeWhisperTarget = null; // Aktif fısıldanan kişi
 
 let uid = localStorage.getItem("kralfm_uid");
 if(!uid){
@@ -629,7 +684,7 @@ function time(t){
 return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
 }
 
-// TAB (Özel Mesaj / Etiketleme) Fonksiyonu
+// TAB (Etiketleme) Fonksiyonu
 function mentionUser(username){
   const textInput = $("text");
   const cleanName = username.replace(":", "").trim();
@@ -644,12 +699,33 @@ function mentionUser(username){
   }, 1000);
 }
 
-// Otomatik Tab Tuşu / Butonu Mantığı (Hızlı Etiketleme)
+// Özel Fısıltı Modunu Başlat
+function startWhisper(username) {
+  activeWhisperTarget = username.replace(":", "").trim();
+  $("whisperTargetName").textContent = activeWhisperTarget;
+  $("whisperIndicator").classList.add("active");
+  
+  const textInput = $("text");
+  textInput.style.border = "2px solid #c084fc";
+  textInput.style.boxShadow = "0 0 10px #c084fc";
+  textInput.focus();
+}
+
+// Fısıltı Modunu İptal Et
+function cancelWhisper() {
+  activeWhisperTarget = null;
+  $("whisperIndicator").classList.remove("active");
+  const textInput = $("text");
+  textInput.style.border = "";
+  textInput.style.boxShadow = "";
+}
+
+$("cancelWhisper").onclick = cancelWhisper;
+
 function handleTabComplete() {
   const textInput = $("text");
   const val = textInput.value.trim();
   
-  // Eğer metin @ ile başlıyorsa veya harf yazıldıysa eşleşen ilk kullanıcıyı bul
   let query = "";
   if (val.startsWith("@")) {
     query = val.substring(1).toLowerCase();
@@ -661,7 +737,6 @@ function handleTabComplete() {
   if (match) {
     textInput.value = "@" + match + " ";
   } else if (onlineUserNames.length > 0) {
-    // Eşleşme yoksa listedeki ilk kişiyi seç
     textInput.value = "@" + onlineUserNames[0] + " ";
   }
   textInput.focus();
@@ -678,6 +753,13 @@ $("text").addEventListener("keydown", (e) => {
 function appendMessage(d){
 const box=$("messages");
 if(!box||!d)return;
+
+const myCurrentName = $("name").value.trim() || defaultGuestName;
+
+// GİZLİ FISILTI FİLTRESİ: Eğer bu mesaj özel bir fısıltıysa (targetUser varsa), sadece gönderen ve alan görsün
+if(d.targetUser && d.targetUser !== myCurrentName && d.name !== myCurrentName) {
+  return;
+}
 
 const r=document.createElement("div");
 const ts=document.createElement("span");
@@ -704,9 +786,9 @@ n.textContent=(d.name||"Misafir")+": ";
 n.onclick = () => mentionUser(d.name);
 
 let msgText = d.text || "";
-const myCurrentName = $("name").value.trim() || defaultGuestName;
 
-if(msgText.includes("@" + myCurrentName)){
+// Geriye dönük uyumluluk: Eski etiketleri de otomatik olarak whisper yapısına bağla
+if(!d.targetUser && msgText.includes("@" + myCurrentName)){
   d.type = "whisper";
 }
 
@@ -714,7 +796,7 @@ t.textContent=msgText;
 
 if(d.type==="applause") r.className="msg applause-msg";
 else if(d.type==="request") r.className="msg request-msg";
-else if(d.type==="whisper") r.className="msg whisper-msg";
+else if(d.targetUser || d.type==="whisper") r.className="msg whisper-msg";
 else if(d.type==="action") r.className="msg action-msg";
 else r.className=d.type==="bot"?"msg bot-msg":"msg";
 
@@ -816,28 +898,57 @@ onlineUserNames = [];
 
 staticBots.forEach(bot=>{
 onlineUserNames.push(bot.name);
-const d=document.createElement("div");
-d.className="user-list-item";
-d.textContent=bot.avatar+" "+bot.name;
-d.onclick = () => {
-  mentionUser(bot.name);
-  closeDrawer();
-};
-$("onlineUsersList").appendChild(d);
+renderUserItem(bot.avatar, bot.name);
 });
 
 arr.forEach(u=>{
 onlineUserNames.push(u.name);
+renderUserItem(u.avatar || "🎧", u.name);
+});
+});
+
+function renderUserItem(avatar, name) {
 const d=document.createElement("div");
 d.className="user-list-item";
-d.textContent=(u.avatar||"🎧")+" "+u.name;
-d.onclick = () => {
-  mentionUser(u.name);
+
+const infoRow = document.createElement("div");
+infoRow.className = "user-info-row";
+infoRow.textContent = avatar + " " + name;
+
+const actionRow = document.createElement("div");
+actionRow.className = "user-action-row";
+
+const mentionBtn = document.createElement("button");
+mentionBtn.type = "button";
+mentionBtn.className = "user-action-btn mention-action";
+mentionBtn.textContent = "Etiketle";
+mentionBtn.onclick = (e) => {
+  e.stopPropagation();
+  mentionUser(name);
   closeDrawer();
 };
+
+const whisperBtn = document.createElement("button");
+whisperBtn.type = "button";
+whisperBtn.className = "user-action-btn whisper-action";
+whisperBtn.textContent = "💬 Fısılda";
+whisperBtn.onclick = (e) => {
+  e.stopPropagation();
+  startWhisper(name);
+  closeDrawer();
+};
+
+actionRow.append(mentionBtn, whisperBtn);
+d.append(infoRow, actionRow);
+
+// Kutunun kendisine tıklayınca da direkt etiketlesin
+d.onclick = () => {
+  mentionUser(name);
+  closeDrawer();
+};
+
 $("onlineUsersList").appendChild(d);
-});
-});
+}
 
 async function sendMsg(text,type="user",customName=null,customAvatar=null,customColor=null){
 const n=customName||($("name").value.trim()||defaultGuestName);
@@ -846,25 +957,42 @@ const col=customColor||$("userColor").value;
 
 await registerPresence();
 
+let targetUser = null;
+let finalType = type;
+
+// Eğer fısıltı modundaysak hedef kişiyi ekle
+if (activeWhisperTarget && type === "user") {
+  targetUser = activeWhisperTarget;
+  finalType = "whisper";
+}
+
 await push(messagesRef,{
 name:n,
 text,
 color:col,
 avatar:av,
-type,
+type: finalType,
+targetUser: targetUser,
 createdAt:Date.now()
 });
 
-const reply=botReply(text,n);
-if(reply){
-setTimeout(()=>{
-push(messagesRef,{
-name:"Kral Bot",
-text:reply,
-type:"bot",
-createdAt:Date.now()
-});
-},500);
+// Eğer fısıltı modundaysak mesaj gönderildikten sonra modu temizle
+if(activeWhisperTarget) {
+  cancelWhisper();
+}
+
+if(!targetUser) {
+  const reply=botReply(text,n);
+  if(reply){
+    setTimeout(()=>{
+    push(messagesRef,{
+    name:"Kral Bot",
+    text:reply,
+    type:"bot",
+    createdAt:Date.now()
+    });
+    },500);
+  }
 }
 }
 
