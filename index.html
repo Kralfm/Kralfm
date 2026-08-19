@@ -293,34 +293,6 @@ color:#fff;
 font-weight:bold
 }
 
-/* SADECE TAMAMLAMA BUTONU */
-.complete-btn{
-width:100%;
-flex-basis:100%;
-padding:10px 12px;
-background:#2563eb;
-border:0;
-border-radius:8px;
-color:#fff;
-font-weight:bold;
-font-size:14px;
-cursor:pointer;
-order:20
-}
-
-.complete-btn:active{
-transform:scale(.98)
-}
-
-.complete-help{
-width:100%;
-flex-basis:100%;
-font-size:12px;
-color:#888;
-margin:0;
-order:21
-}
-
 .action-btns{
 display:flex;
 gap:8px;
@@ -403,8 +375,7 @@ background:#222;
 border-radius:6px;
 display:flex;
 gap:8px;
-align-items:center;
-cursor:pointer
+align-items:center
 }
 
 .modal-overlay{
@@ -449,7 +420,6 @@ margin-top:15px
 }
 
 @media(max-width:600px){
-
 .radio-banner{
 align-items:flex-start;
 flex-direction:column
@@ -462,12 +432,6 @@ align-self:flex-end
 .radio-logo-text h1{
 font-size:19px
 }
-
-.complete-btn{
-display:block;
-visibility:visible;
-}
-
 }
 </style>
 </head>
@@ -479,9 +443,15 @@ visibility:visible;
 <div>🎙️ Kral FM & Muhabbet</div>
 
 <div>
-<button id="menuTrigger" class="menu-trigger" type="button" title="Çevrimiçi Üyeler">
+
+<button id="soundToggle" class="action-btn" type="button">
+🔔 Ses Açık
+</button>
+
+<button id="menuTrigger" class="menu-trigger" type="button">
 ☰
 </button>
+
 </div>
 
 </header>
@@ -495,53 +465,70 @@ visibility:visible;
 <div class="radio-logo-box">
 
 <div class="l2mr-logo">
+
 <svg viewBox="0 0 24 24">
 <path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/>
 </svg>
+
 </div>
 
 <div class="radio-logo-text">
+
 <h1>📻 Radyo Kral FM</h1>
+
 <span>Kesintisiz Canlı Yayın</span>
+
 </div>
 
 </div>
 
 <div class="live-badge">
+
 <span class="live-dot"></span>
 CANLI YAYIN
+
 </div>
 
 </div>
 
 <div class="radio-description">
+
 ✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕
+
 </div>
 
 <div class="popup-player-box">
 
+<!-- iPhone ve Android için doğrudan çalışan dinleme sayfası -->
 <a
 href="http://kralfm.radiostream321.com/"
 target="_blank"
 rel="noopener"
 class="play-btn"
 id="toggleRadio">
+
 📻 Radyoyu Dinle
+
 </a>
 
+<!-- Alternatif doğrudan dinleme bağlantısı -->
 <a
 href="http://kralfm.radiostream321.com/"
 target="_blank"
 rel="noopener"
 class="radio-browser-btn">
+
 🌐 Tarayıcıda Radyoyu Aç
+
 </a>
 
 <div
 id="radioStatus"
 class="note"
 style="margin-top:8px;text-align:center">
+
 📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.
+
 </div>
 
 </div>
@@ -560,6 +547,7 @@ style="margin-top:8px;text-align:center">
 <form id="form" autocomplete="off">
 
 <select id="userAvatar" title="Avatar">
+
 <option value="👩">👩 Kadın</option>
 <option value="👨">👨 Erkek</option>
 <option value="🕶️">🕶️ Karizmatik</option>
@@ -570,6 +558,7 @@ style="margin-top:8px;text-align:center">
 <option value="🌟">🌟 Yıldız</option>
 <option value="🎧">🎧 Kulaklık</option>
 <option value="🎉">🎉 Parti</option>
+
 </select>
 
 <input type="color" id="userColor" value="#ff5555">
@@ -586,18 +575,6 @@ id="text"
 maxlength="300"
 placeholder="Mesajınızı yazın..."
 required>
-
-<!-- SADECE YENİ BUTON -->
-<button
-id="completeUser"
-class="complete-btn"
-type="button">
-↹ Kullanıcı Adını Tamamla
-</button>
-
-<p class="complete-help">
-💡 Örneğin Ley yazıp tamamla tuşuna basabilirsiniz.
-</p>
 
 <button type="submit">
 Gönder
@@ -660,8 +637,16 @@ Sohbet odası hazır. 🤖
 <aside id="userDrawer" class="user-drawer">
 
 <div class="drawer-header">
+
 <h3>👥 Çevrimiçi Üyeler</h3>
-<button id="closeDrawer" class="close-drawer" type="button">✕</button>
+
+<button
+id="closeDrawer"
+class="close-drawer"
+type="button">
+✕
+</button>
+
 </div>
 
 <div id="onlineUsersList">
@@ -681,34 +666,54 @@ Kimse yok...
 Yayıncıya duyurmak istediğiniz şarkıyı yazın:
 </p>
 
-<input id="songArtist" placeholder="Sanatçı Adı">
-<input id="songTitle" placeholder="Şarkı Adı">
+<input
+id="songArtist"
+placeholder="Sanatçı Adı">
+
+<input
+id="songTitle"
+placeholder="Şarkı Adı">
 
 <div class="modal-actions">
-<button id="closeRequestModal" class="action-btn" type="button">İptal</button>
-<button id="sendRequest" class="action-btn request-btn" type="button">Gönder 🎶</button>
-</div>
+
+<button
+id="closeRequestModal"
+class="action-btn"
+type="button">
+İptal
+</button>
+
+<button
+id="sendRequest"
+class="action-btn request-btn"
+type="button">
+Gönder 🎶
+</button>
 
 </div>
 
 </div>
 
+</div>
 
-<!-- Ses kaynakları bırakıldı ama JavaScript'te oynatılmıyor -->
+
 <audio
 id="notificationSound"
-preload="none">
+src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
+preload="auto">
 </audio>
 
 <audio
 id="applauseSound"
-preload="none">
+src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+preload="auto">
 </audio>
 
 
 <script type="module">
 
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
 getDatabase,
@@ -717,17 +722,26 @@ push,
 onValue,
 set,
 onDisconnect
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 
 const firebaseConfig={
+
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
+
 authDomain:"kralfm-muhabbet.firebaseapp.com",
+
 databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",
+
 projectId:"kralfm-muhabbet",
+
 storageBucket:"kralfm-muhabbet.firebasestorage.app",
+
 messagingSenderId:"638769846511",
+
 appId:"1:638769846511:web:f6d8abb91564873996"
+
 };
 
 
@@ -739,69 +753,44 @@ const messagesRef=ref(db,"messages");
 
 const presenceRef=ref(db,"presence");
 
+
 const $=id=>document.getElementById(id);
 
+let sound=true;
 
-/* =====================================================
-   SES KAPALI
-===================================================== */
+const uid=
+"user_"+Math.random().toString(36).slice(2,10);
 
-let sound=false;
+const notification=$("notificationSound");
 
-
-/* =====================================================
-   UID
-===================================================== */
-
-let uid=localStorage.getItem("kral_uid");
-
-if(!uid){
-
-uid="user_"+Math.random().toString(36).slice(2,10);
-
-localStorage.setItem("kral_uid",uid);
-
-}
-
-
-/* =====================================================
-   KULLANICI
-===================================================== */
+const applause=$("applauseSound");
 
 const defaultGuestName=
-localStorage.getItem("kral_name") ||
-("Misafir_"+Math.floor(Math.random()*900+100));
+"Misafir_"+Math.floor(Math.random()*900+100);
 
-const defaultAvatar=
-localStorage.getItem("kral_avatar") || "👩";
-
-const defaultColor=
-localStorage.getItem("kral_color") || "#ff5555";
-
-
-$("name").value=
-localStorage.getItem("kral_name") || "";
-
-$("userAvatar").value=defaultAvatar;
-
-$("userColor").value=defaultColor;
-
-
-/* =====================================================
-   BOTLAR - AYNEN KORUNDU
-===================================================== */
 
 const staticBots=[
+
 {name:"DuRu",avatar:"👩"},
+
 {name:"Eren",avatar:"👨"},
+
 {name:"LeyLi",avatar:"🌟"},
+
 {name:"RadyoDinliyorum",avatar:"🎧"}
+
 ];
 
 
-/* =====================================================
-   DRAWER - AYNEN KORUNDU
-===================================================== */
+$("soundToggle").onclick=()=>{
+
+sound=!sound;
+
+$("soundToggle").textContent=
+sound?"🔔 Ses Açık":"🔕 Sessiz";
+
+};
+
 
 function openDrawer(){
 
@@ -811,6 +800,7 @@ $("drawerOverlay").style.display="block";
 
 }
 
+
 function closeDrawer(){
 
 $("userDrawer").classList.remove("open");
@@ -819,6 +809,7 @@ $("drawerOverlay").style.display="none";
 
 }
 
+
 $("menuTrigger").onclick=openDrawer;
 
 $("closeDrawer").onclick=closeDrawer;
@@ -826,28 +817,20 @@ $("closeDrawer").onclick=closeDrawer;
 $("drawerOverlay").onclick=closeDrawer;
 
 
-/* =====================================================
-   SAAT
-===================================================== */
+/* ===============================
+   SOHBET SİSTEMİ
+================================ */
 
 function time(t){
 
-return new Date(
-t||Date.now()
-).toLocaleTimeString(
-"tr-TR",
-{
+return new Date(t||Date.now())
+.toLocaleTimeString("tr-TR",{
 hour:"2-digit",
 minute:"2-digit"
-}
-);
+});
 
 }
 
-
-/* =====================================================
-   MESAJ GÖSTERME - AYNEN KORUNDU
-===================================================== */
 
 function appendMessage(d){
 
@@ -861,14 +844,16 @@ const ts=document.createElement("span");
 
 ts.className="time";
 
-ts.textContent="["+time(d.createdAt)+"] ";
+ts.textContent=
+"["+time(d.createdAt)+"] ";
 
 
 if(d.type==="system"){
 
 r.className="msg system-msg";
 
-r.textContent=ts.textContent+" "+d.text;
+r.textContent=
+ts.textContent+" "+d.text;
 
 box.appendChild(r);
 
@@ -885,6 +870,7 @@ const n=document.createElement("span");
 
 const t=document.createElement("span");
 
+
 av.className="avatar";
 
 av.textContent=
@@ -896,6 +882,7 @@ d.type==="bot"?"name bot-name":"name";
 
 n.textContent=
 (d.name||"Misafir")+": ";
+
 
 t.textContent=d.text||"";
 
@@ -938,36 +925,26 @@ if(d.type!=="bot"&&d.color)
 n.style.color=d.color;
 
 
-/* İsim tıklama */
-
-n.onclick=()=>{
-
-if(
-d.name &&
-d.name!=="Kral Bot" &&
-d.name!=="Sistem"
-){
-
-insertNameAtCursor(d.name);
-
-}
-
-};
-
-
 box.appendChild(r);
 
 box.scrollTop=box.scrollHeight;
 
 
-/* SES KODU BİLEREK YOK */
+if(sound){
+
+const snd=
+d.type==="applause"
+?applause
+:notification;
+
+snd.currentTime=0;
+
+snd.play().catch(()=>{});
 
 }
 
+}
 
-/* =====================================================
-   MESAJLAR
-===================================================== */
 
 onValue(messagesRef,snap=>{
 
@@ -982,15 +959,12 @@ appendMessage(d);
 });
 
 
-/* =====================================================
-   BOT CEVABI - AYNEN KORUNDU
-===================================================== */
-
 function botReply(text,user){
 
 const m=text.toLowerCase();
 
-if(user.toLowerCase()==="kral bot") return null;
+if(user.toLowerCase()==="kral bot")
+return null;
 
 if(m.includes("selam"))
 return "Aleykümselam @"+user+" 👋";
@@ -1009,70 +983,32 @@ return null;
 }
 
 
-/* =====================================================
-   PRESENCE - İLK SİSTEM KORUNDU
-===================================================== */
-
 async function registerPresence(){
 
 const activeName=
 $("name").value.trim()||defaultGuestName;
 
-const activeAvatar=
-$("userAvatar").value;
+const activeAvatar=$("userAvatar").value;
 
-const activeColor=
-$("userColor").value;
+const activeColor=$("userColor").value;
 
-
-localStorage.setItem(
-"kral_name",
-$("name").value.trim()
-);
-
-localStorage.setItem(
-"kral_avatar",
-activeAvatar
-);
-
-localStorage.setItem(
-"kral_color",
-activeColor
-);
-
-
-const uref=
-ref(db,"presence/"+uid);
+const uref=ref(db,"presence/"+uid);
 
 
 try{
 
-await set(
-uref,
-{
+await set(uref,{
 name:activeName,
 avatar:activeAvatar,
 color:activeColor,
-createdAt:Date.now(),
-lastSeen:Date.now()
-}
-);
-
-
-/*
-   Sayfa kapandığında Firebase bağlantısı koptuğunda
-   kullanıcı kaldırılır.
-*/
+createdAt:Date.now()
+});
 
 onDisconnect(uref).remove();
 
-
 }catch(e){
 
-console.error(
-"Presence hata:",
-e
-);
+console.error("Presence hata:",e);
 
 }
 
@@ -1098,20 +1034,14 @@ registerPresence
 );
 
 
-/* =====================================================
-   PRESENCE LİSTESİ
-===================================================== */
-
-let previousUsers={};
-
 onValue(presenceRef,snap=>{
 
 const users=snap.val()||{};
 
+const arr=Object.values(users);
+
 $("onlineUsersList").innerHTML="";
 
-
-/* BOTLAR */
 
 staticBots.forEach(bot=>{
 
@@ -1122,24 +1052,13 @@ d.className="user-list-item";
 d.textContent=
 bot.avatar+" "+bot.name;
 
-d.onclick=()=>{
-
-insertNameAtCursor(bot.name);
-
-closeDrawer();
-
-};
-
-$("onlineUsersList").appendChild(d);
+$("onlineUsersList")
+.appendChild(d);
 
 });
 
 
-/* GERÇEK KULLANICILAR */
-
-Object.keys(users).forEach(id=>{
-
-const u=users[id];
+arr.forEach(u=>{
 
 const d=document.createElement("div");
 
@@ -1148,224 +1067,191 @@ d.className="user-list-item";
 d.textContent=
 (u.avatar||"🎧")+" "+u.name;
 
-d.onclick=()=>{
+$("onlineUsersList")
+.appendChild(d);
 
-insertNameAtCursor(u.name);
+});
 
-closeDrawer();
+});
+
+
+async function sendMsg(
+text,
+type="user",
+customName=null,
+customAvatar=null,
+customColor=null
+){
+
+const n=
+customName||
+($("name").value.trim()||defaultGuestName);
+
+const av=
+customAvatar||$("userAvatar").value;
+
+const col=
+customColor||$("userColor").value;
+
+
+await registerPresence();
+
+
+await push(messagesRef,{
+name:n,
+text,
+color:col,
+avatar:av,
+type,
+createdAt:Date.now()
+});
+
+
+const reply=botReply(text,n);
+
+
+if(reply){
+
+setTimeout(()=>{
+
+push(messagesRef,{
+name:"Kral Bot",
+text:reply,
+type:"bot",
+createdAt:Date.now()
+});
+
+},500);
+
+}
+
+}
+
+
+$("form").onsubmit=async e=>{
+
+e.preventDefault();
+
+const t=$("text").value.trim();
+
+if(!t)return;
+
+
+try{
+
+await sendMsg(t);
+
+$("statusText").textContent=
+"Sohbet odası hazır. 🤖";
+
+$("text").value="";
+
+}catch(err){
+
+$("statusText").textContent=
+"Mesaj gönderilemedi.";
+
+}
 
 };
 
-$("onlineUsersList").appendChild(d);
 
-});
-
-
-/* GİRİŞ / ÇIKIŞ */
-
-if(Object.keys(previousUsers).length>0){
-
-Object.keys(users).forEach(id=>{
-
-if(!previousUsers[id]&&id!==uid){
-
-push(
-messagesRef,
-{
-name:"Sistem",
-text:
-users[id].name+
-" sohbete giriş yaptı.",
-type:"system",
-createdAt:Date.now()
-}
+$("sendApplause").onclick=()=>sendMsg(
+"👏 Coşkulu bir alkış gönderdi!",
+"applause"
 );
 
-}
 
-});
-
-
-Object.keys(previousUsers).forEach(id=>{
-
-if(!users[id]&&id!==uid){
-
-push(
-messagesRef,
-{
-name:"Sistem",
-text:
-previousUsers[id].name+
-" sohbetten ayrıldı.",
-type:"system",
-createdAt:Date.now()
-}
+$("sendCoffee").onclick=()=>sendMsg(
+"☕ Herkese sıcacık kahve ikram etti!"
 );
 
-}
 
-});
+$("sendHeart").onclick=()=>sendMsg(
+"❤️ Kucak dolusu sevgiler gönderdi!"
+);
 
-}
 
+$("sendFire").onclick=()=>sendMsg(
+"🔥 Ortamı alevlendirdi!",
+"action"
+);
 
-previousUsers=users;
 
-});
+$("clearChat").onclick=async()=>{
 
+if(confirm(
+"Sohbet odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?"
+)){
 
-/* =====================================================
-   İSİM EKLEME
-===================================================== */
-
-function insertNameAtCursor(name){
-
-const input=$("text");
-
-const value=input.value;
-
-const start=input.selectionStart;
-
-const end=input.selectionEnd;
-
-
-/*
-   İmlecin önündeki mevcut kelimeyi bul.
-*/
-
-const before=value.substring(0,start);
-
-const after=value.substring(end);
-
-const match=
-before.match(/(?:^|\s)(@?[^\s@]*)$/);
-
-
-if(match){
-
-const oldWord=match[1];
-
-const wordStart=
-start-oldWord.length;
-
-const prefix=
-oldWord.startsWith("@")?"@":"";
-
-
-input.value=
-before.substring(0,wordStart)+
-prefix+
-name+
-" "+
-after;
-
-
-const pos=
-wordStart+
-prefix.length+
-name.length+
-1;
-
-input.focus();
-
-input.setSelectionRange(pos,pos);
-
-}else{
-
-input.value=
-before+
-name+
-" "+
-after;
-
-const pos=
-before.length+
-name.length+
-1;
-
-input.focus();
-
-input.setSelectionRange(pos,pos);
-
-}
-
-}
-
-
-/* =====================================================
-   TAMAMLAMA İÇİN KULLANICI LİSTESİ
-===================================================== */
-
-function getAvailableNames(){
-
-const names=[];
-
-
-/* BOTLAR */
-
-staticBots.forEach(bot=>{
-names.push(bot.name);
-});
-
-
-/* ÇEVRİM İÇİ KULLANICILAR */
-
-const items=
-$("onlineUsersList")
-.querySelectorAll(".user-list-item");
-
-
-items.forEach(item=>{
-
-const text=item.textContent.trim();
-
-const parts=text.split(/\s+/);
-
-if(parts.length>=2){
-
-const name=
-parts.slice(1).join(" ");
-
-if(name)names.push(name);
-
-}
-
-});
-
-
-return[
-...new Set(names)
-];
-
-}
-
-
-/* =====================================================
-   TAMAMLA BUTONU
-===================================================== */
-
-$("completeUser").onclick=()=>{
-
-const input=$("text");
-
-const value=input.value;
-
-const cursor=input.selectionStart;
-
-const before=value.substring(0,cursor);
-
-const after=value.substring(cursor);
-
-
-/*
-   İmlecin bulunduğu kelime
-*/
-
-const match=
-before.match(/(?:^|\s)(@?[^\s@]*)$/);
-
-
-if(!match){
+await set(messagesRef,null);
 
 $("statusText").textContent=
-"Kullanıcı adının bir kısmı
+"Ekran herkeste temizlendi.";
+
+}
+
+};
+
+
+$("openRequestModal").onclick=()=>{
+
+$("requestModal").style.display="flex";
+
+};
+
+
+$("closeRequestModal").onclick=()=>{
+
+$("requestModal").style.display="none";
+
+};
+
+
+$("sendRequest").onclick=async()=>{
+
+const a=$("songArtist").value.trim();
+
+const t=$("songTitle").value.trim();
+
+
+if(!a||!t){
+
+alert(
+"Lütfen sanatçı ve şarkı adını yazın."
+);
+
+return;
+
+}
+
+
+try{
+
+await sendMsg(
+'🎵 İSTEK PARÇA: '+a+' - "'+t+'"',
+"request"
+);
+
+$("songArtist").value="";
+
+$("songTitle").value="";
+
+$("requestModal").style.display="none";
+
+$("statusText").textContent=
+"Sohbet odası hazır. 🤖";
+
+}catch(err){
+
+$("statusText").textContent=
+"Mesaj gönderilemedi.";
+
+}
+
+};
+
+</script>
+
+</body>
+</html>
