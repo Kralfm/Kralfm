@@ -617,7 +617,7 @@ padding:2px 3px;
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase, ref, push, onValue, set, onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase, ref, push, onValue, set, remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -815,23 +815,6 @@ color:activeColor,
 createdAt:Date.now()
 });
 
-onDisconnect(uref).remove();
-
-const disconnectMsgRef = push(messagesRef);
-onDisconnect(disconnectMsgRef).set({
-name: "Sistem",
-text: activeName + " sohbetten ayrıldı.",
-type: "system",
-createdAt: Date.now()
-});
-
-window.addEventListener("beforeunload", () => {
-  try {
-    uref.onDisconnect().cancel();
-    disconnectMsgRef.onDisconnect().cancel();
-  } catch(err) {}
-});
-
 if(!sessionStorage.getItem("kralfm_joined_logged")){
   sessionStorage.setItem("kralfm_joined_logged", "true");
   await push(messagesRef,{
@@ -847,6 +830,23 @@ console.error("Presence hata:",e);
 }
 
 registerPresence();
+
+// Sadece sekme/pencere tamamen kapatıldığında veya çarpıya basıldığında listeden ve sistemden düşür
+window.addEventListener("beforeunload", () => {
+  const activeName = $("name").value.trim() || defaultGuestName;
+  const uref = ref(db, "presence/" + uid);
+  
+  // Veritabanından kullanıcıyı sil
+  remove(uref);
+  
+  // Sistem mesajı gönder
+  push(messagesRef, {
+    name: "Sistem",
+    text: activeName + " sohbetten ayrıldı.",
+    type: "system",
+    createdAt: Date.now()
+  });
+});
 
 $("name").addEventListener("change", registerPresence);
 $("name").addEventListener("blur", registerPresence);
@@ -978,7 +978,7 @@ $("sendHeart").onclick = async () => {
 };
 
 $("sendFire").onclick = async () => {
-  const name = $("name").value.trim() || defaultGuildName;
+  const name = $("name").value.trim() || defaultGuestName;
   await push(messagesRef, {
     name: name,
     text: "🔥 ortamı alevlendirdi, coşku dorukta!",
