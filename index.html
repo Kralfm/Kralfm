@@ -617,7 +617,7 @@ padding:2px 3px;
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase, ref, push, onValue, set, onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase, ref, push, onValue, set, onDisconnect, remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -948,4 +948,4 @@ $("sendApplause").onclick = async () => {
     text: "👏 kocaman bir alkış gönderdi! 🎶",
     type: "applause",
     avatar: $("userAvatar").value,
-    color: $("userColor").value,
+    color: $("userColor").va
