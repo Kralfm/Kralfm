@@ -490,11 +490,11 @@ margin-top:15px
 
 @media(max-width:768px){
 .app-container{
-padding:5px;
-gap:6px;
+padding:4px;
+gap:4px;
 }
 .sidebar-right{
-width:105px; 
+width:125px; 
 padding:6px;
 height:calc(100vh - 60px);
 }
@@ -507,15 +507,6 @@ font-size:11px;
 .user-action-btn{
 font-size:9px;
 padding:2px 3px;
-}
-.card{
-padding:10px;
-}
-.radio-logo-text h1{
-font-size:15px;
-}
-.radio-logo-text span{
-font-size:10px;
 }
 }
 </style>
@@ -605,7 +596,7 @@ font-size:10px;
 <div class="sidebar-header">
 <span>👥 Üyeler</span>
 </div>
-<div id="onlineUsersList" class="sidebar-users-area">Kimse yok...</div>
+<div id="onlineUsersList" class="sidebar-users-area">Yükleniyor...</div>
 </aside>
 </div>
 
@@ -954,4 +945,83 @@ $("sendApplause").onclick = async () => {
   applause.play().catch(()=>{});
   await push(messagesRef, {
     name: name,
-    text: "👏 kocaman bir alkış gönder
+    text: "👏 kocaman bir alkış gönderdi! 🎶",
+    type: "applause",
+    avatar: $("userAvatar").value,
+    color: $("userColor").value,
+    createdAt: Date.now()
+  });
+};
+
+$("sendCoffee").onclick = async () => {
+  const name = $("name").value.trim() || defaultGuestName;
+  await push(messagesRef, {
+    name: name,
+    text: "☕ odadakilere nefis sıcak kahveler ısmarladı! Afiyet olsun.",
+    type: "request",
+    avatar: $("userAvatar").value,
+    color: $("userColor").value,
+    createdAt: Date.now()
+  });
+};
+
+$("sendHeart").onclick = async () => {
+  const name = $("name").value.trim() || defaultGuestName;
+  await push(messagesRef, {
+    name: name,
+    text: "❤️ kalplerini ortaya bıraktı, sevgi dolu anlar yaşanıyor!",
+    type: "action",
+    avatar: $("userAvatar").value,
+    color: $("userColor").value,
+    createdAt: Date.now()
+  });
+};
+
+$("sendFire").onclick = async () => {
+  const name = $("name").value.trim() || defaultGuildName;
+  await push(messagesRef, {
+    name: name,
+    text: "🔥 ortamı alevlendirdi, coşku dorukta!",
+    type: "action",
+    avatar: $("userAvatar").value,
+    color: $("userColor").value,
+    createdAt: Date.now()
+  });
+};
+
+const requestModal = $("requestModal");
+$("openRequestModal").onclick = () => requestModal.style.display = "flex";
+$("closeRequestModal").onclick = () => requestModal.style.display = "none";
+
+$("sendRequest").onclick = async () => {
+  const artist = $("songArtist").value.trim();
+  const title = $("songTitle").value.trim();
+  const name = $("name").value.trim() || defaultGuestName;
+
+  if(!artist || !title) {
+    alert("Lütfen sanatçı ve şarkı adı giriniz.");
+    return;
+  }
+
+  await push(messagesRef, {
+    name: name,
+    text: `🎵 İstek Parça: ${artist} - ${title} (Yayıncıya iletildi!)`,
+    type: "request",
+    avatar: $("userAvatar").value,
+    color: $("userColor").value,
+    createdAt: Date.now()
+  });
+
+  $("songArtist").value = "";
+  $("songTitle").value = "";
+  requestModal.style.display = "none";
+};
+
+$("clearChat").onclick = async () => {
+  if(confirm("Tüm sohbet geçmişi herkes için silinecek. Emin misiniz?")) {
+    await set(messagesRef, null);
+  }
+};
+</script>
+</body>
+</html>
