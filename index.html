@@ -293,28 +293,32 @@ color:#fff;
 font-weight:bold
 }
 
-/* YENİ TAMAMLA BUTONU */
-
+/* SADECE TAMAMLAMA BUTONU */
 .complete-btn{
+width:100%;
+flex-basis:100%;
+padding:10px 12px;
 background:#2563eb;
-color:#fff;
 border:0;
 border-radius:8px;
-padding:12px 14px;
+color:#fff;
 font-weight:bold;
+font-size:14px;
 cursor:pointer;
-white-space:nowrap
+order:20
 }
 
 .complete-btn:active{
-transform:scale(.97)
+transform:scale(.98)
 }
 
-.tab-note{
+.complete-help{
 width:100%;
+flex-basis:100%;
 font-size:12px;
 color:#888;
-margin-top:0
+margin:0;
+order:21
 }
 
 .action-btns{
@@ -460,11 +464,11 @@ font-size:19px
 }
 
 .complete-btn{
-padding:12px 10px;
+display:block;
+visibility:visible;
 }
 
 }
-
 </style>
 </head>
 
@@ -483,11 +487,6 @@ padding:12px 10px;
 </header>
 
 <main>
-
-<!-- =====================================================
-     RADYO BÖLÜMÜ
-     DOKUNULMADI
-====================================================== -->
 
 <div class="card radio-player-card">
 
@@ -550,10 +549,6 @@ style="margin-top:8px;text-align:center">
 </div>
 
 
-<!-- =====================================================
-     SOHBET
-====================================================== -->
-
 <div class="card">
 
 <h3 style="margin-top:0">
@@ -592,21 +587,21 @@ maxlength="300"
 placeholder="Mesajınızı yazın..."
 required>
 
-<!-- YENİ -->
+<!-- SADECE YENİ BUTON -->
 <button
-type="button"
 id="completeUser"
-class="complete-btn">
-↹ Tamamla
+class="complete-btn"
+type="button">
+↹ Kullanıcı Adını Tamamla
 </button>
+
+<p class="complete-help">
+💡 Örneğin Ley yazıp tamamla tuşuna basabilirsiniz.
+</p>
 
 <button type="submit">
 Gönder
 </button>
-
-<div class="tab-note">
-💡 Kullanıcı adının bir kısmını yazıp <b>↹ Tamamla</b> butonuna basabilirsiniz.
-</div>
 
 </form>
 
@@ -690,16 +685,8 @@ Yayıncıya duyurmak istediğiniz şarkıyı yazın:
 <input id="songTitle" placeholder="Şarkı Adı">
 
 <div class="modal-actions">
-<button id="closeRequestModal" class="action-btn" type="button">
-İptal
-</button>
-
-<button
-id="sendRequest"
-class="action-btn request-btn"
-type="button">
-Gönder 🎶
-</button>
+<button id="closeRequestModal" class="action-btn" type="button">İptal</button>
+<button id="sendRequest" class="action-btn request-btn" type="button">Gönder 🎶</button>
 </div>
 
 </div>
@@ -707,42 +694,31 @@ Gönder 🎶
 </div>
 
 
-<!--
-     SES DOSYALARI DURUYOR.
-     FAKAT JAVASCRIPT TARAFINDA SES KESİNLİKLE ÇALINMIYOR.
--->
-
+<!-- Ses kaynakları bırakıldı ama JavaScript'te oynatılmıyor -->
 <audio
 id="notificationSound"
-src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
 preload="none">
 </audio>
 
 <audio
 id="applauseSound"
-src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
 preload="none">
 </audio>
 
 
 <script type="module">
 
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
 getDatabase,
 ref,
 push,
 onValue,
-set
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+set,
+onDisconnect
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-
-/* =====================================================
-   FIREBASE
-====================================================== */
 
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -753,6 +729,7 @@ storageBucket:"kralfm-muhabbet.firebasestorage.app",
 messagingSenderId:"638769846511",
 appId:"1:638769846511:web:f6d8abb91564873996"
 };
+
 
 const app=initializeApp(firebaseConfig);
 
@@ -766,66 +743,53 @@ const $=id=>document.getElementById(id);
 
 
 /* =====================================================
-   SES TAMAMEN KAPALI
-====================================================== */
+   SES KAPALI
+===================================================== */
 
-const sound=false;
+let sound=false;
 
 
 /* =====================================================
-   KULLANICI ID
-====================================================== */
+   UID
+===================================================== */
 
 let uid=localStorage.getItem("kral_uid");
 
 if(!uid){
 
-uid=
-"user_"+
-Math.random()
-.toString(36)
-.slice(2,10);
+uid="user_"+Math.random().toString(36).slice(2,10);
 
-localStorage.setItem(
-"kral_uid",
-uid
-);
+localStorage.setItem("kral_uid",uid);
 
 }
 
 
 /* =====================================================
-   KULLANICI BİLGİLERİ
-====================================================== */
+   KULLANICI
+===================================================== */
 
 const defaultGuestName=
 localStorage.getItem("kral_name") ||
-("Misafir_"+
-Math.floor(Math.random()*900+100));
+("Misafir_"+Math.floor(Math.random()*900+100));
 
 const defaultAvatar=
-localStorage.getItem("kral_avatar") ||
-"👩";
+localStorage.getItem("kral_avatar") || "👩";
 
 const defaultColor=
-localStorage.getItem("kral_color") ||
-"#ff5555";
+localStorage.getItem("kral_color") || "#ff5555";
 
 
 $("name").value=
-localStorage.getItem("kral_name") ||
-"";
+localStorage.getItem("kral_name") || "";
 
-$("userAvatar").value=
-defaultAvatar;
+$("userAvatar").value=defaultAvatar;
 
-$("userColor").value=
-defaultColor;
+$("userColor").value=defaultColor;
 
 
 /* =====================================================
-   BOTLAR
-====================================================== */
+   BOTLAR - AYNEN KORUNDU
+===================================================== */
 
 const staticBots=[
 {name:"DuRu",avatar:"👩"},
@@ -836,26 +800,22 @@ const staticBots=[
 
 
 /* =====================================================
-   DRAWER
-====================================================== */
+   DRAWER - AYNEN KORUNDU
+===================================================== */
 
 function openDrawer(){
 
-$("userDrawer")
-.classList.add("open");
+$("userDrawer").classList.add("open");
 
-$("drawerOverlay")
-.style.display="block";
+$("drawerOverlay").style.display="block";
 
 }
 
 function closeDrawer(){
 
-$("userDrawer")
-.classList.remove("open");
+$("userDrawer").classList.remove("open");
 
-$("drawerOverlay")
-.style.display="none";
+$("drawerOverlay").style.display="none";
 
 }
 
@@ -868,14 +828,13 @@ $("drawerOverlay").onclick=closeDrawer;
 
 /* =====================================================
    SAAT
-====================================================== */
+===================================================== */
 
 function time(t){
 
 return new Date(
 t||Date.now()
-)
-.toLocaleTimeString(
+).toLocaleTimeString(
 "tr-TR",
 {
 hour:"2-digit",
@@ -887,8 +846,8 @@ minute:"2-digit"
 
 
 /* =====================================================
-   MESAJ GÖSTER
-====================================================== */
+   MESAJ GÖSTERME - AYNEN KORUNDU
+===================================================== */
 
 function appendMessage(d){
 
@@ -896,145 +855,90 @@ const box=$("messages");
 
 if(!box||!d)return;
 
+const r=document.createElement("div");
 
-const r=
-document.createElement("div");
-
-const ts=
-document.createElement("span");
+const ts=document.createElement("span");
 
 ts.className="time";
 
-ts.textContent=
-"["+time(d.createdAt)+"] ";
+ts.textContent="["+time(d.createdAt)+"] ";
 
 
 if(d.type==="system"){
 
-r.className=
-"msg system-msg";
+r.className="msg system-msg";
 
-r.textContent=
-ts.textContent+
-" "+
-d.text;
+r.textContent=ts.textContent+" "+d.text;
 
 box.appendChild(r);
 
-box.scrollTop=
-box.scrollHeight;
+box.scrollTop=box.scrollHeight;
 
 return;
 
 }
 
 
-const av=
-document.createElement("span");
+const av=document.createElement("span");
 
-const n=
-document.createElement("span");
+const n=document.createElement("span");
 
-const t=
-document.createElement("span");
-
+const t=document.createElement("span");
 
 av.className="avatar";
 
 av.textContent=
-(
-d.type==="bot"
-?
-"🤖"
-:
-(d.avatar||"🎧")
-)+
-" ";
+(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
 
 
 n.className=
-d.type==="bot"
-?
-"name bot-name"
-:
-"name";
+d.type==="bot"?"name bot-name":"name";
 
 n.textContent=
-(d.name||"Misafir")+
-": ";
+(d.name||"Misafir")+": ";
 
-t.textContent=
-d.text||"";
+t.textContent=d.text||"";
 
 
 if(d.type==="applause")
-r.className=
-"msg applause-msg";
+r.className="msg applause-msg";
 
 else if(d.type==="request")
-r.className=
-"msg request-msg";
+r.className="msg request-msg";
 
 else if(d.type==="whisper")
-r.className=
-"msg whisper-msg";
+r.className="msg whisper-msg";
 
 else if(d.type==="action")
-r.className=
-"msg action-msg";
+r.className="msg action-msg";
 
 else
 r.className=
-d.type==="bot"
-?
-"msg bot-msg"
-:
-"msg";
+d.type==="bot"?"msg bot-msg":"msg";
 
 
 if(d.type==="bot"){
 
-const b=
-document.createElement("span");
+const b=document.createElement("span");
 
 b.className="bot-badge";
 
 b.textContent="BOT";
 
-r.append(
-ts,
-b,
-av,
-n,
-t
-);
+r.append(ts,b,av,n,t);
 
 }else{
 
-r.append(
-ts,
-av,
-n,
-t
-);
+r.append(ts,av,n,t);
 
 }
 
 
-if(
-d.type!=="bot" &&
-d.color
-){
-
-n.style.color=
-d.color;
-
-}
+if(d.type!=="bot"&&d.color)
+n.style.color=d.color;
 
 
-/* =====================================================
-   İSME TIKLAMA
-====================================================== */
+/* İsim tıklama */
 
 n.onclick=()=>{
 
@@ -1044,9 +948,7 @@ d.name!=="Kral Bot" &&
 d.name!=="Sistem"
 ){
 
-insertUsername(
-d.name
-);
+insertNameAtCursor(d.name);
 
 }
 
@@ -1055,53 +957,40 @@ d.name
 
 box.appendChild(r);
 
-box.scrollTop=
-box.scrollHeight;
+box.scrollTop=box.scrollHeight;
 
 
-/*
-   SES KAPALI.
-   BURADA HİÇBİR SES ÇALINMIYOR.
-*/
+/* SES KODU BİLEREK YOK */
 
 }
 
 
 /* =====================================================
    MESAJLAR
-====================================================== */
+===================================================== */
 
-onValue(
-messagesRef,
-snap=>{
+onValue(messagesRef,snap=>{
 
-const data=
-snap.val()||{};
+const data=snap.val()||{};
 
 $("messages").innerHTML="";
 
-Object.values(data)
-.forEach(d=>{
+Object.values(data).forEach(d=>{
 appendMessage(d);
 });
 
-}
-);
+});
 
 
 /* =====================================================
-   BOT
-====================================================== */
+   BOT CEVABI - AYNEN KORUNDU
+===================================================== */
 
 function botReply(text,user){
 
-const m=
-text.toLowerCase();
+const m=text.toLowerCase();
 
-if(
-user.toLowerCase()==="kral bot"
-)
-return null;
+if(user.toLowerCase()==="kral bot") return null;
 
 if(m.includes("selam"))
 return "Aleykümselam @"+user+" 👋";
@@ -1121,25 +1010,13 @@ return null;
 
 
 /* =====================================================
-   PRESENCE SİSTEMİ
-
-   Sayfa yenilenince kayıt korunur.
-   Kullanıcı düzenli olarak lastSeen gönderir.
-
-   15 saniyeden fazla haber alınamazsa
-   çevrim dışı kabul edilir.
-====================================================== */
-
-const HEARTBEAT=5000;
-
-const OFFLINE_TIME=15000;
-
+   PRESENCE - İLK SİSTEM KORUNDU
+===================================================== */
 
 async function registerPresence(){
 
 const activeName=
-$("name").value.trim() ||
-defaultGuestName;
+$("name").value.trim()||defaultGuestName;
 
 const activeAvatar=
 $("userAvatar").value;
@@ -1164,13 +1041,14 @@ activeColor
 );
 
 
+const uref=
+ref(db,"presence/"+uid);
+
+
 try{
 
 await set(
-ref(
-db,
-"presence/"+uid
-),
+uref,
 {
 name:activeName,
 avatar:activeAvatar,
@@ -1179,6 +1057,15 @@ createdAt:Date.now(),
 lastSeen:Date.now()
 }
 );
+
+
+/*
+   Sayfa kapandığında Firebase bağlantısı koptuğunda
+   kullanıcı kaldırılır.
+*/
+
+onDisconnect(uref).remove();
+
 
 }catch(e){
 
@@ -1192,58 +1079,8 @@ e
 }
 
 
-async function heartbeat(){
-
-const activeName=
-$("name").value.trim() ||
-defaultGuestName;
-
-const activeAvatar=
-$("userAvatar").value;
-
-const activeColor=
-$("userColor").value;
-
-
-try{
-
-await set(
-ref(
-db,
-"presence/"+uid
-),
-{
-name:activeName,
-avatar:activeAvatar,
-color:activeColor,
-createdAt:Date.now(),
-lastSeen:Date.now()
-}
-);
-
-}catch(e){
-
-console.error(
-"Heartbeat hata:",
-e
-);
-
-}
-
-}
-
-
 registerPresence();
 
-setInterval(
-heartbeat,
-HEARTBEAT
-);
-
-
-/* =====================================================
-   KULLANICI BİLGİLERİ DEĞİŞİNCE
-====================================================== */
 
 $("name").addEventListener(
 "input",
@@ -1262,47 +1099,14 @@ registerPresence
 
 
 /* =====================================================
-   ÇEVRİMİÇİ KULLANICILAR
-====================================================== */
+   PRESENCE LİSTESİ
+===================================================== */
 
 let previousUsers={};
 
+onValue(presenceRef,snap=>{
 
-onValue(
-presenceRef,
-snap=>{
-
-const all=
-snap.val()||{};
-
-const now=
-Date.now();
-
-const users={};
-
-
-/*
-   Sadece aktif kullanıcıları göster.
-*/
-
-Object.keys(all)
-.forEach(id=>{
-
-const u=
-all[id];
-
-if(
-u &&
-u.lastSeen &&
-(now-u.lastSeen)<=OFFLINE_TIME
-){
-
-users[id]=u;
-
-}
-
-});
-
+const users=snap.val()||{};
 
 $("onlineUsersList").innerHTML="";
 
@@ -1311,81 +1115,59 @@ $("onlineUsersList").innerHTML="";
 
 staticBots.forEach(bot=>{
 
-const d=
-document.createElement("div");
+const d=document.createElement("div");
 
-d.className=
-"user-list-item";
+d.className="user-list-item";
 
 d.textContent=
-bot.avatar+
-" "+
-bot.name;
+bot.avatar+" "+bot.name;
 
 d.onclick=()=>{
 
-insertUsername(
-bot.name
-);
+insertNameAtCursor(bot.name);
 
 closeDrawer();
 
 };
 
-$("onlineUsersList")
-.appendChild(d);
+$("onlineUsersList").appendChild(d);
 
 });
 
 
 /* GERÇEK KULLANICILAR */
 
-Object.keys(users)
-.forEach(id=>{
+Object.keys(users).forEach(id=>{
 
-const u=
-users[id];
+const u=users[id];
 
-const d=
-document.createElement("div");
+const d=document.createElement("div");
 
-d.className=
-"user-list-item";
+d.className="user-list-item";
 
 d.textContent=
-(u.avatar||"🎧")+
-" "+
-u.name;
+(u.avatar||"🎧")+" "+u.name;
 
 d.onclick=()=>{
 
-insertUsername(
-u.name
-);
+insertNameAtCursor(u.name);
 
 closeDrawer();
 
 };
 
-$("onlineUsersList")
-.appendChild(d);
+$("onlineUsersList").appendChild(d);
 
 });
 
 
-/* GİRİŞ / ÇIKIŞ MESAJLARI */
+/* GİRİŞ / ÇIKIŞ */
 
-if(
-Object.keys(previousUsers).length>0
-){
+if(Object.keys(previousUsers).length>0){
 
-Object.keys(users)
-.forEach(id=>{
+Object.keys(users).forEach(id=>{
 
-if(
-!previousUsers[id] &&
-id!==uid
-){
+if(!previousUsers[id]&&id!==uid){
 
 push(
 messagesRef,
@@ -1404,13 +1186,9 @@ createdAt:Date.now()
 });
 
 
-Object.keys(previousUsers)
-.forEach(id=>{
+Object.keys(previousUsers).forEach(id=>{
 
-if(
-!users[id] &&
-id!==uid
-){
+if(!users[id]&&id!==uid){
 
 push(
 messagesRef,
@@ -1431,38 +1209,163 @@ createdAt:Date.now()
 }
 
 
-previousUsers=
-users;
+previousUsers=users;
 
-}
-);
+});
 
 
 /* =====================================================
-   KULLANICI ADI EKLEME
+   İSİM EKLEME
+===================================================== */
 
-   Tıklama veya Tamamla buradan kullanıyor.
-====================================================== */
+function insertNameAtCursor(name){
 
-function insertUsername(name){
+const input=$("text");
 
-const input=
-$("text");
+const value=input.value;
 
-const start=
-input.selectionStart;
+const start=input.selectionStart;
 
-const end=
-input.selectionEnd;
-
-const value=
-input.value;
+const end=input.selectionEnd;
 
 
 /*
-   İmlecin bulunduğu yerdeki kelimeyi bul.
+   İmlecin önündeki mevcut kelimeyi bul.
 */
 
-const before=
-value.substring(
-  
+const before=value.substring(0,start);
+
+const after=value.substring(end);
+
+const match=
+before.match(/(?:^|\s)(@?[^\s@]*)$/);
+
+
+if(match){
+
+const oldWord=match[1];
+
+const wordStart=
+start-oldWord.length;
+
+const prefix=
+oldWord.startsWith("@")?"@":"";
+
+
+input.value=
+before.substring(0,wordStart)+
+prefix+
+name+
+" "+
+after;
+
+
+const pos=
+wordStart+
+prefix.length+
+name.length+
+1;
+
+input.focus();
+
+input.setSelectionRange(pos,pos);
+
+}else{
+
+input.value=
+before+
+name+
+" "+
+after;
+
+const pos=
+before.length+
+name.length+
+1;
+
+input.focus();
+
+input.setSelectionRange(pos,pos);
+
+}
+
+}
+
+
+/* =====================================================
+   TAMAMLAMA İÇİN KULLANICI LİSTESİ
+===================================================== */
+
+function getAvailableNames(){
+
+const names=[];
+
+
+/* BOTLAR */
+
+staticBots.forEach(bot=>{
+names.push(bot.name);
+});
+
+
+/* ÇEVRİM İÇİ KULLANICILAR */
+
+const items=
+$("onlineUsersList")
+.querySelectorAll(".user-list-item");
+
+
+items.forEach(item=>{
+
+const text=item.textContent.trim();
+
+const parts=text.split(/\s+/);
+
+if(parts.length>=2){
+
+const name=
+parts.slice(1).join(" ");
+
+if(name)names.push(name);
+
+}
+
+});
+
+
+return[
+...new Set(names)
+];
+
+}
+
+
+/* =====================================================
+   TAMAMLA BUTONU
+===================================================== */
+
+$("completeUser").onclick=()=>{
+
+const input=$("text");
+
+const value=input.value;
+
+const cursor=input.selectionStart;
+
+const before=value.substring(0,cursor);
+
+const after=value.substring(cursor);
+
+
+/*
+   İmlecin bulunduğu kelime
+*/
+
+const match=
+before.match(/(?:^|\s)(@?[^\s@]*)$/);
+
+
+if(!match){
+
+$("statusText").textContent=
+"Kullanıcı adının bir kısmı
