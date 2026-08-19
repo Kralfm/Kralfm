@@ -204,7 +204,6 @@ color:#93c5fd;
 font-style:italic
 }
 
-/* YENİ /me GÖRÜNÜMÜ */
 .me-msg{
 background:linear-gradient(135deg,#172554,#312e81);
 border:1px solid #818cf8;
@@ -356,7 +355,6 @@ color:#aaa;
 font-size:13px
 }
 
-/* ÖZEL MESAJ ALANI */
 .private-bar{
 display:flex;
 align-items:center;
@@ -466,7 +464,6 @@ display:inline-block;
 flex-shrink:0
 }
 
-/* ÖZEL MESAJ MODALI */
 .modal-overlay{
 display:none;
 position:fixed;
@@ -517,7 +514,6 @@ color:#d8b4fe;
 font-weight:bold
 }
 
-/* ÖZEL MESAJLAR */
 .private-list{
 max-height:220px;
 overflow-y:auto;
@@ -542,14 +538,6 @@ border-left:3px solid #22c55e
 
 .private-item small{
 color:#888
-}
-
-/* TAB İPUCU */
-.autocomplete-hint{
-font-size:11px;
-color:#777;
-width:100%;
-margin-top:-3px
 }
 
 @media(max-width:600px){
@@ -673,12 +661,10 @@ style="margin-top:8px;text-align:center">
 💬 Canlı Sohbet Odası
 </h3>
 
-<!-- ÖZEL MESAJ BİLDİRİMİ -->
 <div id="privateNotification" class="private-notification">
 💌 Yeni özel mesajınız var!
 </div>
 
-<!-- KÜÇÜK ÖZEL MESAJ ALANI -->
 <div class="private-bar">
 
 <span class="private-title">
@@ -737,10 +723,6 @@ required>
 <button type="submit">
 Gönder
 </button>
-
-<div class="autocomplete-hint">
-💡 Kullanıcı adının birkaç harfini yazıp Tab'a basabilirsin.
-</div>
 
 </form>
 
@@ -818,8 +800,6 @@ Kimse yok...
 </aside>
 
 
-<!-- İSTEK MODALI -->
-
 <div id="requestModal" class="modal-overlay">
 
 <div class="modal-box">
@@ -860,8 +840,6 @@ Gönder 🎶
 
 </div>
 
-
-<!-- ÖZEL MESAJ MODALI -->
 
 <div id="privateModal" class="modal-overlay">
 
@@ -960,20 +938,12 @@ const privateRef=ref(db,"privateMessages");
 const $=id=>document.getElementById(id);
 
 
-/* SESLER TAMAMEN KAPALI */
-
 const sound=false;
 
+const uid="user_"+Math.random().toString(36).slice(2,10);
 
-const uid=
-"user_"+Math.random().toString(36).slice(2,10);
+const defaultGuestName="Misafir_"+Math.floor(Math.random()*900+100);
 
-
-const defaultGuestName=
-"Misafir_"+Math.floor(Math.random()*900+100);
-
-
-/* MEVCUT BOTLAR AYNEN KALDI */
 
 const staticBots=[
 
@@ -1001,10 +971,6 @@ let privateUnread=0;
 let lastHour=-1;
 
 
-/* ===============================
-   MENÜ
-================================ */
-
 function openDrawer(){
 
 $("userDrawer").classList.add("open");
@@ -1030,10 +996,6 @@ $("closeDrawer").onclick=closeDrawer;
 $("drawerOverlay").onclick=closeDrawer;
 
 
-/* ===============================
-   SAAT
-================================ */
-
 function time(t){
 
 return new Date(t||Date.now())
@@ -1045,16 +1007,11 @@ minute:"2-digit"
 }
 
 
-/* ===============================
-   MESAJ GÖRÜNÜMÜ
-================================ */
-
 function appendMessage(d){
 
 const box=$("messages");
 
 if(!box||!d)return;
-
 
 const r=document.createElement("div");
 
@@ -1062,18 +1019,14 @@ const ts=document.createElement("span");
 
 ts.className="time";
 
-ts.textContent=
-"["+time(d.createdAt)+"] ";
+ts.textContent="["+time(d.createdAt)+"] ";
 
-
-/* SİSTEM */
 
 if(d.type==="system"){
 
 r.className="msg system-msg";
 
-r.textContent=
-ts.textContent+d.text;
+r.textContent=ts.textContent+d.text;
 
 box.appendChild(r);
 
@@ -1084,21 +1037,17 @@ return;
 }
 
 
-/* GİRİŞ */
-
 if(d.type==="join"){
 
 r.className="msg join-msg";
 
-r.textContent=
-"🟢 "+d.name+" sohbete katıldı";
+r.textContent="🟢 "+d.name+" sohbete katıldı";
 
 const tm=document.createElement("span");
 
 tm.className="event-time";
 
-tm.textContent=
-" — "+time(d.createdAt);
+tm.textContent=" — "+time(d.createdAt);
 
 r.appendChild(tm);
 
@@ -1111,21 +1060,17 @@ return;
 }
 
 
-/* ÇIKIŞ */
-
 if(d.type==="leave"){
 
 r.className="msg leave-msg";
 
-r.textContent=
-"🔴 "+d.name+" sohbetten ayrıldı";
+r.textContent="🔴 "+d.name+" sohbetten ayrıldı";
 
 const tm=document.createElement("span");
 
 tm.className="event-time";
 
-tm.textContent=
-" — "+time(d.createdAt);
+tm.textContent=" — "+time(d.createdAt);
 
 r.appendChild(tm);
 
@@ -1147,21 +1092,16 @@ const t=document.createElement("span");
 
 av.className="avatar";
 
-av.textContent=
-(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
+av.textContent=(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
 
 
-n.className=
-d.type==="bot"?"name bot-name":"name";
+n.className=d.type==="bot"?"name bot-name":"name";
 
-n.textContent=
-(d.name||"Misafir")+": ";
+n.textContent=(d.name||"Misafir")+": ";
 
 
 t.textContent=d.text||"";
 
-
-/* MESAJ TİPLERİ */
 
 if(d.type==="applause")
 r.className="msg applause-msg";
@@ -1179,11 +1119,8 @@ else if(d.type==="me")
 r.className="msg me-msg";
 
 else
-r.className=
-d.type==="bot"?"msg bot-msg":"msg";
+r.className=d.type==="bot"?"msg bot-msg":"msg";
 
-
-/* BOT */
 
 if(d.type==="bot"){
 
@@ -1213,10 +1150,6 @@ box.scrollTop=box.scrollHeight;
 }
 
 
-/* ===============================
-   MESAJLARI GETİR
-================================ */
-
 onValue(messagesRef,snap=>{
 
 const data=snap.val()||{};
@@ -1231,10 +1164,6 @@ appendMessage(d);
 
 });
 
-
-/* ===============================
-   BOT
-================================ */
 
 function botReply(text,user){
 
@@ -1260,21 +1189,15 @@ return null;
 }
 
 
-/* ===============================
-   PRESENCE
-================================ */
-
 async function registerPresence(){
 
-const activeName=
-$("name").value.trim()||defaultGuestName;
+const activeName=$("name").value.trim()||defaultGuestName;
 
 const activeAvatar=$("userAvatar").value;
 
 const activeColor=$("userColor").value;
 
 const uref=ref(db,"presence/"+uid);
-
 
 try{
 
@@ -1304,32 +1227,15 @@ console.error("Presence hata:",e);
 }
 
 
-/* İLK GİRİŞ */
-
 registerPresence();
 
 
-/* BİLGİ DEĞİŞİNCE */
+$("name").addEventListener("input",registerPresence);
 
-$("name").addEventListener(
-"input",
-registerPresence
-);
+$("userAvatar").addEventListener("change",registerPresence);
 
-$("userAvatar").addEventListener(
-"change",
-registerPresence
-);
+$("userColor").addEventListener("change",registerPresence);
 
-$("userColor").addEventListener(
-"change",
-registerPresence
-);
-
-
-/* ===============================
-   ÇEVRİM İÇİ LİSTE
-================================ */
 
 onValue(presenceRef,snap=>{
 
@@ -1338,19 +1244,9 @@ const users=snap.val()||{};
 const arr=Object.entries(users);
 
 
-/*
-Yeni kullanıcı algılandı.
-Sistem mesajını yalnızca bu tarayıcı
-için ekliyoruz. Böylece aynı kişi için
-çok sayıda tekrar oluşturulmuyor.
-*/
-
 arr.forEach(([id,u])=>{
 
-if(
-id!==uid &&
-!knownUsers[id]
-){
+if(id!==uid && !knownUsers[id]){
 
 appendMessage({
 
@@ -1367,16 +1263,9 @@ createdAt:Date.now()
 });
 
 
-/*
-Ayrılan kullanıcı
-*/
-
 Object.keys(knownUsers).forEach(id=>{
 
-if(
-id!==uid &&
-!users[id]
-){
+if(id!==uid && !users[id]){
 
 const old=knownUsers[id];
 
@@ -1407,12 +1296,8 @@ knownUsers[id]=u;
 currentUsers=users;
 
 
-/* SAĞ MENÜ */
-
 $("onlineUsersList").innerHTML="";
 
-
-/* BOTLAR DEĞİŞMEDİ */
 
 staticBots.forEach(bot=>{
 
@@ -1422,17 +1307,12 @@ d.className="user-list-item";
 
 d.style.cursor="default";
 
-d.innerHTML=
-'<span class="user-online-dot"></span>'+
-bot.avatar+" "+bot.name;
+d.innerHTML='<span class="user-online-dot"></span>'+bot.avatar+" "+bot.name;
 
-$("onlineUsersList")
-.appendChild(d);
+$("onlineUsersList").appendChild(d);
 
 });
 
-
-/* GERÇEK KULLANICILAR */
 
 arr.forEach(([id,u])=>{
 
@@ -1442,30 +1322,154 @@ d.className="user-list-item";
 
 d.dataset.uid=id;
 
-d.innerHTML=
-'<span class="user-online-dot"></span>'+
-(u.avatar||"🎧")+" "+
-(u.name||"Misafir");
+d.innerHTML='<span class="user-online-dot"></span>'+(u.avatar||"🎧")+" "+(u.name||"Misafir");
 
-
-/*
-Kullanıcıya tıklayınca
-özel mesaj aç
-*/
 
 if(id!==uid){
 
 d.onclick=()=>{
 
-openPrivateFor(
-id,
-u.name||"Misafir"
-);
+openPrivateFor(id,u.name||"Misafir");
 
 };
 
 }
 
 
-$("onlineUsersList")
-.append
+$("onlineUsersList").appendChild(d);
+
+});
+
+});
+
+
+async function sendMsg(text,type="user",customName=null,customAvatar=null,customColor=null){
+
+const n=customName||($("name").value.trim()||defaultGuestName);
+
+const av=customAvatar||$("userAvatar").value;
+
+const col=customColor||$("userColor").value;
+
+
+await registerPresence();
+
+
+await push(messagesRef,{
+
+name:n,
+
+text,
+
+color:col,
+
+avatar:av,
+
+type,
+
+createdAt:Date.now()
+
+});
+
+
+const reply=botReply(text,n);
+
+if(reply){
+
+setTimeout(()=>{
+
+push(messagesRef,{
+
+name:"Kral Bot",
+
+text:reply,
+
+type:"bot",
+
+createdAt:Date.now()
+
+});
+
+},500);
+
+}
+
+}
+
+
+function sendMeAction(text){
+
+const n=$("name").value.trim()||defaultGuestName;
+
+const av=$("userAvatar").value;
+
+const col=$("userColor").value;
+
+
+push(messagesRef,{
+
+name:n,
+
+avatar:av,
+
+color:col,
+
+text:text,
+
+type:"me",
+
+createdAt:Date.now()
+
+});
+
+}
+
+
+$("form").onsubmit=async e=>{
+
+e.preventDefault();
+
+const t=$("text").value.trim();
+
+if(!t)return;
+
+
+if(t.toLowerCase().startsWith("/me ")){
+
+const action=t.substring(4).trim();
+
+if(action){
+
+sendMeAction(action);
+
+$("text").value="";
+
+}
+
+return;
+
+}
+
+
+try{
+
+await sendMsg(t);
+
+$("statusText").textContent="Sohbet odası hazır. 🤖";
+
+$("text").value="";
+
+}catch(err){
+
+$("statusText").textContent="Mesaj gönderilemedi.";
+
+}
+
+};
+
+
+$("sendApplause").onclick=()=>sendMsg("👏 Coşkulu bir alkış gönderdi!","applause");
+
+$("sendCoffee").onclick=()=>sendMsg("☕ Herkese sıcacık kahve ikram etti!","action");
+
+$("sendHeart").onclick=()=>sendMsg("❤️ Kucak dolusu sevgiler g
