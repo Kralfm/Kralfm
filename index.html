@@ -815,6 +815,10 @@ color:activeColor,
 createdAt:Date.now()
 });
 
+// Yeni sekme/sayfa açıldığında sayacı artır (Böylece gezindiğinde düşmez)
+let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "0") + 1;
+localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
+
 if(!sessionStorage.getItem("kralfm_joined_logged")){
   sessionStorage.setItem("kralfm_joined_logged", "true");
   await push(messagesRef,{
@@ -831,21 +835,26 @@ console.error("Presence hata:",e);
 
 registerPresence();
 
-// Sadece sekme/pencere tamamen kapatıldığında veya çarpıya basıldığında listeden ve sistemden düşür
+// Kullanıcı sekme/pencereyi (X tuşuna basıp) kapattığında çalışır
 window.addEventListener("beforeunload", () => {
-  const activeName = $("name").value.trim() || defaultGuestName;
-  const uref = ref(db, "presence/" + uid);
-  
-  // Veritabanından kullanıcıyı sil
-  remove(uref);
-  
-  // Sistem mesajı gönder
-  push(messagesRef, {
-    name: "Sistem",
-    text: activeName + " sohbetten ayrıldı.",
-    type: "system",
-    createdAt: Date.now()
-  });
+  let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "1") - 1;
+  localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
+
+  // Sadece tüm sekmeleri kapattıysa veritabanından tamamen sil ve çıkış mesajı at
+  if (openTabs <= 0) {
+    localStorage.removeItem("kralfm_open_tabs_" + uid);
+    const activeName = $("name").value.trim() || defaultGuestName;
+    const uref = ref(db, "presence/" + uid);
+    
+    remove(uref);
+    
+    push(messagesRef, {
+      name: "Sistem",
+      text: activeName + " sohbetten ayrıldı.",
+      type: "system",
+      createdAt: Date.now()
+    });
+  }
 });
 
 $("name").addEventListener("change", registerPresence);
@@ -924,104 +933,4 @@ $("form").onsubmit = async (e) => {
   }
 
   await push(messagesRef, {
-    name: name,
-    text: text,
-    avatar: avatar,
-    color: color,
-    type: msgType,
-    targetUser: targetUser,
-    createdAt: Date.now()
-  });
-
-  textInput.value = "";
-  if (activeWhisperTarget) {
-    cancelWhisper();
-  }
-};
-
-$("sendApplause").onclick = async () => {
-  const name = $("name").value.trim() || defaultGuestName;
-  applause.currentTime = 0;
-  applause.play().catch(()=>{});
-  await push(messagesRef, {
-    name: name,
-    text: "👏 kocaman bir alkış gönderdi! 🎶",
-    type: "applause",
-    avatar: $("userAvatar").value,
-    color: $("userColor").value,
-    createdAt: Date.now()
-  });
-};
-
-$("sendCoffee").onclick = async () => {
-  const name = $("name").value.trim() || defaultGuestName;
-  await push(messagesRef, {
-    name: name,
-    text: "☕ odadakilere nefis sıcak kahveler ısmarladı! Afiyet olsun.",
-    type: "request",
-    avatar: $("userAvatar").value,
-    color: $("userColor").value,
-    createdAt: Date.now()
-  });
-};
-
-$("sendHeart").onclick = async () => {
-  const name = $("name").value.trim() || defaultGuestName;
-  await push(messagesRef, {
-    name: name,
-    text: "❤️ kalplerini ortaya bıraktı, sevgi dolu anlar yaşanıyor!",
-    type: "action",
-    avatar: $("userAvatar").value,
-    color: $("userColor").value,
-    createdAt: Date.now()
-  });
-};
-
-$("sendFire").onclick = async () => {
-  const name = $("name").value.trim() || defaultGuestName;
-  await push(messagesRef, {
-    name: name,
-    text: "🔥 ortamı alevlendirdi, coşku dorukta!",
-    type: "action",
-    avatar: $("userAvatar").value,
-    color: $("userColor").value,
-    createdAt: Date.now()
-  });
-};
-
-const requestModal = $("requestModal");
-$("openRequestModal").onclick = () => requestModal.style.display = "flex";
-$("closeRequestModal").onclick = () => requestModal.style.display = "none";
-
-$("sendRequest").onclick = async () => {
-  const artist = $("songArtist").value.trim();
-  const title = $("songTitle").value.trim();
-  const name = $("name").value.trim() || defaultGuestName;
-
-  if(!artist || !title) {
-    alert("Lütfen sanatçı ve şarkı adı giriniz.");
-    return;
-  }
-
-  await push(messagesRef, {
-    name: name,
-    text: `🎵 İstek Parça: ${artist} - ${title} (Yayıncıya iletildi!)`,
-    type: "request",
-    avatar: $("userAvatar").value,
-    color: $("userColor").value,
-    createdAt: Date.now()
-  });
-
-  $("songArtist").value = "";
-  $("songTitle").value = "";
-  requestModal.style.display = "none";
-};
-
-$("clearChat").onclick = async () => {
-  if(confirm("Tüm sohbet geçmişi herkes için silinecek. Emin misiniz?")) {
-    await set(messagesRef, null);
-  }
-};
-</script>
-</body>
-</html>
+    name
