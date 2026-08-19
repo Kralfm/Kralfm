@@ -617,7 +617,7 @@ padding:2px 3px;
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase, ref, push, onValue, set, remove} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase, ref, push, onValue, set, remove, set as dbSet} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -910,7 +910,7 @@ d.append(infoRow, actionRow);
 $("onlineUsersList").appendChild(d);
 }
 
-// 📌 Form Gönderme İşlevi ve Butonlar (Tam ve Eksiksiz)
+// Form Gönderme İşlevi
 $("form").onsubmit = async (e) => {
   e.preventDefault();
   const textInput = $("text");
@@ -941,4 +941,5 @@ $("form").onsubmit = async (e) => {
   });
 
   textInput.value = "";
-  
+  cancelWhisper();
+};
