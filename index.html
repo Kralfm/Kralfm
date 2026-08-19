@@ -30,16 +30,24 @@ main{max-width:850px;margin:auto;padding:15px}
 .bot-msg{background:linear-gradient(135deg,#1e1b4b,#31103f);border:1px solid #7c3aed}
 .applause-msg{background:linear-gradient(135deg,#3f2b10,#2a1a08);border:1px solid #f59e0b;color:#fef08a;font-weight:bold}
 .request-msg{background:linear-gradient(135deg,#064e3b,#022c22);border:1px solid #10b981;color:#a7f3d0;font-weight:bold}
+.whisper-msg{background:linear-gradient(135deg,#3b0764,#581c87);border:1px solid #c084fc}
 .action-msg{background:linear-gradient(135deg,#1e3a8a,#172554);border:1px solid #3b82f6;color:#93c5fd;font-style:italic}
-.system-msg{background:#222;border:1px dashed #555;color:#aaa;font-style:italic;text-align:center;font-size:13px}
+.me-msg{background:linear-gradient(135deg,#172554,#312e81);border:1px solid #818cf8;color:#c7d2fe;font-style:italic;font-weight:bold}
 .join-msg{background:linear-gradient(135deg,#052e16,#064e3b);border:1px solid #22c55e;color:#bbf7d0;font-weight:bold;text-align:center}
 .leave-msg{background:linear-gradient(135deg,#450a0a,#7f1d1d);border:1px solid #ef4444;color:#fecaca;font-weight:bold;text-align:center}
 .time{font-size:11px;color:#888;margin-right:6px}
+.event-time{font-weight:900;font-size:12px;color:#fff;margin-right:6px}
 .avatar{margin-right:4px}
 .name{font-weight:bold;color:#ff5555;margin-right:6px}
 .bot-name{color:#c084fc!important}
 .bot-badge{font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;margin-right:6px;background:#7c3aed}
-form{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap}
+
+/* Hızlı İsim Tamamlama Çubuğu */
+.quick-mention-bar{display:flex;gap:6px;overflow-x:auto;padding:6px 0;margin-top:8px;white-space:nowrap}
+.mention-chip{background:#2a1b3d;border:1px solid #7c3aed;color:#d8b4fe;padding:4px 10px;border-radius:15px;font-size:12px;cursor:pointer;font-weight:bold}
+.mention-chip:hover{background:#3b2256}
+
+form{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}
 select#userAvatar,input#name,input#text{background:#2a2a2a;color:#fff;border-radius:8px;border:0}
 select#userAvatar{padding:12px 8px;font-size:18px}
 input[type=color]{width:48px;height:48px;border:0}
@@ -54,23 +62,36 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 .fire-btn{background:#c2410c}
 .request-btn{background:#047857}
 .private-btn{background:#6d28d9}
-.note{color:#aaa;font-size:13px}
+
+.private-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;padding:9px 11px;background:#181024;border:1px solid #6d28d9;border-radius:9px}
+.private-title{font-weight:bold;color:#d8b4fe;font-size:14px}
+.private-count{display:none;background:#ef4444;color:#fff;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:bold}
+.private-notification{display:none;background:linear-gradient(135deg,#4c1d95,#701a75);border:1px solid #c084fc;border-radius:9px;padding:10px;margin-bottom:10px;font-weight:bold;cursor:pointer}
+
 .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:998;display:none}
 .user-drawer{position:fixed;top:0;right:-290px;width:280px;height:100%;background:#181818;border-left:1px solid #333;z-index:999;transition:right .3s;padding:20px;overflow-y:auto}
 .user-drawer.open{right:0}
 .drawer-header{display:flex;justify-content:space-between;border-bottom:1px solid #333;padding-bottom:10px;margin-bottom:15px}
 .drawer-header h3{margin:0;color:#ff5555}
 .close-drawer{background:none;border:0;color:#fff;font-size:20px;cursor:pointer}
-.user-list-item{padding:9px 10px;margin:5px 0;background:#222;border-radius:6px;display:flex;gap:8px;align-items:center}
+.user-list-item{padding:9px 10px;margin:5px 0;background:#222;border-radius:6px;display:flex;gap:8px;align-items:center;cursor:pointer}
+.user-list-item:hover{background:#333}
 .user-online-dot{width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;flex-shrink:0}
+
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}
 .modal-box{background:#1e1e1e;border:1px solid #10b981;border-radius:12px;padding:20px;width:90%;max-width:400px}
 .modal-box h3{color:#10b981;margin-top:0}
 .modal-box input{width:100%;padding:10px;margin:8px 0;background:#2a2a2a;border:1px solid #444;color:#fff;border-radius:6px}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}
+.private-target{background:#2a2a2a;padding:10px;border-radius:7px;margin-bottom:8px;color:#d8b4fe;font-weight:bold}
+.private-list{max-height:220px;overflow-y:auto;margin-bottom:10px}
+.private-item{background:#292929;border-radius:8px;padding:9px;margin:6px 0;font-size:13px}
+.private-item.mine{border-left:3px solid #8b5cf6}
+.private-item.other{border-left:3px solid #22c55e}
+.private-item small{color:#888}
+.note{color:#aaa;font-size:13px}
 </style>
 
-<!-- Firebase SDK (Kararlı ve Uyumlu Sürüm) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
@@ -107,7 +128,21 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 
 <div class="card">
 <h3 style="margin-top:0">💬 Canlı Sohbet Odası</h3>
+
+<div id="privateNotification" class="private-notification">💌 Yeni özel mesajınız var!</div>
+
+<div class="private-bar">
+<span class="private-title">💌 Özel Mesaj</span>
+<div>
+<button id="openPrivateModal" class="action-btn private-btn" type="button">Özel Mesaj</button>
+<span id="privateCount" class="private-count">0 yeni</span>
+</div>
+</div>
+
 <div id="messages" class="chat-box-area"></div>
+
+<!-- Yanında İsimleri Yazan Hızlı Tamamlama Çubuğu -->
+<div id="quickMentionBar" class="quick-mention-bar"></div>
 
 <form id="form" autocomplete="off">
 <select id="userAvatar" title="Avatar">
@@ -134,7 +169,7 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 <button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
 <button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
 <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
-<button id="clearChat" class="action-btn" type="button">🗑️ Temizle</button>
+<button id="clearChat" class="action-btn" type="button">🗑️ Herkeste Temizle</button>
 </div>
 <p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
 </div>
@@ -161,6 +196,20 @@ button[type=submit]{border:0;border-radius:8px;padding:12px 20px;background:#e00
 </div>
 </div>
 
+<div id="privateModal" class="modal-overlay">
+<div class="modal-box">
+<h3>💌 Özel Mesaj</h3>
+<div id="privateTarget" class="private-target">Kullanıcı seçilmedi</div>
+<div id="privateMessages" class="private-list"></div>
+<input id="privateText" maxlength="300" placeholder="Özel mesajınızı yazın...">
+<div class="modal-actions">
+<button id="sendPrivateCoffee" class="action-btn coffee-btn" type="button">☕ Kahve</button>
+<button id="closePrivateModal" class="action-btn" type="button">Kapat</button>
+<button id="sendPrivate" class="action-btn private-btn" type="button">Gönder 💌</button>
+</div>
+</div>
+</div>
+
 <script>
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -177,12 +226,26 @@ const db=firebase.database();
 
 const messagesRef=db.ref("messages");
 const presenceRef=db.ref("presence");
+const privateRef=db.ref("privateMessages");
 
 const $=id=>document.getElementById(id);
 const uid="user_"+Math.random().toString(36).slice(2,10);
 const defaultGuestName="Misafir_"+Math.floor(Math.random()*900+100);
 
-// Drawer Kontrolleri
+const staticBots=[
+{name:"DuRu",avatar:"👩"},
+{name:"Eren",avatar:"👨"},
+{name:"LeyLi",avatar:"🌟"},
+{name:"RadyoDinliyorum",avatar:"🎧"}
+];
+
+let currentUsers={};
+let knownUsers={};
+let privateTargetUid=null;
+let privateTargetName=null;
+let privateUnread=0;
+let lastHour=-1;
+
 $("menuTrigger").onclick=()=>{$("userDrawer").classList.add("open");$("drawerOverlay").style.display="block";};
 $("closeDrawer").onclick=()=>{$("userDrawer").classList.remove("open");$("drawerOverlay").style.display="none";};
 $("drawerOverlay").onclick=()=>{$("userDrawer").classList.remove("open");$("drawerOverlay").style.display="none";};
@@ -191,21 +254,64 @@ function time(t){
 return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
 }
 
-// Mesaj Listeleme
+function appendMessage(d){
+const box=$("messages");
+if(!box||!d)return;
+const r=document.createElement("div");
+const ts=`<span class="time">[${time(d.createdAt)}]</span> `;
+
+if(d.type==="join"){
+r.className="msg join-msg";
+r.innerHTML=`🟢 ${d.name} sohbete katıldı <span class="event-time">— ${time(d.createdAt)}</span>`;
+box.appendChild(r);
+box.scrollTop=box.scrollHeight;
+return;
+}
+
+if(d.type==="leave"){
+r.className="msg leave-msg";
+r.innerHTML=`🔴 ${d.name} sohbetten ayrıldı <span class="event-time">— ${time(d.createdAt)}</span>`;
+box.appendChild(r);
+box.scrollTop=box.scrollHeight;
+return;
+}
+
+let extraClass="";
+if(d.type==="applause") extraClass=" applause-msg";
+else if(d.type==="request") extraClass=" request-msg";
+else if(d.type==="action") extraClass=" action-msg";
+else if(d.type==="me") extraClass=" me-msg";
+else if(d.type==="bot") extraClass=" bot-msg";
+else if(d.type==="whisper") extraClass=" whisper-msg";
+
+r.className="msg"+extraClass;
+const badge=d.type==="bot"?'<span class="bot-badge">BOT</span>':'';
+const nameColor=d.type==="bot"?'#c084fc':(d.color||'#ff5555');
+const avatar=d.type==="bot"?"🤖":(d.avatar||"🎧");
+
+r.innerHTML=`${ts}${badge}<span class="avatar">${avatar}</span> <span class="name" style="color:${nameColor}">${d.name||"Misafir"}:</span> ${d.text||""}`;
+box.appendChild(r);
+box.scrollTop=box.scrollHeight;
+}
+
 messagesRef.on("value",snap=>{
 const data=snap.val()||{};
-const box=$("messages");
-box.innerHTML="";
+$("messages").innerHTML="";
 Object.values(data).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0)).forEach(d=>{
-const r=document.createElement("div");
-r.className="msg"+(d.type==="applause"?" applause-msg":d.type==="request"?" request-msg":d.type==="action"?" action-msg":d.type==="bot"?" bot-msg":"");
-r.innerHTML=`<span class="time">[${time(d.createdAt)}]</span> <span class="avatar">${d.avatar||"🎧"}</span> <span class="name" style="color:${d.color||'#ff5555'}">${d.name||"Misafir"}:</span> ${d.text||""}`;
-box.appendChild(r);
+appendMessage(d);
 });
-box.scrollTop=box.scrollHeight;
 });
 
-// Çevrim İçi Kayıt
+function botReply(text,user){
+const m=text.toLowerCase();
+if(user.toLowerCase()==="kral bot")return null;
+if(m.includes("selam"))return "Aleykümselam @"+user+" 👋";
+if(m.includes("merhaba"))return "Merhaba @"+user+"! Kral FM'e hoş geldin. 📻";
+if(m.includes("kahve"))return "☕ Sayın @"+user+", kahveniz hazır! Afiyet olsun.";
+if(m.includes("istek"))return "🎵 İstek mesajınız yayıncıya iletildi. Keyifli dinlemeler!";
+return null;
+}
+
 function registerPresence(){
 const activeName=$("name").value.trim()||defaultGuestName;
 const activeAvatar=$("userAvatar").value;
@@ -214,25 +320,69 @@ const uref=presenceRef.child(uid);
 uref.set({name:activeName,avatar:activeAvatar,color:activeColor,createdAt:Date.now()});
 uref.onDisconnect().remove();
 }
+
 registerPresence();
 $("name").oninput=registerPresence;
 $("userAvatar").onchange=registerPresence;
 $("userColor").onchange=registerPresence;
 
-// Çevrim İçi Listesi
 presenceRef.on("value",snap=>{
 const users=snap.val()||{};
+const arr=Object.entries(users);
+
+arr.forEach(([id,u])=>{
+if(id!==uid && !knownUsers[id]){
+messagesRef.push({type:"join",name:u.name||"Misafir",createdAt:Date.now()});
+}
+});
+
+Object.keys(knownUsers).forEach(id=>{
+if(id!==uid && !users[id]){
+const old=knownUsers[id];
+messagesRef.push({type:"leave",name:old.name||"Misafir",createdAt:Date.now()});
+}
+});
+
+knownUsers={};
+arr.forEach(([id,u])=>{knownUsers[id]=u;});
+currentUsers=users;
+
 const list=$("onlineUsersList");
+const mentionBar=$("quickMentionBar");
 list.innerHTML="";
-Object.entries(users).forEach(([id,u])=>{
+mentionBar.innerHTML="";
+
+staticBots.forEach(bot=>{
 const d=document.createElement("div");
 d.className="user-list-item";
-d.innerHTML=`<span class="user-online-dot"></span>${u.avatar||"🎧"} ${u.name||"Misafir"}`;
+d.innerHTML=`<span class="user-online-dot"></span>${bot.avatar} ${bot.name} <span style="font-size:10px;color:#a855f7;margin-left:auto;">BOT</span>`;
 list.appendChild(d);
+});
+
+arr.forEach(([id,u])=>{
+const userName=u.name||"Misafir";
+const d=document.createElement("div");
+d.className="user-list-item";
+d.innerHTML=`<span class="user-online-dot"></span>${u.avatar||"🎧"} ${userName}`;
+if(id!==uid){
+d.onclick=()=>openPrivateFor(id,userName);
+}
+list.appendChild(d);
+
+if(id!==uid){
+const chip=document.createElement("div");
+chip.className="mention-chip";
+chip.textContent="@"+userName;
+chip.onclick=()=>{
+const txtBox=$("text");
+txtBox.value+="@"+userName+" ";
+txtBox.focus();
+};
+mentionBar.appendChild(chip);
+}
 });
 });
 
-// Mesaj Gönderme
 async function sendMsg(text,type="user"){
 await registerPresence();
 await messagesRef.push({
@@ -243,12 +393,30 @@ avatar:$("userAvatar").value,
 type,
 createdAt:Date.now()
 });
+
+const reply=botReply(text,$("name").value.trim()||defaultGuestName);
+if(reply){
+setTimeout(()=>{
+messagesRef.push({name:"Kral Bot",text:reply,type:"bot",createdAt:Date.now()});
+},500);
+}
 }
 
 $("form").onsubmit=async e=>{
 e.preventDefault();
 const t=$("text").value.trim();
 if(!t)return;
+
+if(t.toLowerCase().startsWith("/me ")){
+const action=t.substring(4).trim();
+if(action){
+const n=$("name").value.trim()||defaultGuestName;
+await messagesRef.push({name:n,avatar:$("userAvatar").value,color:$("userColor").value,text:action,type:"me",createdAt:Date.now()});
+$("text").value="";
+}
+return;
+}
+
 await sendMsg(t);
 $("text").value="";
 };
@@ -257,18 +425,54 @@ $("sendApplause").onclick=()=>sendMsg("👏 Coşkulu bir alkış gönderdi!","ap
 $("sendCoffee").onclick=()=>sendMsg("☕ Herkese sıcacık kahve ikram etti!","action");
 $("sendHeart").onclick=()=>sendMsg("❤️ Kucak dolusu sevgiler gönderdi!","action");
 $("sendFire").onclick=()=>sendMsg("🔥 Ortamı alevlendirdi!","action");
-$("clearChat").onclick=()=> { if(confirm("Tüm mesajlar silinsin mi?")) messagesRef.remove(); };
+
+$("clearChat").onclick=async()=>{
+if(confirm("Sohbet odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?")){
+await messagesRef.remove();
+}
+};
 
 $("openRequestModal").onclick=()=>{$("requestModal").style.display="flex";};
 $("closeRequestModal").onclick=()=>{$("requestModal").style.display="none";};
+
 $("sendRequest").onclick=async()=>{
 const a=$("songArtist").value.trim();
 const t=$("songTitle").value.trim();
-if(!a||!t){alert("Sanatçı ve şarkı adı girin.");return;}
+if(!a||!t){alert("Lütfen sanatçı ve şarkı adını yazın.");return;}
 await sendMsg('🎵 İSTEK PARÇA: '+a+' - "'+t+'"','request');
 $("songArtist").value="";$("songTitle").value="";$("requestModal").style.display="none";
 };
-</script>
 
-</body>
-</html>
+function openPrivateFor(id,name){
+privateTargetUid=id;
+privateTargetName=name;
+$("privateTarget").textContent="💌 "+name+" ile özel sohbet";
+$("privateModal").style.display="flex";
+loadPrivateMessages();
+}
+
+$("openPrivateModal").onclick=()=>{
+const users=Object.entries(currentUsers).filter(([id])=>id!==uid);
+if(!users.length){
+alert("Şu anda özel mesaj gönderebileceğin çevrim içi bir kullanıcı yok.");
+return;
+}
+const [id,u]=users[0];
+openPrivateFor(id,u.name||"Misafir");
+};
+
+$("closePrivateModal").onclick=()=>{$("privateModal").style.display="none";};
+
+function loadPrivateMessages(){
+if(!privateTargetUid)return;
+const myPath=uid+"_"+privateTargetUid;
+const otherPath=privateTargetUid+"_"+uid;
+const aRef=db.ref("privateMessages/"+myPath);
+const bRef=db.ref("privateMessages/"+otherPath);
+
+aRef.on("value",snap1=>{
+const first=snap1.val()||{};
+const firstArr=Object.values(first);
+bRef.on("value",snap2=>{
+const second=snap2.val()||{};
+const secondArr=Object.values(second)
