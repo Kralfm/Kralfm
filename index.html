@@ -7,14 +7,7 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-margin:0;
-background:#111;
-color:#fff;
-font-family:Arial,sans-serif;
-overflow-x:hidden
-}
+body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
 
 header{
 background:#b00000;
@@ -211,30 +204,51 @@ color:#93c5fd;
 font-style:italic
 }
 
+/* YENİ /me GÖRÜNÜMÜ */
+.me-msg{
+background:linear-gradient(135deg,#172554,#312e81);
+border:1px solid #818cf8;
+color:#c7d2fe;
+font-style:italic;
+font-weight:bold;
+box-shadow:0 3px 12px rgba(99,102,241,.2)
+}
+
 .system-msg{
 background:#222;
 border:1px dashed #555;
-color:#ddd;
+color:#aaa;
 font-style:italic;
 text-align:center;
 font-size:13px
 }
 
-.system-join{
-border-color:#16a34a;
-color:#86efac;
-font-weight:bold
+.join-msg{
+background:linear-gradient(135deg,#052e16,#064e3b);
+border:1px solid #22c55e;
+color:#bbf7d0;
+font-weight:bold;
+text-align:center
 }
 
-.system-leave{
-border-color:#dc2626;
-color:#fca5a5;
-font-weight:bold
+.leave-msg{
+background:linear-gradient(135deg,#450a0a,#7f1d1d);
+border:1px solid #ef4444;
+color:#fecaca;
+font-weight:bold;
+text-align:center
 }
 
 .time{
 font-size:11px;
 color:#888;
+margin-right:6px
+}
+
+.event-time{
+font-weight:900;
+font-size:12px;
+color:#fff;
 margin-right:6px
 }
 
@@ -309,8 +323,7 @@ border-radius:8px;
 padding:12px 20px;
 background:#e00000;
 color:#fff;
-font-weight:bold;
-cursor:pointer
+font-weight:bold
 }
 
 .action-btns{
@@ -336,10 +349,51 @@ font-weight:bold
 .heart-btn{background:#be123c}
 .fire-btn{background:#c2410c}
 .request-btn{background:#047857}
+.private-btn{background:#6d28d9}
 
 .note{
 color:#aaa;
 font-size:13px
+}
+
+/* ÖZEL MESAJ ALANI */
+.private-bar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+margin-bottom:10px;
+padding:9px 11px;
+background:#181024;
+border:1px solid #6d28d9;
+border-radius:9px
+}
+
+.private-title{
+font-weight:bold;
+color:#d8b4fe;
+font-size:14px
+}
+
+.private-count{
+display:none;
+background:#ef4444;
+color:#fff;
+border-radius:20px;
+padding:3px 8px;
+font-size:11px;
+font-weight:bold
+}
+
+.private-notification{
+display:none;
+background:linear-gradient(135deg,#4c1d95,#701a75);
+border:1px solid #c084fc;
+border-radius:9px;
+padding:10px;
+margin-bottom:10px;
+font-weight:bold;
+cursor:pointer
 }
 
 .drawer-overlay{
@@ -385,8 +439,7 @@ color:#ff5555
 background:none;
 border:0;
 color:#fff;
-font-size:20px;
-cursor:pointer
+font-size:20px
 }
 
 .user-list-item{
@@ -397,21 +450,14 @@ border-radius:6px;
 display:flex;
 gap:8px;
 align-items:center;
-cursor:pointer;
-border:1px solid transparent
+cursor:pointer
 }
 
 .user-list-item:hover{
-border-color:#777;
-background:#292929
+background:#333
 }
 
-.bot-user{
-cursor:default;
-opacity:.9
-}
-
-.online-dot{
+.user-online-dot{
 width:8px;
 height:8px;
 background:#22c55e;
@@ -420,6 +466,7 @@ display:inline-block;
 flex-shrink:0
 }
 
+/* ÖZEL MESAJ MODALI */
 .modal-overlay{
 display:none;
 position:fixed;
@@ -436,9 +483,7 @@ border:1px solid #10b981;
 border-radius:12px;
 padding:20px;
 width:90%;
-max-width:400px;
-max-height:90vh;
-overflow-y:auto
+max-width:400px
 }
 
 .modal-box h3{
@@ -456,109 +501,58 @@ color:#fff;
 border-radius:6px
 }
 
-.private-messages{
-max-height:280px;
-overflow-y:auto;
-background:#111;
-border-radius:8px;
-padding:8px;
-margin-top:10px
+.modal-actions{
+display:flex;
+gap:10px;
+justify-content:flex-end;
+margin-top:15px
 }
 
-.private-message{
+.private-target{
+background:#2a2a2a;
+padding:10px;
+border-radius:7px;
+margin-bottom:8px;
+color:#d8b4fe;
+font-weight:bold
+}
+
+/* ÖZEL MESAJLAR */
+.private-list{
+max-height:220px;
+overflow-y:auto;
+margin-bottom:10px
+}
+
+.private-item{
 background:#292929;
 border-radius:8px;
 padding:9px;
 margin:6px 0;
-font-size:14px
+font-size:13px
 }
 
-.private-message.mine{
-border-left:3px solid #10b981
+.private-item.mine{
+border-left:3px solid #8b5cf6
 }
 
-.private-message.theirs{
-border-left:3px solid #c084fc
+.private-item.other{
+border-left:3px solid #22c55e
 }
 
-.private-time{
-font-size:10px;
-color:#888;
-margin-right:5px
+.private-item small{
+color:#888
 }
 
-.private-notification{
-display:none;
-position:fixed;
-top:15px;
-left:50%;
-transform:translateX(-50%);
-z-index:2000;
-background:#7c3aed;
-color:#fff;
-padding:12px 18px;
-border-radius:10px;
-font-weight:bold;
-box-shadow:0 4px 20px rgba(0,0,0,.5);
-cursor:pointer
-}
-
-.private-badge{
-display:inline-block;
-background:#ef4444;
-color:#fff;
+/* TAB İPUCU */
+.autocomplete-hint{
 font-size:11px;
-min-width:20px;
-padding:2px 6px;
-border-radius:12px;
-text-align:center;
-margin-left:5px
-}
-
-.modal-actions{
-display:flex;
-gap:8px;
-justify-content:flex-end;
-margin-top:12px;
-flex-wrap:wrap
-}
-
-.target-info{
-background:#111;
-border-radius:8px;
-padding:10px;
-margin:8px 0;
-color:#ddd
-}
-
-.private-input{
+color:#777;
 width:100%;
-padding:12px;
-background:#2a2a2a;
-border:1px solid #444;
-color:#fff;
-border-radius:8px;
-margin-top:8px
-}
-
-.private-action-buttons{
-display:flex;
-gap:6px;
-flex-wrap:wrap;
-margin-top:8px
-}
-
-.private-action-buttons button{
-border:0;
-border-radius:7px;
-padding:8px 10px;
-color:#fff;
-cursor:pointer;
-font-weight:bold
+margin-top:-3px
 }
 
 @media(max-width:600px){
-
 .radio-banner{
 align-items:flex-start;
 flex-direction:column
@@ -572,11 +566,9 @@ align-self:flex-end
 font-size:19px
 }
 
-.private-notification{
-width:90%;
-text-align:center
+.private-bar{
+font-size:12px
 }
-
 }
 </style>
 </head>
@@ -588,14 +580,16 @@ text-align:center
 <div>🎙️ Kral FM & Muhabbet</div>
 
 <div>
-<button id="menuTrigger" class="menu-trigger" type="button">☰</button>
+
+<button id="menuTrigger" class="menu-trigger" type="button">
+☰
+</button>
+
 </div>
 
 </header>
 
 <main>
-
-<!-- RADYO BÖLÜMÜNE DOKUNULMADI -->
 
 <div class="card radio-player-card">
 
@@ -679,6 +673,33 @@ style="margin-top:8px;text-align:center">
 💬 Canlı Sohbet Odası
 </h3>
 
+<!-- ÖZEL MESAJ BİLDİRİMİ -->
+<div id="privateNotification" class="private-notification">
+💌 Yeni özel mesajınız var!
+</div>
+
+<!-- KÜÇÜK ÖZEL MESAJ ALANI -->
+<div class="private-bar">
+
+<span class="private-title">
+💌 Özel Mesaj
+</span>
+
+<div>
+<button
+id="openPrivateModal"
+class="action-btn private-btn"
+type="button">
+Özel Mesaj
+</button>
+
+<span id="privateCount" class="private-count">
+0 yeni
+</span>
+</div>
+
+</div>
+
 <div id="messages" class="chat-box-area"></div>
 
 <form id="form" autocomplete="off">
@@ -717,28 +738,49 @@ required>
 Gönder
 </button>
 
+<div class="autocomplete-hint">
+💡 Kullanıcı adının birkaç harfini yazıp Tab'a basabilirsin.
+</div>
+
 </form>
+
 
 <div class="action-btns">
 
-<button id="sendApplause" class="action-btn applause-btn" type="button">
+<button id="sendApplause"
+class="action-btn applause-btn"
+type="button">
 👏 Alkış
 </button>
 
-<button id="sendCoffee" class="action-btn coffee-btn" type="button">
+<button id="sendCoffee"
+class="action-btn coffee-btn"
+type="button">
 ☕ Kahve Ismarla
 </button>
 
-<button id="sendHeart" class="action-btn heart-btn" type="button">
+<button id="sendHeart"
+class="action-btn heart-btn"
+type="button">
 ❤️ Kalp At
 </button>
 
-<button id="sendFire" class="action-btn fire-btn" type="button">
+<button id="sendFire"
+class="action-btn fire-btn"
+type="button">
 🔥 Alev Et
 </button>
 
-<button id="openRequestModal" class="action-btn request-btn" type="button">
+<button id="openRequestModal"
+class="action-btn request-btn"
+type="button">
 🎵 İstek Yap
+</button>
+
+<button id="clearChat"
+class="action-btn"
+type="button">
+🗑️ Herkeste Temizle
 </button>
 
 </div>
@@ -752,25 +794,22 @@ Sohbet odası hazır. 🤖
 </main>
 
 
-<!-- ÇEVRİM İÇİ MENÜ -->
-
 <div id="drawerOverlay" class="drawer-overlay"></div>
 
 <aside id="userDrawer" class="user-drawer">
 
 <div class="drawer-header">
 
-<h3>👥 Çevrimiçi Üyeler</h3>
+<h3>👥 Çevrim İçi Üyeler</h3>
 
-<button id="closeDrawer" class="close-drawer" type="button">
+<button
+id="closeDrawer"
+class="close-drawer"
+type="button">
 ✕
 </button>
 
 </div>
-
-<p class="note">
-Kullanıcıya dokunarak özel mesaj gönderebilirsin.
-</p>
 
 <div id="onlineUsersList">
 Kimse yok...
@@ -791,9 +830,13 @@ Kimse yok...
 Yayıncıya duyurmak istediğiniz şarkıyı yazın:
 </p>
 
-<input id="songArtist" placeholder="Sanatçı Adı">
+<input
+id="songArtist"
+placeholder="Sanatçı Adı">
 
-<input id="songTitle" placeholder="Şarkı Adı">
+<input
+id="songTitle"
+placeholder="Şarkı Adı">
 
 <div class="modal-actions">
 
@@ -824,72 +867,47 @@ Gönder 🎶
 
 <div class="modal-box">
 
-<h3>
-💌 Özel Mesajlar
-<span id="privateBadge" class="private-badge" style="display:none">0</span>
-</h3>
+<h3>💌 Özel Mesaj</h3>
 
-<div id="privateTarget" class="target-info">
-Kullanıcı seçilmedi.
+<div id="privateTarget" class="private-target">
+Kullanıcı seçilmedi
 </div>
 
-<div id="privateMessages" class="private-messages">
-Henüz özel mesaj yok.
+<div id="privateMessages" class="private-list">
 </div>
 
 <input
 id="privateText"
-class="private-input"
 maxlength="300"
 placeholder="Özel mesajınızı yazın...">
 
+<div class="modal-actions">
+
 <button
-id="sendPrivate"
-class="action-btn request-btn"
-type="button"
-style="width:100%;margin-top:8px">
-
-💌 Özel Mesaj Gönder
-
-</button>
-
-<div class="private-action-buttons">
-
-<button id="privateCoffee" style="background:#78350f" type="button">
+id="sendPrivateCoffee"
+class="action-btn coffee-btn"
+type="button">
 ☕ Kahve
 </button>
 
-<button id="privateApplause" style="background:#d97706" type="button">
-👏 Alkış
-</button>
-
-<button id="privateHeart" style="background:#be123c" type="button">
-❤️ Kalp
-</button>
-
-<button id="privateFire" style="background:#c2410c" type="button">
-🔥 Alev
-</button>
-
-</div>
-
-<div class="modal-actions">
-
-<button id="closePrivateModal" class="action-btn" type="button">
+<button
+id="closePrivateModal"
+class="action-btn"
+type="button">
 Kapat
 </button>
 
-</div>
+<button
+id="sendPrivate"
+class="action-btn private-btn"
+type="button">
+Gönder 💌
+</button>
 
 </div>
 
 </div>
 
-
-<!-- ÖZEL MESAJ UYARISI -->
-
-<div id="privateNotification" class="private-notification">
-💌 Yeni özel mesajınız var!
 </div>
 
 
@@ -904,9 +922,7 @@ ref,
 push,
 onValue,
 set,
-onDisconnect,
-transaction,
-update
+onDisconnect
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
@@ -923,43 +939,100 @@ projectId:"kralfm-muhabbet",
 
 storageBucket:"kralfm-muhabbet.firebasestorage.app",
 
-messagingSenderId:"638769511",
+messagingSenderId:"638769846511",
 
-appId:"1:638769511:web:f6d8abb91564873996"
+appId:"1:638769846511:web:f6d8abb91564873996"
 
 };
 
 
 const app=initializeApp(firebaseConfig);
+
 const db=getDatabase(app);
 
 const messagesRef=ref(db,"messages");
+
 const presenceRef=ref(db,"presence");
+
+const privateRef=ref(db,"privateMessages");
+
 
 const $=id=>document.getElementById(id);
 
+
+/* SESLER TAMAMEN KAPALI */
+
+const sound=false;
+
+
 const uid=
-"user_"+Math.random().toString(36).slice(2,12);
+"user_"+Math.random().toString(36).slice(2,10);
+
 
 const defaultGuestName=
 "Misafir_"+Math.floor(Math.random()*900+100);
 
 
+/* MEVCUT BOTLAR AYNEN KALDI */
+
 const staticBots=[
 
 {name:"DuRu",avatar:"👩"},
+
 {name:"Eren",avatar:"👨"},
+
 {name:"LeyLi",avatar:"🌟"},
+
 {name:"RadyoDinliyorum",avatar:"🎧"}
 
 ];
 
 
-let onlineUsers={};
-let selectedUser=null;
-let privateListenersStarted=false;
-let lastPrivateCount=0;
+let currentUsers={};
 
+let knownUsers={};
+
+let privateTargetUid=null;
+
+let privateTargetName=null;
+
+let privateUnread=0;
+
+let lastHour=-1;
+
+
+/* ===============================
+   MENÜ
+================================ */
+
+function openDrawer(){
+
+$("userDrawer").classList.add("open");
+
+$("drawerOverlay").style.display="block";
+
+}
+
+
+function closeDrawer(){
+
+$("userDrawer").classList.remove("open");
+
+$("drawerOverlay").style.display="none";
+
+}
+
+
+$("menuTrigger").onclick=openDrawer;
+
+$("closeDrawer").onclick=closeDrawer;
+
+$("drawerOverlay").onclick=closeDrawer;
+
+
+/* ===============================
+   SAAT
+================================ */
 
 function time(t){
 
@@ -972,32 +1045,9 @@ minute:"2-digit"
 }
 
 
-/* =========================
-   MENÜ
-========================= */
-
-function openDrawer(){
-
-$("userDrawer").classList.add("open");
-$("drawerOverlay").style.display="block";
-
-}
-
-function closeDrawer(){
-
-$("userDrawer").classList.remove("open");
-$("drawerOverlay").style.display="none";
-
-}
-
-$("menuTrigger").onclick=openDrawer;
-$("closeDrawer").onclick=closeDrawer;
-$("drawerOverlay").onclick=closeDrawer;
-
-
-/* =========================
-   MESAJ GÖRÜNTÜLEME
-========================= */
+/* ===============================
+   MESAJ GÖRÜNÜMÜ
+================================ */
 
 function appendMessage(d){
 
@@ -1005,31 +1055,83 @@ const box=$("messages");
 
 if(!box||!d)return;
 
+
 const r=document.createElement("div");
 
 const ts=document.createElement("span");
 
 ts.className="time";
-ts.textContent="["+time(d.createdAt)+"] ";
 
+ts.textContent=
+"["+time(d.createdAt)+"] ";
+
+
+/* SİSTEM */
 
 if(d.type==="system"){
 
 r.className="msg system-msg";
 
-if(d.subtype==="join")
-r.classList.add("system-join");
-
-if(d.subtype==="leave")
-r.classList.add("system-leave");
-
-const strong=document.createElement("strong");
-
-strong.textContent=d.text;
-
-r.append(ts,strong);
+r.textContent=
+ts.textContent+d.text;
 
 box.appendChild(r);
+
+box.scrollTop=box.scrollHeight;
+
+return;
+
+}
+
+
+/* GİRİŞ */
+
+if(d.type==="join"){
+
+r.className="msg join-msg";
+
+r.textContent=
+"🟢 "+d.name+" sohbete katıldı";
+
+const tm=document.createElement("span");
+
+tm.className="event-time";
+
+tm.textContent=
+" — "+time(d.createdAt);
+
+r.appendChild(tm);
+
+box.appendChild(r);
+
+box.scrollTop=box.scrollHeight;
+
+return;
+
+}
+
+
+/* ÇIKIŞ */
+
+if(d.type==="leave"){
+
+r.className="msg leave-msg";
+
+r.textContent=
+"🔴 "+d.name+" sohbetten ayrıldı";
+
+const tm=document.createElement("span");
+
+tm.className="event-time";
+
+tm.textContent=
+" — "+time(d.createdAt);
+
+r.appendChild(tm);
+
+box.appendChild(r);
+
+box.scrollTop=box.scrollHeight;
 
 return;
 
@@ -1037,20 +1139,29 @@ return;
 
 
 const av=document.createElement("span");
+
 const n=document.createElement("span");
+
 const t=document.createElement("span");
 
+
 av.className="avatar";
-n.className=d.type==="bot"?"name bot-name":"name";
 
 av.textContent=
 (d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
 
+
+n.className=
+d.type==="bot"?"name bot-name":"name";
+
 n.textContent=
 (d.name||"Misafir")+": ";
 
+
 t.textContent=d.text||"";
 
+
+/* MESAJ TİPLERİ */
 
 if(d.type==="applause")
 r.className="msg applause-msg";
@@ -1064,15 +1175,22 @@ r.className="msg whisper-msg";
 else if(d.type==="action")
 r.className="msg action-msg";
 
-else
-r.className=d.type==="bot"?"msg bot-msg":"msg";
+else if(d.type==="me")
+r.className="msg me-msg";
 
+else
+r.className=
+d.type==="bot"?"msg bot-msg":"msg";
+
+
+/* BOT */
 
 if(d.type==="bot"){
 
 const b=document.createElement("span");
 
 b.className="bot-badge";
+
 b.textContent="BOT";
 
 r.append(ts,b,av,n,t);
@@ -1090,8 +1208,14 @@ n.style.color=d.color;
 
 box.appendChild(r);
 
+box.scrollTop=box.scrollHeight;
+
 }
 
+
+/* ===============================
+   MESAJLARI GETİR
+================================ */
 
 onValue(messagesRef,snap=>{
 
@@ -1101,16 +1225,16 @@ $("messages").innerHTML="";
 
 Object.values(data)
 .sort((a,b)=>(a.createdAt||0)-(b.createdAt||0))
-.forEach(appendMessage);
-
-$("messages").scrollTop=$("messages").scrollHeight;
+.forEach(d=>{
+appendMessage(d);
+});
 
 });
 
 
-/* =========================
+/* ===============================
    BOT
-========================= */
+================================ */
 
 function botReply(text,user){
 
@@ -1136,9 +1260,9 @@ return null;
 }
 
 
-/* =========================
+/* ===============================
    PRESENCE
-========================= */
+================================ */
 
 async function registerPresence(){
 
@@ -1146,24 +1270,30 @@ const activeName=
 $("name").value.trim()||defaultGuestName;
 
 const activeAvatar=$("userAvatar").value;
+
 const activeColor=$("userColor").value;
 
 const uref=ref(db,"presence/"+uid);
 
-try{
 
-await onDisconnect(uref).remove();
+try{
 
 await set(uref,{
 
-uid:uid,
 name:activeName,
+
 avatar:activeAvatar,
+
 color:activeColor,
+
 createdAt:Date.now(),
+
 lastSeen:Date.now()
 
 });
+
+
+onDisconnect(uref).remove();
 
 }catch(e){
 
@@ -1174,226 +1304,168 @@ console.error("Presence hata:",e);
 }
 
 
-async function sendSystemMessage(text,subtype){
+/* İLK GİRİŞ */
 
-try{
+registerPresence();
 
-await push(messagesRef,{
 
-name:"Sistem",
-text:text,
-type:"system",
-subtype:subtype,
+/* BİLGİ DEĞİŞİNCE */
+
+$("name").addEventListener(
+"input",
+registerPresence
+);
+
+$("userAvatar").addEventListener(
+"change",
+registerPresence
+);
+
+$("userColor").addEventListener(
+"change",
+registerPresence
+);
+
+
+/* ===============================
+   ÇEVRİM İÇİ LİSTE
+================================ */
+
+onValue(presenceRef,snap=>{
+
+const users=snap.val()||{};
+
+const arr=Object.entries(users);
+
+
+/*
+Yeni kullanıcı algılandı.
+Sistem mesajını yalnızca bu tarayıcı
+için ekliyoruz. Böylece aynı kişi için
+çok sayıda tekrar oluşturulmuyor.
+*/
+
+arr.forEach(([id,u])=>{
+
+if(
+id!==uid &&
+!knownUsers[id]
+){
+
+appendMessage({
+
+type:"join",
+
+name:u.name||"Misafir",
+
 createdAt:Date.now()
 
 });
 
-}catch(e){
-
-console.error("Sistem mesajı:",e);
-
 }
-
-}
-
-
-/* =========================
-   GİRİŞ
-========================= */
-
-let firstPresence=true;
-
-async function startPresence(){
-
-await registerPresence();
-
-if(firstPresence){
-
-firstPresence=false;
-
-const name=
-$("name").value.trim()||defaultGuestName;
-
-await sendSystemMessage(
-"🟢 "+name+" sohbete katıldı",
-"join"
-);
-
-}
-
-}
-
-startPresence();
-
-
-$("name").addEventListener("input",registerPresence);
-
-$("userAvatar").addEventListener("change",registerPresence);
-
-$("userColor").addEventListener("change",registerPresence);
-
-
-/* =========================
-   ÇIKIŞ
-========================= */
-
-let leaving=false;
-
-window.addEventListener("beforeunload",()=>{
-
-if(leaving)return;
-
-leaving=true;
-
-const name=
-$("name").value.trim()||defaultGuestName;
-
-const uref=ref(db,"presence/"+uid);
-
-onDisconnect(uref).remove();
 
 });
 
 
-/* =========================
-   ÇEVRİM İÇİ LİSTE
-========================= */
+/*
+Ayrılan kullanıcı
+*/
 
-onValue(presenceRef,snap=>{
+Object.keys(knownUsers).forEach(id=>{
 
-onlineUsers=snap.val()||{};
+if(
+id!==uid &&
+!users[id]
+){
 
-const box=$("onlineUsersList");
+const old=knownUsers[id];
 
-box.innerHTML="";
+appendMessage({
 
+type:"leave",
+
+name:old.name||"Misafir",
+
+createdAt:Date.now()
+
+});
+
+}
+
+});
+
+
+knownUsers={};
+
+arr.forEach(([id,u])=>{
+
+knownUsers[id]=u;
+
+});
+
+
+currentUsers=users;
+
+
+/* SAĞ MENÜ */
+
+$("onlineUsersList").innerHTML="";
+
+
+/* BOTLAR DEĞİŞMEDİ */
 
 staticBots.forEach(bot=>{
 
 const d=document.createElement("div");
 
-d.className="user-list-item bot-user";
+d.className="user-list-item";
+
+d.style.cursor="default";
 
 d.innerHTML=
-'<span>🤖</span>'+
-'<span>'+bot.avatar+" "+bot.name+"</span>";
+'<span class="user-online-dot"></span>'+
+bot.avatar+" "+bot.name;
 
-box.appendChild(d);
+$("onlineUsersList")
+.appendChild(d);
 
 });
 
 
-const arr=Object.values(onlineUsers);
+/* GERÇEK KULLANICILAR */
 
-if(arr.length===0){
-
-const p=document.createElement("p");
-
-p.className="note";
-p.textContent="Henüz başka kullanıcı yok.";
-
-box.appendChild(p);
-
-}
-
-
-arr.forEach(u=>{
-
-if(u.uid===uid)return;
+arr.forEach(([id,u])=>{
 
 const d=document.createElement("div");
 
 d.className="user-list-item";
 
+d.dataset.uid=id;
+
 d.innerHTML=
-'<span class="online-dot"></span>'+
-'<span>'+(u.avatar||"🎧")+" "+(u.name||"Misafir")+"</span>";
+'<span class="user-online-dot"></span>'+
+(u.avatar||"🎧")+" "+
+(u.name||"Misafir");
+
+
+/*
+Kullanıcıya tıklayınca
+özel mesaj aç
+*/
+
+if(id!==uid){
 
 d.onclick=()=>{
 
-selectedUser={
-
-uid:u.uid,
-name:u.name||"Misafir",
-avatar:u.avatar||"🎧"
-
-};
-
-openPrivateModal();
+openPrivateFor(
+id,
+u.name||"Misafir"
+);
 
 };
-
-box.appendChild(d);
-
-});
-
-});
-
-
-/* =========================
-   MESAJ GÖNDER
-========================= */
-
-async function sendMsg(
-text,
-type="user",
-customName=null,
-customAvatar=null,
-customColor=null
-){
-
-const n=
-customName||
-($("name").value.trim()||defaultGuestName);
-
-const av=
-customAvatar||$("userAvatar").value;
-
-const col=
-customColor||$("userColor").value;
-
-
-await registerPresence();
-
-
-/* /me KOMUTU */
-
-if(type==="user"&&text.toLowerCase().startsWith("/me ")){
-
-const action=text.substring(4).trim();
-
-if(action){
-
-await push(messagesRef,{
-
-name:n,
-text:"✨ "+action+" ✨",
-color:col,
-avatar:av,
-type:"action",
-createdAt:Date.now()
-
-});
-
-return;
-
-}
 
 }
 
 
-await push(messagesRef,{
-
-name:n,
-text:text,
-color:col,
-avatar:av,
-type:type,
-createdAt:Date.now()
-
-});
-
-
-const reply=botReply(text,n);
-
-if(reply)
+$("onlineUsersList")
+.append
