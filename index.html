@@ -195,7 +195,7 @@ font-weight:bold
 .whisper-msg{
 background:linear-gradient(135deg,#3b0764,#581c87);
 border:1px solid #c084fc;
-box-shadow: 0 0 10px rgba(192, 132, 252, 0.4);
+box-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
 }
 
 .action-msg{
@@ -288,7 +288,7 @@ font-size:15px
 input#text{
 flex:1;
 padding:12px;
-min-width:180px;
+min-width:150px;
 font-size:15px;
 transition: border 0.3s, box-shadow 0.3s;
 }
@@ -299,7 +299,23 @@ border-radius:8px;
 padding:12px 20px;
 background:#e00000;
 color:#fff;
-font-weight:bold
+font-weight:bold;
+cursor:pointer;
+}
+
+.tab-btn{
+background:#4338ca;
+color:#fff;
+border:0;
+border-radius:8px;
+padding:12px 14px;
+font-weight:bold;
+cursor:pointer;
+font-size:14px;
+transition:background 0.2s;
+}
+.tab-btn:hover{
+background:#4f46e5;
 }
 
 .action-btns{
@@ -374,7 +390,8 @@ color:#ff5555
 background:none;
 border:0;
 color:#fff;
-font-size:20px
+font-size:20px;
+cursor:pointer;
 }
 
 .user-list-item{
@@ -509,7 +526,8 @@ font-size:19px
 
 <input type="color" id="userColor" value="#ff5555">
 <input type="text" id="name" maxlength="30" placeholder="Adınız">
-<input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
+<input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın... (Örn: @Kullanici)" required>
+<button type="button" id="tabButton" class="tab-btn" title="Aktif kullanıcıyı etiketle">@ Tab</button>
 <button type="submit">Gönder</button>
 </form>
 
@@ -572,6 +590,7 @@ const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
 let sound=false;
+let onlineUserNames = [];
 
 let uid = localStorage.getItem("kralfm_uid");
 if(!uid){
@@ -619,7 +638,6 @@ function mentionUser(username){
   textInput.value = "@" + cleanName + " " + textInput.value;
   textInput.focus();
   
-  // Mobil ve masaüstünde görsel uyarı (Kutu kısa süreliğine parlar)
   textInput.style.border = "2px solid #c084fc";
   textInput.style.boxShadow = "0 0 10px #c084fc";
   setTimeout(() => {
@@ -627,6 +645,37 @@ function mentionUser(username){
     textInput.style.boxShadow = "";
   }, 1000);
 }
+
+// Otomatik Tab Tuşu / Butonu Mantığı (Hızlı Etiketleme)
+function handleTabComplete() {
+  const textInput = $("text");
+  const val = textInput.value.trim();
+  
+  // Eğer metin @ ile başlıyorsa veya harf yazıldıysa eşleşen ilk kullanıcıyı bul
+  let query = "";
+  if (val.startsWith("@")) {
+    query = val.substring(1).toLowerCase();
+  } else if (val.length > 0) {
+    query = val.toLowerCase();
+  }
+
+  const match = onlineUserNames.find(u => u.toLowerCase().startsWith(query));
+  if (match) {
+    textInput.value = "@" + match + " ";
+  } else if (onlineUserNames.length > 0) {
+    // Eşleşme yoksa listedeki ilk kişiyi seç
+    textInput.value = "@" + onlineUserNames[0] + " ";
+  }
+  textInput.focus();
+}
+
+$("tabButton").onclick = handleTabComplete;
+$("text").addEventListener("keydown", (e) => {
+  if (e.key === "Tab") {
+    e.preventDefault();
+    handleTabComplete();
+  }
+});
 
 function appendMessage(d){
 const box=$("messages");
@@ -654,13 +703,11 @@ av.textContent=(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
 
 n.className=d.type==="bot"?"name bot-name":"name";
 n.textContent=(d.name||"Misafir")+": ";
-
-// İsime (tab atmak için) tıklama olayı ekleme (Mobilde ve masaüstünde çalışır)
 n.onclick = () => mentionUser(d.name);
 
-// Eğer mesaj içinde kullanıcının kendi adı geçiyorsa veya @ ile etiketlendiyse özel stil verelim
 let msgText = d.text || "";
 const myCurrentName = $("name").value.trim() || defaultGuestName;
+
 if(msgText.includes("@" + myCurrentName)){
   d.type = "whisper";
 }
@@ -687,13 +734,8 @@ if(d.type!=="bot"&&d.color) n.style.color=d.color;
 box.appendChild(r);
 box.scrollTop=box.scrollHeight;
 
-// Eğer mesaj size (etiketlenerek) geldiyse özel ses çal veya uyar
 if(msgText.includes("@" + myCurrentName)){
   const snd=notification;
-  snd.currentTime=0;
-  snd.play().catch(()=>{});
-} else if(sound){
-  const snd=d.type==="applause"?applause:notification;
   snd.currentTime=0;
   snd.play().catch(()=>{});
 }
@@ -778,8 +820,10 @@ onValue(presenceRef,snap=>{
 const users=snap.val()||{};
 const arr=Object.values(users);
 $("onlineUsersList").innerHTML="";
+onlineUserNames = [];
 
 staticBots.forEach(bot=>{
+onlineUserNames.push(bot.name);
 const d=document.createElement("div");
 d.className="user-list-item";
 d.textContent=bot.avatar+" "+bot.name;
@@ -791,10 +835,10 @@ $("onlineUsersList").appendChild(d);
 });
 
 arr.forEach(u=>{
+onlineUserNames.push(u.name);
 const d=document.createElement("div");
 d.className="user-list-item";
 d.textContent=(u.avatar||"🎧")+" "+u.name;
-// Sağ menüdeki çevrimiçi kullanıcıya tıklayınca da tab atma aktif
 d.onclick = () => {
   mentionUser(u.name);
   closeDrawer();
@@ -869,7 +913,7 @@ if(!a||!t){alert("Lütfen sanatçı ve şarkı adını yazın.");return;}
 try{
 await sendMsg('🎵 İSTEK PARÇA: '+a+' - "'+t+'"',"request");
 $("songArtist").value="";
-$("songTitle").value="";
+$("songTitle","").value="";
 $("requestModal").style.display="none";
 $("statusText").textContent="Sohbet odası hazır. 🤖";
 }catch(err){
