@@ -7,7 +7,14 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+overflow-x:hidden
+}
 
 header{
 background:#b00000;
@@ -201,16 +208,24 @@ border:1px solid #c084fc
 background:linear-gradient(135deg,#1e3a8a,#172554);
 border:1px solid #3b82f6;
 color:#93c5fd;
-font-style:italic
+font-style:italic;
+font-weight:bold
 }
 
 .system-msg{
-background:#222;
-border:1px dashed #555;
-color:#aaa;
-font-style:italic;
+background:linear-gradient(135deg,#171717,#242424);
+border:1px solid #555;
+color:#ddd;
+font-style:normal;
 text-align:center;
-font-size:13px
+font-size:14px;
+font-weight:bold
+}
+
+.private-msg{
+background:linear-gradient(135deg,#32104d,#1d1230);
+border:1px solid #c084fc;
+color:#f3e8ff
 }
 
 .time{
@@ -241,6 +256,16 @@ padding:2px 6px;
 border-radius:4px;
 margin-right:6px;
 background:#7c3aed
+}
+
+.me-name{
+color:#60a5fa;
+font-weight:bold
+}
+
+.me-text{
+color:#bfdbfe;
+font-style:italic
 }
 
 form{
@@ -316,6 +341,7 @@ font-weight:bold
 .heart-btn{background:#be123c}
 .fire-btn{background:#c2410c}
 .request-btn{background:#047857}
+.complete-btn{background:#2563eb}
 
 .note{
 color:#aaa;
@@ -375,7 +401,29 @@ background:#222;
 border-radius:6px;
 display:flex;
 gap:8px;
-align-items:center
+align-items:center;
+cursor:pointer;
+transition:.2s
+}
+
+.user-list-item:hover{
+background:#333
+}
+
+.user-actions{
+margin-left:auto;
+display:flex;
+gap:4px
+}
+
+.user-small-btn{
+background:#444;
+border:1px solid #666;
+color:#fff;
+border-radius:5px;
+padding:4px 6px;
+font-size:11px;
+cursor:pointer
 }
 
 .modal-overlay{
@@ -419,7 +467,17 @@ justify-content:flex-end;
 margin-top:15px
 }
 
+.target-user{
+background:#222;
+border:1px solid #555;
+padding:9px;
+border-radius:7px;
+margin-bottom:8px;
+color:#ddd
+}
+
 @media(max-width:600px){
+
 .radio-banner{
 align-items:flex-start;
 flex-direction:column
@@ -431,6 +489,10 @@ align-self:flex-end
 
 .radio-logo-text h1{
 font-size:19px
+}
+
+.user-list-item{
+font-size:14px
 }
 }
 </style>
@@ -444,10 +506,6 @@ font-size:19px
 
 <div>
 
-<button id="soundToggle" class="action-btn" type="button">
-🔔 Ses Açık
-</button>
-
 <button id="menuTrigger" class="menu-trigger" type="button">
 ☰
 </button>
@@ -457,6 +515,11 @@ font-size:19px
 </header>
 
 <main>
+
+<!-- =========================
+     RADYO BÖLÜMÜ
+     DOKUNULMADI
+========================= -->
 
 <div class="card radio-player-card">
 
@@ -499,7 +562,6 @@ CANLI YAYIN
 
 <div class="popup-player-box">
 
-<!-- iPhone ve Android için doğrudan çalışan dinleme sayfası -->
 <a
 href="http://kralfm.radiostream321.com/"
 target="_blank"
@@ -511,7 +573,6 @@ id="toggleRadio">
 
 </a>
 
-<!-- Alternatif doğrudan dinleme bağlantısı -->
 <a
 href="http://kralfm.radiostream321.com/"
 target="_blank"
@@ -535,6 +596,10 @@ style="margin-top:8px;text-align:center">
 
 </div>
 
+
+<!-- =========================
+     SOHBET
+========================= -->
 
 <div class="card">
 
@@ -576,12 +641,22 @@ maxlength="300"
 placeholder="Mesajınızı yazın..."
 required>
 
+<button
+id="completeName"
+class="action-btn complete-btn"
+type="button">
+👤 Tamamla
+</button>
+
 <button type="submit">
 Gönder
 </button>
 
 </form>
 
+<p class="note">
+💡 Örnek: <b>/me alkışladı 👏</b>
+</p>
 
 <div class="action-btns">
 
@@ -632,6 +707,10 @@ Sohbet odası hazır. 🤖
 </main>
 
 
+<!-- =========================
+     KULLANICI MENÜSÜ
+========================= -->
+
 <div id="drawerOverlay" class="drawer-overlay"></div>
 
 <aside id="userDrawer" class="user-drawer">
@@ -655,6 +734,10 @@ Kimse yok...
 
 </aside>
 
+
+<!-- =========================
+     İSTEK PARÇA
+========================= -->
 
 <div id="requestModal" class="modal-overlay">
 
@@ -697,16 +780,63 @@ Gönder 🎶
 </div>
 
 
+<!-- =========================
+     ÖZEL MESAJ
+========================= -->
+
+<div id="privateModal" class="modal-overlay">
+
+<div class="modal-box">
+
+<h3>💬 Özel Mesaj</h3>
+
+<div id="privateTarget" class="target-user">
+Kullanıcı seçilmedi
+</div>
+
+<input
+id="privateText"
+maxlength="300"
+placeholder="Özel mesajınızı yazın...">
+
+<div class="modal-actions">
+
+<button
+id="closePrivateModal"
+class="action-btn"
+type="button">
+İptal
+</button>
+
+<button
+id="sendPrivate"
+class="action-btn request-btn"
+type="button">
+Gönder 💬
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     SESLER
+     KULLANILMIYOR
+========================= -->
+
 <audio
 id="notificationSound"
 src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
-preload="auto">
+preload="none">
 </audio>
 
 <audio
 id="applauseSound"
 src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
-preload="auto">
+preload="none">
 </audio>
 
 
@@ -725,6 +855,10 @@ onDisconnect
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
+
+/* =========================
+   FIREBASE
+========================= */
 
 const firebaseConfig={
 
@@ -753,20 +887,24 @@ const messagesRef=ref(db,"messages");
 
 const presenceRef=ref(db,"presence");
 
+const privateMessagesRef=ref(db,"privateMessages");
+
 
 const $=id=>document.getElementById(id);
 
-let sound=true;
+
+/* =========================
+   KULLANICI
+========================= */
 
 const uid=
 "user_"+Math.random().toString(36).slice(2,10);
 
-const notification=$("notificationSound");
-
-const applause=$("applauseSound");
-
 const defaultGuestName=
 "Misafir_"+Math.floor(Math.random()*900+100);
+
+
+let selectedPrivateUser=null;
 
 
 const staticBots=[
@@ -782,15 +920,9 @@ const staticBots=[
 ];
 
 
-$("soundToggle").onclick=()=>{
-
-sound=!sound;
-
-$("soundToggle").textContent=
-sound?"🔔 Ses Açık":"🔕 Sessiz";
-
-};
-
+/* =========================
+   MENÜ
+========================= */
 
 function openDrawer(){
 
@@ -817,9 +949,9 @@ $("closeDrawer").onclick=closeDrawer;
 $("drawerOverlay").onclick=closeDrawer;
 
 
-/* ===============================
-   SOHBET SİSTEMİ
-================================ */
+/* =========================
+   SAAT
+========================= */
 
 function time(t){
 
@@ -832,11 +964,16 @@ minute:"2-digit"
 }
 
 
+/* =========================
+   MESAJ GÖRÜNÜMÜ
+========================= */
+
 function appendMessage(d){
 
 const box=$("messages");
 
 if(!box||!d)return;
+
 
 const r=document.createElement("div");
 
@@ -848,12 +985,14 @@ ts.textContent=
 "["+time(d.createdAt)+"] ";
 
 
+/* SİSTEM MESAJI */
+
 if(d.type==="system"){
 
 r.className="msg system-msg";
 
-r.textContent=
-ts.textContent+" "+d.text;
+r.innerHTML=
+"<b>"+ts.textContent+" "+escapeHtml(d.text)+"</b>";
 
 box.appendChild(r);
 
@@ -863,6 +1002,32 @@ return;
 
 }
 
+
+/* /ME */
+
+if(d.type==="me"){
+
+r.className="msg action-msg";
+
+r.innerHTML=
+ts.outerHTML+
+"✨ <span class='me-name'>"+
+escapeHtml(d.name||"Misafir")+
+"</span> "+
+"<span class='me-text'>"+
+escapeHtml(d.text||"")+
+"</span>";
+
+box.appendChild(r);
+
+box.scrollTop=box.scrollHeight;
+
+return;
+
+}
+
+
+/* NORMAL */
 
 const av=document.createElement("span");
 
@@ -899,6 +1064,9 @@ r.className="msg whisper-msg";
 else if(d.type==="action")
 r.className="msg action-msg";
 
+else if(d.type==="private")
+r.className="msg private-msg";
+
 else
 r.className=
 d.type==="bot"?"msg bot-msg":"msg";
@@ -929,22 +1097,26 @@ box.appendChild(r);
 
 box.scrollTop=box.scrollHeight;
 
+}
 
-if(sound){
 
-const snd=
-d.type==="applause"
-?applause
-:notification;
+/* HTML GÜVENLİĞİ */
 
-snd.currentTime=0;
+function escapeHtml(value){
 
-snd.play().catch(()=>{});
+return String(value||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
-}
 
+/* =========================
+   MESAJLARI DİNLE
+========================= */
 
 onValue(messagesRef,snap=>{
 
@@ -952,36 +1124,54 @@ const data=snap.val()||{};
 
 $("messages").innerHTML="";
 
-Object.values(data).forEach(d=>{
+Object.values(data)
+.sort((a,b)=>(a.createdAt||0)-(b.createdAt||0))
+.forEach(d=>{
+
 appendMessage(d);
-});
 
 });
 
+});
+
+
+/* =========================
+   BOT
+========================= */
 
 function botReply(text,user){
 
 const m=text.toLowerCase();
 
+
 if(user.toLowerCase()==="kral bot")
 return null;
+
 
 if(m.includes("selam"))
 return "Aleykümselam @"+user+" 👋";
 
+
 if(m.includes("merhaba"))
 return "Merhaba @"+user+"! Kral FM'e hoş geldin. 📻";
+
 
 if(m.includes("kahve"))
 return "☕ Sayın @"+user+", kahveniz hazır! Afiyet olsun.";
 
+
 if(m.includes("istek"))
 return "🎵 İstek mesajınız yayıncıya iletildi. Keyifli dinlemeler!";
+
 
 return null;
 
 }
 
+
+/* =========================
+   PRESENCE
+========================= */
 
 async function registerPresence(){
 
@@ -998,13 +1188,39 @@ const uref=ref(db,"presence/"+uid);
 try{
 
 await set(uref,{
+
 name:activeName,
+
 avatar:activeAvatar,
+
 color:activeColor,
+
 createdAt:Date.now()
+
 });
 
-onDisconnect(uref).remove();
+
+/*
+Kullanıcı bağlantısı koparsa
+ayrılma mesajı yazılacak.
+*/
+
+const leaveRef=push(messagesRef);
+
+await onDisconnect(uref).remove();
+
+await onDisconnect(leaveRef).set({
+
+name:activeName,
+
+text:"🔴 "+activeName+" sohbetten ayrıldı.",
+
+type:"system",
+
+createdAt:Date.now()
+
+});
+
 
 }catch(e){
 
@@ -1015,11 +1231,146 @@ console.error("Presence hata:",e);
 }
 
 
-registerPresence();
+/* =========================
+   GİRİŞ MESAJI
+========================= */
 
+async function announceJoin(){
+
+const activeName=
+$("name").value.trim()||defaultGuestName;
+
+
+await push(messagesRef,{
+
+name:activeName,
+
+text:"🟢 "+activeName+" sohbete katıldı. Hoş geldin! 👋",
+
+type:"system",
+
+createdAt:Date.now()
+
+});
+
+}
+
+
+/* =========================
+   PRESENCE DİNLE
+========================= */
+
+onValue(presenceRef,snap=>{
+
+const users=snap.val()||{};
+
+const arr=Object.entries(users);
+
+$("onlineUsersList").innerHTML="";
+
+
+/* MEVCUT BOTLARA DOKUNULMADI */
+
+staticBots.forEach(bot=>{
+
+const d=document.createElement("div");
+
+d.className="user-list-item";
+
+d.innerHTML=
+"<span>"+bot.avatar+" "+escapeHtml(bot.name)+"</span>";
+
+$("onlineUsersList")
+.appendChild(d);
+
+});
+
+
+/* GERÇEK KULLANICILAR */
+
+arr.forEach(([id,u])=>{
+
+if(id===uid)return;
+
+const d=document.createElement("div");
+
+d.className="user-list-item";
+
+
+const info=document.createElement("span");
+
+info.textContent=
+(u.avatar||"🎧")+" "+(u.name||"Misafir");
+
+
+const actions=document.createElement("div");
+
+actions.className="user-actions";
+
+
+const pm=document.createElement("button");
+
+pm.className="user-small-btn";
+
+pm.textContent="💬";
+
+pm.title="Özel mesaj";
+
+pm.onclick=()=>{
+
+openPrivateModal({
+
+uid:id,
+
+name:u.name||"Misafir",
+
+avatar:u.avatar||"🎧"
+
+});
+
+};
+
+
+const coffee=document.createElement("button");
+
+coffee.className="user-small-btn";
+
+coffee.textContent="☕";
+
+coffee.title="Kahve ikram et";
+
+coffee.onclick=()=>{
+
+sendCoffeeToUser({
+
+uid:id,
+
+name:u.name||"Misafir",
+
+avatar:u.avatar||"🎧"
+
+});
+
+};
+
+
+actions.append(pm,coffee);
+
+d.append(info,actions);
+
+$("onlineUsersList").appendChild(d);
+
+});
+
+});
+
+
+/* =========================
+   INPUT DEĞİŞİKLİKLERİ
+========================= */
 
 $("name").addEventListener(
-"input",
+"change",
 registerPresence
 );
 
@@ -1034,46 +1385,9 @@ registerPresence
 );
 
 
-onValue(presenceRef,snap=>{
-
-const users=snap.val()||{};
-
-const arr=Object.values(users);
-
-$("onlineUsersList").innerHTML="";
-
-
-staticBots.forEach(bot=>{
-
-const d=document.createElement("div");
-
-d.className="user-list-item";
-
-d.textContent=
-bot.avatar+" "+bot.name;
-
-$("onlineUsersList")
-.appendChild(d);
-
-});
-
-
-arr.forEach(u=>{
-
-const d=document.createElement("div");
-
-d.className="user-list-item";
-
-d.textContent=
-(u.avatar||"🎧")+" "+u.name;
-
-$("onlineUsersList")
-.appendChild(d);
-
-});
-
-});
-
+/* =========================
+   GENEL MESAJ GÖNDER
+========================= */
 
 async function sendMsg(
 text,
@@ -1098,12 +1412,19 @@ await registerPresence();
 
 
 await push(messagesRef,{
+
 name:n,
+
 text,
+
 color:col,
+
 avatar:av,
+
 type,
+
 createdAt:Date.now()
+
 });
 
 
@@ -1115,10 +1436,15 @@ if(reply){
 setTimeout(()=>{
 
 push(messagesRef,{
+
 name:"Kral Bot",
+
 text:reply,
+
 type:"bot",
+
 createdAt:Date.now()
+
 });
 
 },500);
@@ -1128,25 +1454,57 @@ createdAt:Date.now()
 }
 
 
+/* =========================
+   FORM
+========================= */
+
 $("form").onsubmit=async e=>{
 
 e.preventDefault();
 
-const t=$("text").value.trim();
+const input=$("text");
 
-if(!t)return;
+const raw=input.value.trim();
 
+if(!raw)return;
+
+
+/* /ME KOMUTU */
+
+if(raw.toLowerCase().startsWith("/me ")){
+
+const action=raw.substring(4).trim();
+
+if(action){
+
+await sendMsg(
+action,
+"me"
+);
+
+input.value="";
+
+return;
+
+}
+
+}
+
+
+/* NORMAL */
 
 try{
 
-await sendMsg(t);
+await sendMsg(raw);
 
 $("statusText").textContent=
 "Sohbet odası hazır. 🤖";
 
-$("text").value="";
+input.value="";
 
 }catch(err){
+
+console.error(err);
 
 $("statusText").textContent=
 "Mesaj gönderilemedi.";
@@ -1156,21 +1514,39 @@ $("statusText").textContent=
 };
 
 
+/* =========================
+   ALKIŞ
+========================= */
+
 $("sendApplause").onclick=()=>sendMsg(
 "👏 Coşkulu bir alkış gönderdi!",
 "applause"
 );
 
 
+/* =========================
+   GENEL KAHVE
+========================= */
+
 $("sendCoffee").onclick=()=>sendMsg(
-"☕ Herkese sıcacık kahve ikram etti!"
+"☕ Herkese sıcacık kahve ikram etti!",
+"action"
 );
 
+
+/* =========================
+   KALP
+========================= */
 
 $("sendHeart").onclick=()=>sendMsg(
-"❤️ Kucak dolusu sevgiler gönderdi!"
+"❤️ Kucak dolusu sevgiler gönderdi!",
+"action"
 );
 
+
+/* =========================
+   ALEV
+========================= */
 
 $("sendFire").onclick=()=>sendMsg(
 "🔥 Ortamı alevlendirdi!",
@@ -1178,21 +1554,300 @@ $("sendFire").onclick=()=>sendMsg(
 );
 
 
-$("clearChat").onclick=async()=>{
+/* =========================
+   KULLANICIYA KAHVE
+========================= */
 
-if(confirm(
-"Sohbet odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?"
-)){
+async function sendCoffeeToUser(user){
 
-await set(messagesRef,null);
+const sender=
+$("name").value.trim()||defaultGuestName;
+
+
+await sendMsg(
+"☕ "+sender+" → "+user.name+" kullanıcısına kahve ikram etti!",
+"action"
+);
+
+}
+
+
+/* =========================
+   İSİM TAMAMLAMA
+========================= */
+
+function completeUsername(){
+
+const input=$("text");
+
+const value=input.value.trim();
+
+
+if(!value){
 
 $("statusText").textContent=
-"Ekran herkeste temizlendi.";
+"Önce bir kullanıcı adının birkaç harfini yaz.";
+
+return;
+
+}
+
+
+const search=value
+.replace(/^@/,"")
+.toLocaleLowerCase("tr-TR");
+
+
+const users=$("onlineUsersList")
+.querySelectorAll(".user-list-item");
+
+
+/*
+Önce gerçek Firebase kullanıcılarını
+presence üzerinden buluyoruz.
+*/
+
+onValue(presenceRef,snap=>{
+
+const data=snap.val()||{};
+
+let found=null;
+
+
+Object.entries(data).some(([id,u])=>{
+
+if(id===uid)return false;
+
+const name=(u.name||"").toLocaleLowerCase("tr-TR");
+
+if(name.startsWith(search)){
+
+found=u.name;
+
+return true;
+
+}
+
+return false;
+
+},{onlyOnce:true});
+
+
+if(found){
+
+input.value="@"+found+" ";
+
+input.focus();
+
+$("statusText").textContent=
+"👤 "+found+" tamamlandı.";
+
+}else{
+
+$("statusText").textContent=
+"Bu isimle çevrim içi kullanıcı bulunamadı.";
+
+}
+
+});
+
+}
+
+
+$("completeName").onclick=completeUsername;
+
+
+/*
+Bilgisayarda TAB tuşu.
+Telefonda ise 👤 Tamamla butonu.
+*/
+
+$("text").addEventListener("keydown",e=>{
+
+if(e.key==="Tab"){
+
+e.preventDefault();
+
+completeUsername();
+
+}
+
+});
+
+
+/* =========================
+   ÖZEL MESAJ MODALI
+========================= */
+
+function openPrivateModal(user){
+
+selectedPrivateUser=user;
+
+$("privateTarget").textContent=
+"💬 "+user.avatar+" "+user.name;
+
+$("privateText").value="";
+
+$("privateModal").style.display="flex";
+
+$("privateText").focus();
+
+}
+
+
+function closePrivateModal(){
+
+$("privateModal").style.display="none";
+
+selectedPrivateUser=null;
+
+}
+
+
+$("closePrivateModal").onclick=
+closePrivateModal;
+
+
+/* =========================
+   ÖZEL MESAJ GÖNDER
+========================= */
+
+$("sendPrivate").onclick=async()=>{
+
+if(!selectedPrivateUser)return;
+
+
+const text=
+$("privateText").value.trim();
+
+if(!text)return;
+
+
+const sender=
+$("name").value.trim()||defaultGuestName;
+
+
+/*
+Konuşma kimliği iki kullanıcı ID'sinin
+sıralanmış birleşiminden oluşturuluyor.
+*/
+
+const ids=[
+uid,
+selectedPrivateUser.uid
+].sort();
+
+
+const conversationId=
+ids[0]+"_"+ids[1];
+
+
+try{
+
+await push(
+ref(
+db,
+"privateMessages/"+conversationId
+),
+{
+
+from:uid,
+
+fromName:sender,
+
+to:selectedPrivateUser.uid,
+
+toName:selectedPrivateUser.name,
+
+text:text,
+
+createdAt:Date.now()
+
+});
+
+
+$("privateText").value="";
+
+$("statusText").textContent=
+"💬 Özel mesaj gönderildi.";
+
+closePrivateModal();
+
+}catch(e){
+
+console.error(e);
+
+$("statusText").textContent=
+"Özel mesaj gönderilemedi.";
 
 }
 
 };
 
+
+/* =========================
+   ÖZEL MESAJLARI DİNLE
+========================= */
+
+/*
+Bu bölüm mesajları Firebase'den alır.
+Gerçek gizlilik için Firebase Rules
+ayrıca ayarlanmalıdır.
+*/
+
+onValue(
+privateMessagesRef,
+snap=>{
+
+const all=snap.val()||{};
+
+Object.entries(all).forEach(
+([conversationId,messages])=>{
+
+if(!conversationId.includes(uid))
+return;
+
+Object.values(messages||{})
+.forEach(message=>{
+
+if(message.to===uid){
+
+showPrivateNotification(message);
+
+}
+
+});
+
+});
+
+});
+
+
+const shownPrivateMessages=new Set();
+
+
+function showPrivateNotification(message){
+
+const key=
+message.createdAt+"_"+message.from;
+
+
+if(shownPrivateMessages.has(key))
+return;
+
+
+shownPrivateMessages.add(key);
+
+
+$("statusText").textContent=
+"💬 "+message.fromName+" sana özel mesaj gönderdi.";
+
+}
+
+
+/* =========================
+   İSTEK PARÇA
+========================= */
 
 $("openRequestModal").onclick=()=>{
 
@@ -1250,6 +1905,136 @@ $("statusText").textContent=
 }
 
 };
+
+
+/* =========================
+   SOHBET TEMİZLE
+========================= */
+
+$("clearChat").onclick=async()=>{
+
+if(confirm(
+"Sohbet odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?"
+)){
+
+await set(messagesRef,null);
+
+$("statusText").textContent=
+"Ekran herkeste temizlendi.";
+
+}
+
+};
+
+
+/* =========================
+   SAAT BAŞI BOT
+========================= */
+
+function hourlyBot(){
+
+const now=new Date();
+
+if(now.getMinutes()!==0)
+return;
+
+
+const hourKey=
+now.getFullYear()+"_"+
+(now.getMonth()+1)+"_"+
+now.getDate()+"_"+
+now.getHours();
+
+
+const hourlyRef=
+ref(db,"hourlyBot/"+hourKey);
+
+
+set(hourlyRef,{
+
+name:"Kral Bot",
+
+text:
+"🕐 Saat başı bilgilendirme: Saat şu anda "+
+now.toLocaleTimeString(
+"tr-TR",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+)+". Kral FM'de güzel dinlemeler! 📻🎶",
+
+type:"bot",
+
+createdAt:Date.now()
+
+}).catch(e=>{
+
+console.error("Saat botu:",e);
+
+});
+
+
+onValue(
+hourlyRef,
+snap=>{
+
+const data=snap.val();
+
+if(!data)return;
+
+const exists=
+document.querySelector(
+"[data-hour='"+hourKey+"']"
+);
+
+if(exists)return;
+
+const box=$("messages");
+
+const r=document.createElement("div");
+
+r.className="msg bot-msg";
+
+r.dataset.hour=hourKey;
+
+r.innerHTML=
+"<b>🕐 ["+
+time(data.createdAt)+
+"] 🤖 Kral Bot:</b> "+
+escapeHtml(data.text);
+
+box.appendChild(r);
+
+box.scrollTop=box.scrollHeight;
+
+},
+{onlyOnce:true}
+);
+
+}
+
+
+/*
+Her 20 saniyede kontrol ediyor.
+*/
+
+hourlyBot();
+
+setInterval(hourlyBot,20000);
+
+
+/* =========================
+   BAŞLAT
+========================= */
+
+(async()=>{
+
+await registerPresence();
+
+await announceJoin();
+
+})();
 
 </script>
 
