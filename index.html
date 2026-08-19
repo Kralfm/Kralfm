@@ -47,10 +47,6 @@ padding:18px;
 margin-bottom:15px
 }
 
-/* =========================
-   RADYO - DOKUNULMADI
-========================= */
-
 .radio-player-card{
 background:linear-gradient(145deg,#180303,#2a0808);
 border:1px solid #aa0000;
@@ -166,10 +162,6 @@ text-align:center;
 font-weight:bold
 }
 
-/* =========================
-   SOHBET
-========================= */
-
 .chat-box-area{
 height:380px;
 overflow-y:auto;
@@ -209,41 +201,35 @@ font-weight:bold
 
 .whisper-msg{
 background:linear-gradient(135deg,#3b0764,#581c87);
-border:1px solid #c084fc;
-color:#f3e8ff
+border:1px solid #c084fc
 }
 
 .action-msg{
 background:linear-gradient(135deg,#1e3a8a,#172554);
 border:1px solid #3b82f6;
 color:#93c5fd;
-font-style:italic;
-font-weight:bold
+font-style:italic
 }
 
 .system-msg{
 background:#222;
 border:1px dashed #555;
-color:#bbb;
+color:#ddd;
 font-style:italic;
 text-align:center;
 font-size:13px
 }
 
-.join-msg{
-background:linear-gradient(135deg,#063b24,#052e1b);
-border:1px solid #22c55e;
+.system-join{
+border-color:#16a34a;
 color:#86efac;
-font-weight:bold;
-text-align:center
+font-weight:bold
 }
 
-.leave-msg{
-background:linear-gradient(135deg,#3b1111,#240909);
-border:1px solid #ef4444;
+.system-leave{
+border-color:#dc2626;
 color:#fca5a5;
-font-weight:bold;
-text-align:center
+font-weight:bold
 }
 
 .time{
@@ -274,16 +260,6 @@ padding:2px 6px;
 border-radius:4px;
 margin-right:6px;
 background:#7c3aed
-}
-
-.private-badge{
-font-size:10px;
-font-weight:bold;
-padding:3px 6px;
-border-radius:5px;
-background:#a855f7;
-color:#fff;
-margin-right:5px
 }
 
 form{
@@ -360,16 +336,11 @@ font-weight:bold
 .heart-btn{background:#be123c}
 .fire-btn{background:#c2410c}
 .request-btn{background:#047857}
-.private-btn{background:#7c3aed}
 
 .note{
 color:#aaa;
 font-size:13px
 }
-
-/* =========================
-   ÇEVRİMİÇİ KULLANICILAR
-========================= */
 
 .drawer-overlay{
 position:fixed;
@@ -426,14 +397,21 @@ border-radius:6px;
 display:flex;
 gap:8px;
 align-items:center;
-cursor:pointer
+cursor:pointer;
+border:1px solid transparent
 }
 
 .user-list-item:hover{
-background:#333
+border-color:#777;
+background:#292929
 }
 
-.user-online-dot{
+.bot-user{
+cursor:default;
+opacity:.9
+}
+
+.online-dot{
 width:8px;
 height:8px;
 background:#22c55e;
@@ -441,16 +419,6 @@ border-radius:50%;
 display:inline-block;
 flex-shrink:0
 }
-
-.user-private-label{
-margin-left:auto;
-font-size:10px;
-color:#c084fc
-}
-
-/* =========================
-   MODALLAR
-========================= */
 
 .modal-overlay{
 display:none;
@@ -468,7 +436,9 @@ border:1px solid #10b981;
 border-radius:12px;
 padding:20px;
 width:90%;
-max-width:400px
+max-width:400px;
+max-height:90vh;
+overflow-y:auto
 }
 
 .modal-box h3{
@@ -486,56 +456,105 @@ color:#fff;
 border-radius:6px
 }
 
-.modal-actions{
-display:flex;
-gap:10px;
-justify-content:flex-end;
-margin-top:15px
-}
-
-/* =========================
-   ÖZEL MESAJ KUTUSU
-========================= */
-
-.private-panel{
-display:none;
-background:linear-gradient(135deg,#24103a,#35105a);
-border:1px solid #a855f7;
-border-radius:10px;
-padding:12px;
-margin-bottom:12px
-}
-
-.private-panel.open{
-display:block
-}
-
-.private-panel-title{
-font-weight:bold;
-color:#e9d5ff;
-margin-bottom:8px
+.private-messages{
+max-height:280px;
+overflow-y:auto;
+background:#111;
+border-radius:8px;
+padding:8px;
+margin-top:10px
 }
 
 .private-message{
-background:#171020;
+background:#292929;
 border-radius:8px;
 padding:9px;
 margin:6px 0;
 font-size:14px
 }
 
-.private-message strong{
-color:#d8b4fe
+.private-message.mine{
+border-left:3px solid #10b981
 }
 
-.private-unread{
-animation:privatePulse 1.2s infinite
+.private-message.theirs{
+border-left:3px solid #c084fc
 }
 
-@keyframes privatePulse{
-0%{box-shadow:0 0 0 rgba(168,85,247,0)}
-50%{box-shadow:0 0 15px rgba(168,85,247,.7)}
-100%{box-shadow:0 0 0 rgba(168,85,247,0)}
+.private-time{
+font-size:10px;
+color:#888;
+margin-right:5px
+}
+
+.private-notification{
+display:none;
+position:fixed;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+z-index:2000;
+background:#7c3aed;
+color:#fff;
+padding:12px 18px;
+border-radius:10px;
+font-weight:bold;
+box-shadow:0 4px 20px rgba(0,0,0,.5);
+cursor:pointer
+}
+
+.private-badge{
+display:inline-block;
+background:#ef4444;
+color:#fff;
+font-size:11px;
+min-width:20px;
+padding:2px 6px;
+border-radius:12px;
+text-align:center;
+margin-left:5px
+}
+
+.modal-actions{
+display:flex;
+gap:8px;
+justify-content:flex-end;
+margin-top:12px;
+flex-wrap:wrap
+}
+
+.target-info{
+background:#111;
+border-radius:8px;
+padding:10px;
+margin:8px 0;
+color:#ddd
+}
+
+.private-input{
+width:100%;
+padding:12px;
+background:#2a2a2a;
+border:1px solid #444;
+color:#fff;
+border-radius:8px;
+margin-top:8px
+}
+
+.private-action-buttons{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin-top:8px
+}
+
+.private-action-buttons button{
+border:0;
+border-radius:7px;
+padding:8px 10px;
+color:#fff;
+cursor:pointer;
+font-weight:bold
 }
 
 @media(max-width:600px){
@@ -553,13 +572,11 @@ align-self:flex-end
 font-size:19px
 }
 
-input#name{
-width:110px
+.private-notification{
+width:90%;
+text-align:center
 }
 
-input#text{
-min-width:150px
-}
 }
 </style>
 </head>
@@ -571,20 +588,14 @@ min-width:150px
 <div>🎙️ Kral FM & Muhabbet</div>
 
 <div>
-
-<button id="menuTrigger" class="menu-trigger" type="button">
-☰
-</button>
-
+<button id="menuTrigger" class="menu-trigger" type="button">☰</button>
 </div>
 
 </header>
 
 <main>
 
-<!-- =========================
-     RADYO BÖLÜMÜ - AYNI
-========================= -->
+<!-- RADYO BÖLÜMÜNE DOKUNULMADI -->
 
 <div class="card radio-player-card">
 
@@ -661,25 +672,12 @@ style="margin-top:8px;text-align:center">
 
 </div>
 
-<!-- =========================
-     SOHBET
-========================= -->
 
 <div class="card">
 
 <h3 style="margin-top:0">
 💬 Canlı Sohbet Odası
 </h3>
-
-<div id="privatePanel" class="private-panel">
-
-<div class="private-panel-title">
-💌 Özel Mesajlar
-</div>
-
-<div id="privateMessages"></div>
-
-</div>
 
 <div id="messages" class="chat-box-area"></div>
 
@@ -723,40 +721,24 @@ Gönder
 
 <div class="action-btns">
 
-<button id="sendApplause"
-class="action-btn applause-btn"
-type="button">
+<button id="sendApplause" class="action-btn applause-btn" type="button">
 👏 Alkış
 </button>
 
-<button id="sendCoffee"
-class="action-btn coffee-btn"
-type="button">
+<button id="sendCoffee" class="action-btn coffee-btn" type="button">
 ☕ Kahve Ismarla
 </button>
 
-<button id="sendHeart"
-class="action-btn heart-btn"
-type="button">
+<button id="sendHeart" class="action-btn heart-btn" type="button">
 ❤️ Kalp At
 </button>
 
-<button id="sendFire"
-class="action-btn fire-btn"
-type="button">
+<button id="sendFire" class="action-btn fire-btn" type="button">
 🔥 Alev Et
 </button>
 
-<button id="openRequestModal"
-class="action-btn request-btn"
-type="button">
+<button id="openRequestModal" class="action-btn request-btn" type="button">
 🎵 İstek Yap
-</button>
-
-<button id="clearChat"
-class="action-btn"
-type="button">
-🗑️ Herkeste Temizle
 </button>
 
 </div>
@@ -769,9 +751,8 @@ Sohbet odası hazır. 🤖
 
 </main>
 
-<!-- =========================
-     KULLANICI MENÜSÜ
-========================= -->
+
+<!-- ÇEVRİM İÇİ MENÜ -->
 
 <div id="drawerOverlay" class="drawer-overlay"></div>
 
@@ -779,16 +760,17 @@ Sohbet odası hazır. 🤖
 
 <div class="drawer-header">
 
-<h3>👥 Çevrim İçi Üyeler</h3>
+<h3>👥 Çevrimiçi Üyeler</h3>
 
-<button
-id="closeDrawer"
-class="close-drawer"
-type="button">
+<button id="closeDrawer" class="close-drawer" type="button">
 ✕
 </button>
 
 </div>
+
+<p class="note">
+Kullanıcıya dokunarak özel mesaj gönderebilirsin.
+</p>
 
 <div id="onlineUsersList">
 Kimse yok...
@@ -796,9 +778,8 @@ Kimse yok...
 
 </aside>
 
-<!-- =========================
-     İSTEK MODALI
-========================= -->
+
+<!-- İSTEK MODALI -->
 
 <div id="requestModal" class="modal-overlay">
 
@@ -810,13 +791,9 @@ Kimse yok...
 Yayıncıya duyurmak istediğiniz şarkıyı yazın:
 </p>
 
-<input
-id="songArtist"
-placeholder="Sanatçı Adı">
+<input id="songArtist" placeholder="Sanatçı Adı">
 
-<input
-id="songTitle"
-placeholder="Şarkı Adı">
+<input id="songTitle" placeholder="Şarkı Adı">
 
 <div class="modal-actions">
 
@@ -840,40 +817,66 @@ Gönder 🎶
 
 </div>
 
-<!-- =========================
-     ÖZEL MESAJ MODALI
-========================= -->
+
+<!-- ÖZEL MESAJ MODALI -->
 
 <div id="privateModal" class="modal-overlay">
 
 <div class="modal-box">
 
-<h3>💌 Özel Mesaj</h3>
+<h3>
+💌 Özel Mesajlar
+<span id="privateBadge" class="private-badge" style="display:none">0</span>
+</h3>
 
-<p
-id="privateTargetText"
-style="font-size:13px;color:#ccc">
-</p>
+<div id="privateTarget" class="target-info">
+Kullanıcı seçilmedi.
+</div>
+
+<div id="privateMessages" class="private-messages">
+Henüz özel mesaj yok.
+</div>
 
 <input
 id="privateText"
+class="private-input"
 maxlength="300"
 placeholder="Özel mesajınızı yazın...">
 
-<div class="modal-actions">
-
-<button
-id="closePrivateModal"
-class="action-btn"
-type="button">
-İptal
-</button>
-
 <button
 id="sendPrivate"
-class="action-btn private-btn"
-type="button">
-Gönder 💌
+class="action-btn request-btn"
+type="button"
+style="width:100%;margin-top:8px">
+
+💌 Özel Mesaj Gönder
+
+</button>
+
+<div class="private-action-buttons">
+
+<button id="privateCoffee" style="background:#78350f" type="button">
+☕ Kahve
+</button>
+
+<button id="privateApplause" style="background:#d97706" type="button">
+👏 Alkış
+</button>
+
+<button id="privateHeart" style="background:#be123c" type="button">
+❤️ Kalp
+</button>
+
+<button id="privateFire" style="background:#c2410c" type="button">
+🔥 Alev
+</button>
+
+</div>
+
+<div class="modal-actions">
+
+<button id="closePrivateModal" class="action-btn" type="button">
+Kapat
 </button>
 
 </div>
@@ -881,6 +884,14 @@ Gönder 💌
 </div>
 
 </div>
+
+
+<!-- ÖZEL MESAJ UYARISI -->
+
+<div id="privateNotification" class="private-notification">
+💌 Yeni özel mesajınız var!
+</div>
+
 
 <script type="module">
 
@@ -894,14 +905,11 @@ push,
 onValue,
 set,
 onDisconnect,
-serverTimestamp
+transaction,
+update
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-
-/* =========================
-   FIREBASE
-========================= */
 
 const firebaseConfig={
 
@@ -915,98 +923,43 @@ projectId:"kralfm-muhabbet",
 
 storageBucket:"kralfm-muhabbet.firebasestorage.app",
 
-messagingSenderId:"638769846511",
+messagingSenderId:"638769511",
 
-appId:"1:638769846511:web:f6d8abb91564873996"
+appId:"1:638769511:web:f6d8abb91564873996"
 
 };
 
 
 const app=initializeApp(firebaseConfig);
-
 const db=getDatabase(app);
 
 const messagesRef=ref(db,"messages");
-
 const presenceRef=ref(db,"presence");
-
-const privateRef=ref(db,"privateMessages");
-
 
 const $=id=>document.getElementById(id);
 
-
-/* =========================
-   KULLANICI
-========================= */
-
 const uid=
 "user_"+Math.random().toString(36).slice(2,12);
-
-const sessionId=
-"session_"+Date.now()+"_"+Math.random().toString(36).slice(2,8);
 
 const defaultGuestName=
 "Misafir_"+Math.floor(Math.random()*900+100);
 
 
-let currentPrivateTarget=null;
-
-let privateUnread=false;
-
-let lastPresenceState={};
-
-
-/* =========================
-   MEVCUT BOTLAR
-   DOKUNULMADI
-========================= */
-
 const staticBots=[
 
 {name:"DuRu",avatar:"👩"},
-
 {name:"Eren",avatar:"👨"},
-
 {name:"LeyLi",avatar:"🌟"},
-
 {name:"RadyoDinliyorum",avatar:"🎧"}
 
 ];
 
 
-/* =========================
-   MENÜ
-========================= */
+let onlineUsers={};
+let selectedUser=null;
+let privateListenersStarted=false;
+let lastPrivateCount=0;
 
-function openDrawer(){
-
-$("userDrawer").classList.add("open");
-
-$("drawerOverlay").style.display="block";
-
-}
-
-
-function closeDrawer(){
-
-$("userDrawer").classList.remove("open");
-
-$("drawerOverlay").style.display="none";
-
-}
-
-
-$("menuTrigger").onclick=openDrawer;
-
-$("closeDrawer").onclick=closeDrawer;
-
-$("drawerOverlay").onclick=closeDrawer;
-
-
-/* =========================
-   SAAT
-========================= */
 
 function time(t){
 
@@ -1020,6 +973,29 @@ minute:"2-digit"
 
 
 /* =========================
+   MENÜ
+========================= */
+
+function openDrawer(){
+
+$("userDrawer").classList.add("open");
+$("drawerOverlay").style.display="block";
+
+}
+
+function closeDrawer(){
+
+$("userDrawer").classList.remove("open");
+$("drawerOverlay").style.display="none";
+
+}
+
+$("menuTrigger").onclick=openDrawer;
+$("closeDrawer").onclick=closeDrawer;
+$("drawerOverlay").onclick=closeDrawer;
+
+
+/* =========================
    MESAJ GÖRÜNTÜLEME
 ========================= */
 
@@ -1029,128 +1005,74 @@ const box=$("messages");
 
 if(!box||!d)return;
 
-
 const r=document.createElement("div");
 
 const ts=document.createElement("span");
 
 ts.className="time";
+ts.textContent="["+time(d.createdAt)+"] ";
 
-ts.textContent=
-"["+time(d.createdAt)+"] ";
-
-
-/* SİSTEM */
 
 if(d.type==="system"){
 
 r.className="msg system-msg";
 
-r.textContent=
-ts.textContent+" "+d.text;
+if(d.subtype==="join")
+r.classList.add("system-join");
+
+if(d.subtype==="leave")
+r.classList.add("system-leave");
+
+const strong=document.createElement("strong");
+
+strong.textContent=d.text;
+
+r.append(ts,strong);
 
 box.appendChild(r);
-
-box.scrollTop=box.scrollHeight;
 
 return;
 
 }
 
-
-/* GİRİŞ */
-
-if(d.type==="join"){
-
-r.className="msg join-msg";
-
-r.textContent=
-"🟢 "+ts.textContent+d.text;
-
-box.appendChild(r);
-
-box.scrollTop=box.scrollHeight;
-
-return;
-
-}
-
-
-/* ÇIKIŞ */
-
-if(d.type==="leave"){
-
-r.className="msg leave-msg";
-
-r.textContent=
-"🔴 "+ts.textContent+d.text;
-
-box.appendChild(r);
-
-box.scrollTop=box.scrollHeight;
-
-return;
-
-}
-
-
-/* NORMAL MESAJ */
 
 const av=document.createElement("span");
-
 const n=document.createElement("span");
-
 const t=document.createElement("span");
 
-
 av.className="avatar";
+n.className=d.type==="bot"?"name bot-name":"name";
 
 av.textContent=
 (d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
 
-
-n.className=
-d.type==="bot"?"name bot-name":"name";
-
 n.textContent=
 (d.name||"Misafir")+": ";
-
 
 t.textContent=d.text||"";
 
 
-/* MESAJ TÜRÜ */
-
 if(d.type==="applause")
-
 r.className="msg applause-msg";
 
 else if(d.type==="request")
-
 r.className="msg request-msg";
 
 else if(d.type==="whisper")
-
 r.className="msg whisper-msg";
 
 else if(d.type==="action")
-
 r.className="msg action-msg";
 
 else
+r.className=d.type==="bot"?"msg bot-msg":"msg";
 
-r.className=
-d.type==="bot"?"msg bot-msg":"msg";
-
-
-/* BOT */
 
 if(d.type==="bot"){
 
 const b=document.createElement("span");
 
 b.className="bot-badge";
-
 b.textContent="BOT";
 
 r.append(ts,b,av,n,t);
@@ -1162,41 +1084,14 @@ r.append(ts,av,n,t);
 }
 
 
-/* RENK */
-
 if(d.type!=="bot"&&d.color)
-
 n.style.color=d.color;
-
-
-/* İSİME TIKLAYINCA ÖZEL MESAJ */
-
-if(
-d.type!=="bot" &&
-d.uid &&
-d.uid!==uid
-){
-
-n.title="Özel mesaj gönder";
-
-n.onclick=()=>openPrivateModal(
-d.name,
-d.uid
-);
-
-}
 
 
 box.appendChild(r);
 
-box.scrollTop=box.scrollHeight;
-
 }
 
-
-/* =========================
-   MESAJLARI FIREBASE'DEN AL
-========================= */
 
 onValue(messagesRef,snap=>{
 
@@ -1204,52 +1099,37 @@ const data=snap.val()||{};
 
 $("messages").innerHTML="";
 
-
 Object.values(data)
-.sort((a,b)=>
-(a.createdAt||0)-(b.createdAt||0)
-)
-.forEach(d=>{
+.sort((a,b)=>(a.createdAt||0)-(b.createdAt||0))
+.forEach(appendMessage);
 
-appendMessage(d);
-
-});
+$("messages").scrollTop=$("messages").scrollHeight;
 
 });
 
 
 /* =========================
-   BOT CEVAPLARI
+   BOT
 ========================= */
 
 function botReply(text,user){
 
 const m=text.toLowerCase();
 
-
 if(user.toLowerCase()==="kral bot")
 return null;
 
-
 if(m.includes("selam"))
-
 return "Aleykümselam @"+user+" 👋";
 
-
 if(m.includes("merhaba"))
-
 return "Merhaba @"+user+"! Kral FM'e hoş geldin. 📻";
 
-
 if(m.includes("kahve"))
-
 return "☕ Sayın @"+user+", kahveniz hazır! Afiyet olsun.";
 
-
 if(m.includes("istek"))
-
 return "🎵 İstek mesajınız yayıncıya iletildi. Keyifli dinlemeler!";
-
 
 return null;
 
@@ -1257,70 +1137,33 @@ return null;
 
 
 /* =========================
-   KULLANICI BİLGİSİ
-========================= */
-
-function getUserData(){
-
-return {
-
-name:
-$("name").value.trim()||defaultGuestName,
-
-avatar:
-$("userAvatar").value,
-
-color:
-$("userColor").value
-
-};
-
-}
-
-
-/* =========================
-   ÇEVRİM İÇİ PRESENCE
+   PRESENCE
 ========================= */
 
 async function registerPresence(){
 
-const u=getUserData();
+const activeName=
+$("name").value.trim()||defaultGuestName;
 
-const uref=
-ref(db,"presence/"+uid);
+const activeAvatar=$("userAvatar").value;
+const activeColor=$("userColor").value;
 
+const uref=ref(db,"presence/"+uid);
 
 try{
+
+await onDisconnect(uref).remove();
 
 await set(uref,{
 
 uid:uid,
-
-name:u.name,
-
-avatar:u.avatar,
-
-color:u.color,
-
-sessionId:sessionId,
-
+name:activeName,
+avatar:activeAvatar,
+color:activeColor,
 createdAt:Date.now(),
-
-lastSeen:Date.now(),
-
-online:true
+lastSeen:Date.now()
 
 });
-
-
-onDisconnect(uref).update({
-
-online:false,
-
-lastSeen:serverTimestamp()
-
-});
-
 
 }catch(e){
 
@@ -1331,74 +1174,23 @@ console.error("Presence hata:",e);
 }
 
 
-/* =========================
-   GİRİŞ MESAJI
-========================= */
-
-async function sendJoinMessage(){
-
-const u=getUserData();
-
-
-await push(messagesRef,{
-
-uid:uid,
-
-name:u.name,
-
-avatar:u.avatar,
-
-color:u.color,
-
-type:"join",
-
-text:
-u.name+" sohbete katıldı.",
-
-createdAt:Date.now(),
-
-sessionId:sessionId
-
-});
-
-}
-
-
-/* =========================
-   ÇIKIŞ MESAJI
-========================= */
-
-async function sendLeaveMessage(){
-
-const u=getUserData();
-
+async function sendSystemMessage(text,subtype){
 
 try{
 
 await push(messagesRef,{
 
-uid:uid,
-
-name:u.name,
-
-avatar:u.avatar,
-
-color:u.color,
-
-type:"leave",
-
-text:
-u.name+" sohbetten ayrıldı.",
-
-createdAt:Date.now(),
-
-sessionId:sessionId
+name:"Sistem",
+text:text,
+type:"system",
+subtype:subtype,
+createdAt:Date.now()
 
 });
 
 }catch(e){
 
-console.log(e);
+console.error("Sistem mesajı:",e);
 
 }
 
@@ -1406,44 +1198,61 @@ console.log(e);
 
 
 /* =========================
-   İLK KAYIT
+   GİRİŞ
 ========================= */
 
-let initialPresenceDone=false;
-
+let firstPresence=true;
 
 async function startPresence(){
 
 await registerPresence();
 
-await sendJoinMessage();
+if(firstPresence){
 
-initialPresenceDone=true;
+firstPresence=false;
+
+const name=
+$("name").value.trim()||defaultGuestName;
+
+await sendSystemMessage(
+"🟢 "+name+" sohbete katıldı",
+"join"
+);
 
 }
 
+}
 
 startPresence();
 
 
+$("name").addEventListener("input",registerPresence);
+
+$("userAvatar").addEventListener("change",registerPresence);
+
+$("userColor").addEventListener("change",registerPresence);
+
+
 /* =========================
-   BİLGİ DEĞİŞİNCE GÜNCELLE
+   ÇIKIŞ
 ========================= */
 
-$("name").addEventListener(
-"input",
-registerPresence
-);
+let leaving=false;
 
-$("userAvatar").addEventListener(
-"change",
-registerPresence
-);
+window.addEventListener("beforeunload",()=>{
 
-$("userColor").addEventListener(
-"change",
-registerPresence
-);
+if(leaving)return;
+
+leaving=true;
+
+const name=
+$("name").value.trim()||defaultGuestName;
+
+const uref=ref(db,"presence/"+uid);
+
+onDisconnect(uref).remove();
+
+});
 
 
 /* =========================
@@ -1452,37 +1261,139 @@ registerPresence
 
 onValue(presenceRef,snap=>{
 
-const users=snap.val()||{};
+onlineUsers=snap.val()||{};
 
-const list=$("onlineUsersList");
+const box=$("onlineUsersList");
 
-list.innerHTML="";
+box.innerHTML="";
 
-
-/* BOTLAR HER ZAMAN GÖRÜNSÜN */
 
 staticBots.forEach(bot=>{
+
+const d=document.createElement("div");
+
+d.className="user-list-item bot-user";
+
+d.innerHTML=
+'<span>🤖</span>'+
+'<span>'+bot.avatar+" "+bot.name+"</span>";
+
+box.appendChild(d);
+
+});
+
+
+const arr=Object.values(onlineUsers);
+
+if(arr.length===0){
+
+const p=document.createElement("p");
+
+p.className="note";
+p.textContent="Henüz başka kullanıcı yok.";
+
+box.appendChild(p);
+
+}
+
+
+arr.forEach(u=>{
+
+if(u.uid===uid)return;
 
 const d=document.createElement("div");
 
 d.className="user-list-item";
 
 d.innerHTML=
-'<span class="user-online-dot"></span>'+
-'<span>'+bot.avatar+" "+bot.name+'</span>'+
-'<span class="user-private-label">BOT</span>';
+'<span class="online-dot"></span>'+
+'<span>'+(u.avatar||"🎧")+" "+(u.name||"Misafir")+"</span>";
 
-list.appendChild(d);
+d.onclick=()=>{
+
+selectedUser={
+
+uid:u.uid,
+name:u.name||"Misafir",
+avatar:u.avatar||"🎧"
+
+};
+
+openPrivateModal();
+
+};
+
+box.appendChild(d);
+
+});
 
 });
 
 
-/* GERÇEK KULLANICILAR */
+/* =========================
+   MESAJ GÖNDER
+========================= */
 
-Object.values(users).forEach(u=>{
+async function sendMsg(
+text,
+type="user",
+customName=null,
+customAvatar=null,
+customColor=null
+){
 
-if(u.online===false)return;
+const n=
+customName||
+($("name").value.trim()||defaultGuestName);
 
-const d=document.createElement("div");
+const av=
+customAvatar||$("userAvatar").value;
 
-d.className="user-li
+const col=
+customColor||$("userColor").value;
+
+
+await registerPresence();
+
+
+/* /me KOMUTU */
+
+if(type==="user"&&text.toLowerCase().startsWith("/me ")){
+
+const action=text.substring(4).trim();
+
+if(action){
+
+await push(messagesRef,{
+
+name:n,
+text:"✨ "+action+" ✨",
+color:col,
+avatar:av,
+type:"action",
+createdAt:Date.now()
+
+});
+
+return;
+
+}
+
+}
+
+
+await push(messagesRef,{
+
+name:n,
+text:text,
+color:col,
+avatar:av,
+type:type,
+createdAt:Date.now()
+
+});
+
+
+const reply=botReply(text,n);
+
+if(reply)
