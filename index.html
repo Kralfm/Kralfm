@@ -83,7 +83,7 @@ padding:12px;
 margin-bottom:10px;
 display:flex;
 align-items:center;
-justify-content:space-between;
+justify-content:between;
 gap:8px
 }
 
@@ -617,7 +617,7 @@ padding:2px 3px;
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase, ref, push, onValue, set, onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase, ref, push, onValue, set, remove, set as dbSet} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -815,22 +815,8 @@ color:activeColor,
 createdAt:Date.now()
 });
 
-onDisconnect(uref).remove();
-
-const disconnectMsgRef = push(messagesRef);
-onDisconnect(disconnectMsgRef).set({
-name: "Sistem",
-text: activeName + " sohbetten ayrıldı.",
-type: "system",
-createdAt: Date.now()
-});
-
-window.addEventListener("beforeunload", () => {
-  try {
-    uref.onDisconnect().cancel();
-    disconnectMsgRef.onDisconnect().cancel();
-  } catch(err) {}
-});
+let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "0") + 1;
+localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
 
 if(!sessionStorage.getItem("kralfm_joined_logged")){
   sessionStorage.setItem("kralfm_joined_logged", "true");
@@ -847,6 +833,26 @@ console.error("Presence hata:",e);
 }
 
 registerPresence();
+
+window.addEventListener("beforeunload", () => {
+  let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "1") - 1;
+  localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
+
+  if (openTabs <= 0) {
+    localStorage.removeItem("kralfm_open_tabs_" + uid);
+    const activeName = $("name").value.trim() || defaultGuestName;
+    const uref = ref(db, "presence/" + uid);
+    
+    remove(uref);
+    
+    push(messagesRef, {
+      name: "Sistem",
+      text: activeName + " sohbetten ayrıldı.",
+      type: "system",
+      createdAt: Date.now()
+    });
+  }
+});
 
 $("name").addEventListener("change", registerPresence);
 $("name").addEventListener("blur", registerPresence);
@@ -904,6 +910,7 @@ d.append(infoRow, actionRow);
 $("onlineUsersList").appendChild(d);
 }
 
+// Form Gönderme İşlevi
 $("form").onsubmit = async (e) => {
   e.preventDefault();
   const textInput = $("text");
@@ -934,18 +941,7 @@ $("form").onsubmit = async (e) => {
   });
 
   textInput.value = "";
-  if (activeWhisperTarget) {
-    cancelWhisper();
-  }
+  cancelWhisper();
 };
 
-$("sendApplause").onclick = async () => {
-  const name = $("name").value.trim() || defaultGuestName;
-  applause.currentTime = 0;
-  applause.play().catch(()=>{});
-  await push(messagesRef, {
-    name: name,
-    text: "👏 kocaman bir alkış gönderdi! 🎶",
-    type: "applause",
-    avatar: $("userAvatar").value,
-    color: $("userColor").value,
+// A
