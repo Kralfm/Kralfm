@@ -727,11 +727,11 @@ const $=id=>document.getElementById(id);
 let onlineUserNames=[];
 let activeWhisperTarget=null;
 
-let uid=sessionStorage.getItem("kralfm_session_uid");
+let uid=localStorage.getItem("kralfm_uid");
 
 if(!uid){
 uid="user_"+Math.random().toString(36).slice(2,10);
-sessionStorage.setItem("kralfm_session_uid",uid);
+localStorage.setItem("kralfm_uid",uid);
 }
 
 const applause=$("applauseSound");
@@ -750,10 +750,9 @@ if(localStorage.getItem("kralfm_color"))
 $("userColor").value=localStorage.getItem("kralfm_color");
 
 
-/* BOTLAR LİSTEDE GÖRÜNÜR ANCAK KONUŞMAZ (SADECE KRALFM YANIT VERİR) */
+/* BOTLAR KORUNDU */
 
 const staticBots=[
-{name:"kralfm",avatar:"🎙️"},
 {name:"DuRu",avatar:"👩"},
 {name:"Eren",avatar:"👨"},
 {name:"LeyLi",avatar:"🌟"},
@@ -842,7 +841,29 @@ textInput.style.boxShadow="";
 $("cancelWhisper").onclick=cancelWhisper;
 
 
-/* TAB TAMAMLAMA */
+/*
+==================================================
+TAB TAMAMLAMA
+==================================================
+
+Buradaki önemli düzeltme:
+
+Örneğin:
+
+"merhaba @Du"
+
+veya
+
+"merhaba @Du nasılsın"
+
+yazarken Tab basılırsa sadece o kullanıcı adı
+tamamlanır.
+
+Mesajın tamamı silinmez.
+
+Mesajın başında, ortasında ve sonunda çalışır.
+==================================================
+*/
 
 function handleTabComplete(){
 
@@ -855,10 +876,18 @@ const cursor=textInput.selectionStart;
 if(cursor===null)return;
 
 
+/* İmlecin bulunduğu kelimeyi bul */
+
 const before=value.substring(0,cursor);
 
 const match=before.match(/@([^\s@]*)$/);
 
+
+/*
+@ yoksa:
+Kullanıcı yazmaya devam etmişse otomatik olarak
+o kelimeyle eşleşen kullanıcı aranır.
+*/
 
 let query="";
 let replaceStart=cursor;
@@ -882,11 +911,15 @@ replaceStart=cursor-wordMatch[1].length;
 }
 
 
+/* Önce eşleşen kullanıcı */
+
 let matchName=
 onlineUserNames.find(u=>
 u.toLowerCase().startsWith(query)
 );
 
+
+/* Hiç eşleşme yoksa ilk kullanıcı */
 
 if(!matchName){
 
@@ -909,6 +942,8 @@ value.substring(cursor);
 textInput.value=newValue;
 
 
+/* İmleci tamamlanan ismin sonuna taşı */
+
 const newCursor=
 replaceStart+insertText.length;
 
@@ -918,6 +953,8 @@ try{
 textInput.setSelectionRange(newCursor,newCursor);
 }catch(e){}
 
+
+/* Küçük görsel uyarı */
 
 textInput.style.border="2px solid #4338ca";
 textInput.style.boxShadow="0 0 10px #4338ca";
@@ -930,8 +967,12 @@ textInput.style.boxShadow="";
 }
 
 
+/* Buton */
+
 $("tabButton").onclick=handleTabComplete;
 
+
+/* KLAVYE TAB */
 
 $("text").addEventListener("keydown",e=>{
 
@@ -948,7 +989,7 @@ return false;
 });
 
 
-/* MESAJ GÖRÜNTÜLEME VE ÖZEL MESAJ FİLTRESİ */
+/* MESAJ GÖRÜNTÜLEME */
 
 function appendMessage(d){
 
@@ -960,12 +1001,14 @@ const myCurrentName=
 $("name").value.trim()||defaultGuestName;
 
 
-/* Fısıltı mesajlarını sadece gönderen ve alan görür */
+/* Özel mesaj sadece ilgili kişilere */
 
-if(d.targetUser){
-if(d.name!==myCurrentName && d.targetUser!==myCurrentName){
+if(
+d.targetUser &&
+d.targetUser!==myCurrentName &&
+d.name!==myCurrentName
+){
 return;
-}
 }
 
 
@@ -976,6 +1019,8 @@ const ts=document.createElement("span");
 ts.className="time";
 ts.textContent="["+time(d.createdAt)+"] ";
 
+
+/* Sistem mesajı */
 
 if(d.type==="system"){
 
@@ -1017,8 +1062,24 @@ mentionUser(d.name);
 
 let msgText=d.text||"";
 
+
+/* Etiket */
+
+if(
+!d.targetUser &&
+d.type==="text" &&
+msgText.includes("@"+myCurrentName)
+){
+
+d.type="whisper";
+
+}
+
+
 t.textContent=msgText;
 
+
+/* Mesaj tipi */
 
 if(d.type==="applause")
 r.className="msg applause-msg";
@@ -1069,6 +1130,8 @@ box.scrollTop=box.scrollHeight;
 }
 
 
+/* MESAJLARI DİNLE */
+
 onValue(messagesRef,snap=>{
 
 const data=snap.val()||{};
@@ -1081,7 +1144,7 @@ Object.values(data)
 });
 
 
-/* PRESENCE (SAYFA GEZİNİNCE DÜŞMEYEN YAPI) */
+/* PRESENCE */
 
 async function registerPresence(){
 
@@ -1173,7 +1236,7 @@ $("userColor")
 .addEventListener("change",registerPresence);
 
 
-/* ÇEVRİMİÇİ LİSTE */
+/* ÇEVRİMİÇİ KİŞİLER */
 
 onValue(presenceRef,snap=>{
 
@@ -1185,6 +1248,8 @@ $("onlineUsersList").innerHTML="";
 
 onlineUserNames=[];
 
+
+/* BOTLAR */
 
 staticBots.forEach(bot=>{
 
@@ -1198,6 +1263,8 @@ true
 
 });
 
+
+/* GERÇEK KULLANICILAR */
 
 arr.forEach(u=>{
 
@@ -1237,68 +1304,4 @@ avatar+" "+name;
 
 
 const actionRow=
-document.createElement("div");
-
-actionRow.className=
-"user-action-row";
-
-
-const mentionBtn=
-document.createElement("button");
-
-mentionBtn.type="button";
-
-mentionBtn.className=
-"user-action-btn mention-action";
-
-mentionBtn.textContent="Etiket";
-
-mentionBtn.onclick=e=>{
-
-e.stopPropagation();
-
-mentionUser(name);
-
-};
-
-
-const whisperBtn=
-document.createElement("button");
-
-whisperBtn.type="button";
-
-whisperBtn.className=
-"user-action-btn whisper-action";
-
-whisperBtn.textContent="Fısılda";
-
-whisperBtn.onclick=e=>{
-
-e.stopPropagation();
-
-startWhisper(name);
-
-};
-
-
-actionRow.append(
-mentionBtn,
-whisperBtn
-);
-
-d.append(
-infoRow,
-actionRow
-);
-
-$("onlineUsersList")
-.appendChild(d);
-
-}
-
-
-/* MESAJ GÖNDERME */
-
-$("form").onsubmit=async e=>{
-
-e.prev
+document.createE
