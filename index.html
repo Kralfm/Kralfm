@@ -444,10 +444,7 @@ font-size:19px
 
 <div>
 
-<button id="soundToggle" class="action-btn" type="button">
-🔔 Ses Açık
-</button>
-
+<!-- Ses butonu tamamen kaldırıldı, sadece menü butonu bırakıldı -->
 <button id="menuTrigger" class="menu-trigger" type="button">
 ☰
 </button>
@@ -756,7 +753,8 @@ const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
 
-let sound=true;
+// Varsayılan olarak sessiz modda başlatıldı (false)
+let sound=false;
 
 const uid=
 "user_"+Math.random().toString(36).slice(2,10);
@@ -780,16 +778,6 @@ const staticBots=[
 {name:"RadyoDinliyorum",avatar:"🎧"}
 
 ];
-
-
-$("soundToggle").onclick=()=>{
-
-sound=!sound;
-
-$("soundToggle").textContent=
-sound?"🔔 Ses Açık":"🔕 Sessiz";
-
-};
 
 
 function openDrawer(){
