@@ -375,7 +375,8 @@ background:#222;
 border-radius:6px;
 display:flex;
 gap:8px;
-align-items:center
+align-items:center;
+cursor:pointer
 }
 
 .modal-overlay{
@@ -443,7 +444,7 @@ font-size:19px
 <div>🎙️ Kral FM & Muhabbet</div>
 
 <div>
-<button id="menuTrigger" class="menu-trigger" type="button">
+<button id="menuTrigger" class="menu-trigger" type="button" title="Çevrimiçi Üyeler">
 ☰
 </button>
 </div>
@@ -548,7 +549,7 @@ placeholder="Adınız">
 type="text"
 id="text"
 maxlength="300"
-placeholder="Mesajınızı yazın... (Kullanıcı adı için Tab tuşunu kullanabilirsiniz)"
+placeholder="Mesajınızı yazın..."
 required>
 
 <button type="submit">
@@ -680,9 +681,8 @@ const messagesRef=ref(db,"messages");
 const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
-let sound=true;
+let sound=true; // Kod içi mantık için tutuldu, ses butonu kaldırıldı
 
-// Yerel depolamadan kullanıcı ID ve bilgilerini koruma
 let uid = localStorage.getItem("kral_uid");
 if(!uid){
   uid = "user_" + Math.random().toString(36).slice(2,10);
@@ -769,8 +769,23 @@ r.append(ts,av,n,t);
 
 if(d.type!=="bot"&&d.color) n.style.color=d.color;
 
+// Sohbetteki isimlere tıklanınca mesaj kutusuna otomatik ekleme (Etiketleme)
+n.onclick = () => {
+  if(d.name && d.name !== "Kral Bot" && d.name !== "Sistem"){
+    const textInput = $("text");
+    textInput.value = "@" + d.name + " " + textInput.value;
+    textInput.focus();
+  }
+};
+
 box.appendChild(r);
 box.scrollTop=box.scrollHeight;
+
+if(sound){
+const snd = d.type==="applause" ? applause : notification;
+snd.currentTime=0;
+snd.play().catch(()=>{});
+}
 }
 
 onValue(messagesRef,snap=>{
@@ -831,6 +846,12 @@ staticBots.forEach(bot=>{
 const d=document.createElement("div");
 d.className="user-list-item";
 d.textContent=bot.avatar+" "+bot.name;
+d.onclick = () => {
+  const textInput = $("text");
+  textInput.value = "@" + bot.name + " " + textInput.value;
+  textInput.focus();
+  closeDrawer();
+};
 $("onlineUsersList").appendChild(d);
 });
 
@@ -838,18 +859,21 @@ arr.forEach(u=>{
 const d=document.createElement("div");
 d.className="user-list-item";
 d.textContent=(u.avatar||"🎧")+" "+u.name;
+d.onclick = () => {
+  const textInput = $("text");
+  textInput.value = "@" + u.name + " " + textInput.value;
+  textInput.focus();
+  closeDrawer();
+};
 $("onlineUsersList").appendChild(d);
 });
 
-// Giriş / Ayrıldı sistemi kontrolü
 if(Object.keys(previousUsers).length > 0){
-  // Yeni girenler
   Object.keys(users).forEach(id => {
     if(!previousUsers[id] && id !== uid){
       push(messagesRef, {name:"Sistem", text: users[id].name + " sohbete giriş yaptı.", type:"system", createdAt:Date.now()});
     }
   });
-  // Çıkanlar
   Object.keys(previousUsers).forEach(id => {
     if(!users[id] && id !== uid){
       push(messagesRef, {name:"Sistem", text: previousUsers[id].name + " sohbetten ayrıldı.", type:"system", createdAt:Date.now()});
@@ -857,38 +881,6 @@ if(Object.keys(previousUsers).length > 0){
   });
 }
 previousUsers = users;
-});
-
-// TABULAMA (Autocomplete) Özelliği - Metin içinde nerede olursa olsun Tab ile isim tamamlama
-$("text").addEventListener("keydown", (e)=>{
-if(e.key === "Tab"){
-  e.preventDefault();
-  const textInput = $("text");
-  const cursorPosition = textInput.selectionStart;
-  const val = textInput.value;
-  
-  // Metni kelimelere bölerek imlecin olduğu kelimeyi bulma
-  const beforeCursor = val.slice(0, cursorPosition);
-  const words = beforeCursor.split(/\s+/);
-  const currentWord = words[words.length - 1].toLowerCase();
-
-  // Çevrimiçi kullanıcılar listesini al
-  const onlineItems = document.querySelectorAll(".user-list-item");
-  let matchedName = "";
-  
-  onlineItems.forEach(item => {
-    const fullName = item.textContent.replace(/^[^\s]+\s/, "").trim();
-    if(fullName.toLowerCase().includes(currentWord) && currentWord.length > 0){
-      matchedName = fullName;
-    }
-  });
-
-  if(matchedName){
-    const lastSpaceIndex = beforeCursor.lastIndexOf(" ");
-    const newBefore = lastSpaceIndex !== -1 ? beforeCursor.slice(0, lastSpaceIndex + 1) : "";
-    textInput.value = newBefore + "@" + matchedName + " " + val.slice(cursorPosition);
-  }
-}
 });
 
 async function sendMsg(text, type="user", customName=null, customAvatar=null, customColor=null){
