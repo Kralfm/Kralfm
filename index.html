@@ -444,7 +444,6 @@ font-size:19px
 
 <div>
 
-<!-- Ses butonu tamamen kaldırıldı, sadece menü butonu bırakıldı -->
 <button id="menuTrigger" class="menu-trigger" type="button">
 ☰
 </button>
@@ -496,7 +495,6 @@ CANLI YAYIN
 
 <div class="popup-player-box">
 
-<!-- iPhone ve Android için doğrudan çalışan dinleme sayfası -->
 <a
 href="http://kralfm.radiostream321.com/"
 target="_blank"
@@ -508,7 +506,6 @@ id="toggleRadio">
 
 </a>
 
-<!-- Alternatif doğrudan dinleme bağlantısı -->
 <a
 href="http://kralfm.radiostream321.com/"
 target="_blank"
@@ -753,11 +750,14 @@ const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
 
-// Varsayılan olarak sessiz modda başlatıldı (false)
 let sound=false;
 
-const uid=
-"user_"+Math.random().toString(36).slice(2,10);
+// Kalıcı UID (Sayfa yenilense bile aynı oturum/kullanıcı kimliği korunur)
+let uid = localStorage.getItem("kralfm_uid");
+if(!uid){
+  uid = "user_" + Math.random().toString(36).slice(2,10);
+  localStorage.setItem("kralfm_uid", uid);
+}
 
 const notification=$("notificationSound");
 
@@ -765,6 +765,17 @@ const applause=$("applauseSound");
 
 const defaultGuestName=
 "Misafir_"+Math.floor(Math.random()*900+100);
+
+// Sayfa yüklendiğinde daha önce kaydedilmiş ad/avatar/renk varsa inputlara doldur
+if(localStorage.getItem("kralfm_name")){
+  $("name").value = localStorage.getItem("kralfm_name");
+}
+if(localStorage.getItem("kralfm_avatar")){
+  $("userAvatar").value = localStorage.getItem("kralfm_avatar");
+}
+if(localStorage.getItem("kralfm_color")){
+  $("userColor").value = localStorage.getItem("kralfm_color");
+}
 
 
 const staticBots=[
@@ -979,6 +990,11 @@ $("name").value.trim()||defaultGuestName;
 const activeAvatar=$("userAvatar").value;
 
 const activeColor=$("userColor").value;
+
+// Bilgileri localStorage'a kaydediyoruz ki sayfa yenilense de unutulmasın
+localStorage.setItem("kralfm_name", $("name").value.trim());
+localStorage.setItem("kralfm_avatar", activeAvatar);
+localStorage.setItem("kralfm_color", activeColor);
 
 const uref=ref(db,"presence/"+uid);
 
