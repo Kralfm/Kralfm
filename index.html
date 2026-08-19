@@ -19,7 +19,6 @@ font-size:20px;
 font-weight:bold
 }
 
-/* Ana Düzen: PC ve Mobilde Yan Yana (Sol içerik, Sağ Üye Listesi) */
 .app-container{
 max-width:1300px;
 margin:auto;
@@ -34,7 +33,6 @@ flex:1;
 min-width:0;
 }
 
-/* Çevrimiçi Üyeler Paneli: Bilgisayar ve Mobilde Her Zaman Sağda */
 .sidebar-right{
 width:240px;
 background:#181818;
@@ -422,7 +420,6 @@ font-weight:bold;
 .mention-action{background:#4338ca}
 .whisper-action{background:#7e22ce}
 
-/* Fısıltı Modu Göstergesi */
 .whisper-indicator {
 display: none;
 position: absolute;
@@ -491,7 +488,6 @@ justify-content:flex-end;
 margin-top:15px
 }
 
-/* Mobil cihazlar için sağ sütun boyutu ince ayarı */
 @media(max-width:768px){
 .app-container{
 padding:5px;
@@ -605,7 +601,6 @@ font-size:10px;
 </div>
 </main>
 
-<!-- Çevrimiçi Üyeler Paneli: Bilgisayar ve Mobilde Her Zaman Sağda -->
 <aside class="sidebar-right">
 <div class="sidebar-header">
 <span>👥 Üyeler</span>
@@ -948,4 +943,15 @@ $("form").onsubmit = async (e) => {
   });
 
   textInput.value = "";
-  if (a
+  if (activeWhisperTarget) {
+    cancelWhisper();
+  }
+};
+
+$("sendApplause").onclick = async () => {
+  const name = $("name").value.trim() || defaultGuestName;
+  applause.currentTime = 0;
+  applause.play().catch(()=>{});
+  await push(messagesRef, {
+    name: name,
+    text: "👏 kocaman bir alkış gönder
