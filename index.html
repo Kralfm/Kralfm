@@ -1045,8 +1045,14 @@ console.error("Presence hata:",e);
 registerPresence();
 
 
+// DÜZELTME BURADA: Harf harf (input) tetiklenmesi kaldırıldı, sadece odak çıkışı (blur) veya değişimde (change) çalışacak
 $("name").addEventListener(
-"input",
+"change",
+registerPresence
+);
+
+$("name").addEventListener(
+"blur",
 registerPresence
 );
 
