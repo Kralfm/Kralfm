@@ -715,8 +715,7 @@ ref,
 push,
 onValue,
 set,
-onDisconnect,
-remove
+onDisconnect
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
@@ -767,7 +766,7 @@ const applause=$("applauseSound");
 const defaultGuestName=
 "Misafir_"+Math.floor(Math.random()*900+100);
 
-// localStorage verilerini yükle
+// Sayfa yüklendiğinde daha önce kaydedilmiş ad/avatar/renk varsa inputlara doldur
 if(localStorage.getItem("kralfm_name")){
   $("name").value = localStorage.getItem("kralfm_name");
 }
@@ -983,9 +982,6 @@ return null;
 }
 
 
-// Oturum açma, giriş yapma ve çıkış yönetimi
-let hasJoinedLogged = false;
-
 async function registerPresence(){
 
 const activeName=
@@ -1011,7 +1007,7 @@ color:activeColor,
 createdAt:Date.now()
 });
 
-// Kullanıcı sekmeden tamamen ayrıldığında veritabanından silinir ve sohbet ekranına çıkış mesajı düşer
+// Sekme/tarayıcı tamamen kapandığında otomatik olarak veritabanından silinir ve çıkış mesajı düşer
 onDisconnect(uref).remove();
 
 const disconnectMsgRef = push(messagesRef);
@@ -1022,9 +1018,9 @@ type: "system",
 createdAt: Date.now()
 });
 
-// İlk kez bu oturumda giriş yapıldıysa sohbet akışına giriş mesajı atıyoruz
-if(!hasJoinedLogged){
-  hasJoinedLogged = true;
+// sessionStorage kullanarak sadece sekme ilk açıldığında (sayfa yenilemelerinde tekrar atmaz) giriş mesajı yazar
+if(!sessionStorage.getItem("kralfm_joined_logged")){
+  sessionStorage.setItem("kralfm_joined_logged", "true");
   await push(messagesRef,{
     name: "Sistem",
     text: activeName + " sohbete giriş yaptı.",
