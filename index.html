@@ -815,7 +815,6 @@ color:activeColor,
 createdAt:Date.now()
 });
 
-// Yeni sekme/sayfa açıldığında sayacı artır (Böylece gezindiğinde düşmez)
 let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "0") + 1;
 localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
 
@@ -835,12 +834,10 @@ console.error("Presence hata:",e);
 
 registerPresence();
 
-// Kullanıcı sekme/pencereyi (X tuşuna basıp) kapattığında çalışır
 window.addEventListener("beforeunload", () => {
   let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "1") - 1;
   localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
 
-  // Sadece tüm sekmeleri kapattıysa veritabanından tamamen sil ve çıkış mesajı at
   if (openTabs <= 0) {
     localStorage.removeItem("kralfm_open_tabs_" + uid);
     const activeName = $("name").value.trim() || defaultGuestName;
@@ -913,6 +910,7 @@ d.append(infoRow, actionRow);
 $("onlineUsersList").appendChild(d);
 }
 
+// 📌 Form Gönderme İşlevi (Tamamlandı)
 $("form").onsubmit = async (e) => {
   e.preventDefault();
   const textInput = $("text");
@@ -933,4 +931,15 @@ $("form").onsubmit = async (e) => {
   }
 
   await push(messagesRef, {
-    name
+    name: name,
+    text: text,
+    avatar: avatar,
+    color: color,
+    type: msgType,
+    targetUser: targetUser,
+    createdAt: Date.now()
+  });
+
+  textInput.value = "";
+  cancelWhisper();
+  
