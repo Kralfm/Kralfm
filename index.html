@@ -19,25 +19,57 @@ font-size:20px;
 font-weight:bold
 }
 
-.menu-trigger{
-background:none;
-border:0;
-color:#fff;
-font-size:25px;
-cursor:pointer
+/* Ana Düzen: PC ve Mobilde Yan Yana (Sol içerik, Sağ Üye Listesi) */
+.app-container{
+max-width:1300px;
+margin:auto;
+padding:10px;
+display:flex;
+gap:10px;
+align-items:flex-start;
 }
 
 main{
-max-width:850px;
-margin:auto;
-padding:15px
+flex:1;
+min-width:0;
+}
+
+/* Çevrimiçi Üyeler Paneli: Bilgisayar ve Mobilde Her Zaman Sağda */
+.sidebar-right{
+width:240px;
+background:#181818;
+border:1px solid #333;
+border-radius:12px;
+padding:10px;
+height:calc(100vh - 80px);
+position:sticky;
+top:10px;
+display:flex;
+flex-direction:column;
+flex-shrink:0;
+}
+
+.sidebar-header{
+display:flex;
+justify-content:space-between;
+border-bottom:1px solid #333;
+padding-bottom:8px;
+margin-bottom:8px;
+font-size:14px;
+font-weight:bold;
+color:#ff5555;
+}
+
+.sidebar-users-area{
+flex:1;
+overflow-y:auto;
 }
 
 .card{
 background:#1e1e1e;
-border-radius:14px;
-padding:18px;
-margin-bottom:15px
+border-radius:12px;
+padding:15px;
+margin-bottom:12px
 }
 
 .radio-player-card{
@@ -48,24 +80,24 @@ box-shadow:0 4px 20px rgba(224,0,0,.3)
 
 .radio-banner{
 background:linear-gradient(90deg,#f00,#800000);
-border-radius:10px;
-padding:15px;
-margin-bottom:12px;
+border-radius:8px;
+padding:12px;
+margin-bottom:10px;
 display:flex;
 align-items:center;
 justify-content:space-between;
-gap:10px
+gap:8px
 }
 
 .radio-logo-box{
 display:flex;
 align-items:center;
-gap:12px
+gap:10px
 }
 
 .l2mr-logo{
-width:45px;
-height:45px;
+width:40px;
+height:40px;
 background:#fff;
 border-radius:50%;
 display:flex;
@@ -75,18 +107,18 @@ flex-shrink:0
 }
 
 .l2mr-logo svg{
-width:28px;
-height:28px;
+width:24px;
+height:24px;
 fill:#b00000
 }
 
 .radio-logo-text h1{
 margin:0;
-font-size:22px
+font-size:18px
 }
 
 .radio-logo-text span{
-font-size:13px;
+font-size:12px;
 color:#ffcccc
 }
 
@@ -94,16 +126,16 @@ color:#ffcccc
 background:#000;
 color:#ff3333;
 border:1px solid #f33;
-font-size:11px;
+font-size:10px;
 font-weight:bold;
-padding:5px 10px;
+padding:4px 8px;
 border-radius:20px;
 white-space:nowrap
 }
 
 .live-dot{
-width:8px;
-height:8px;
+width:6px;
+height:6px;
 background:#f33;
 border-radius:50%;
 display:inline-block
@@ -112,27 +144,27 @@ display:inline-block
 .radio-description{
 background:rgba(0,0,0,.4);
 border-left:4px solid red;
-padding:12px;
+padding:10px;
 border-radius:6px;
-margin-bottom:15px;
-font-size:14px;
+margin-bottom:12px;
+font-size:13px;
 color:#ddd
 }
 
 .popup-player-box{
 background:rgba(0,0,0,.5);
-padding:10px;
-border-radius:10px;
+padding:8px;
+border-radius:8px;
 border:1px solid #333
 }
 
 .play-btn{
 width:100%;
-padding:15px;
-font-size:17px;
+padding:12px;
+font-size:15px;
 background:linear-gradient(180deg,#ff1a1a,#990000);
 border:0;
-border-radius:8px;
+border-radius:6px;
 color:#fff;
 font-weight:bold;
 cursor:pointer;
@@ -144,33 +176,34 @@ text-align:center
 .radio-browser-btn{
 display:block;
 width:100%;
-margin-top:10px;
-padding:12px;
+margin-top:8px;
+padding:10px;
 background:#333;
 border:1px solid #555;
-border-radius:8px;
+border-radius:6px;
 color:#fff;
 text-decoration:none;
 text-align:center;
-font-weight:bold
+font-weight:bold;
+font-size:13px
 }
 
 .chat-box-area{
-height:380px;
+height:320px;
 overflow-y:auto;
 background:#0b0b0b;
-border-radius:10px;
-padding:12px;
+border-radius:8px;
+padding:10px;
 border:1px solid #333
 }
 
 .msg{
 background:#292929;
-border-radius:9px;
-padding:10px 12px;
-margin:8px 0;
+border-radius:8px;
+padding:8px 10px;
+margin:6px 0;
 word-break:break-word;
-font-size:15px
+font-size:14px
 }
 
 .bot-msg{
@@ -195,7 +228,7 @@ font-weight:bold
 .whisper-msg{
 background:linear-gradient(135deg,#3b0764,#581c87);
 border:1px solid #c084fc;
-box-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
+box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
 }
 
 .action-msg{
@@ -211,23 +244,23 @@ border:1px dashed #555;
 color:#aaa;
 font-style:italic;
 text-align:center;
-font-size:13px
+font-size:12px
 }
 
 .time{
-font-size:11px;
+font-size:10px;
 color:#888;
-margin-right:6px
+margin-right:4px
 }
 
 .avatar{
-margin-right:4px
+margin-right:3px
 }
 
 .name{
 font-weight:bold;
 color:#ff5555;
-margin-right:6px;
+margin-right:4px;
 cursor:pointer;
 padding:2px 4px;
 border-radius:4px;
@@ -243,18 +276,18 @@ color:#c084fc!important
 }
 
 .bot-badge{
-font-size:10px;
+font-size:9px;
 font-weight:bold;
-padding:2px 6px;
+padding:2px 5px;
 border-radius:4px;
-margin-right:6px;
+margin-right:4px;
 background:#7c3aed
 }
 
 form{
 display:flex;
-gap:8px;
-margin-top:12px;
+gap:6px;
+margin-top:10px;
 align-items:center;
 flex-wrap:wrap;
 position:relative;
@@ -265,54 +298,55 @@ input#name,
 input#text{
 background:#2a2a2a;
 color:#fff;
-border-radius:8px;
+border-radius:6px;
 border:0
 }
 
 select#userAvatar{
-padding:12px 8px;
-font-size:18px
+padding:10px 6px;
+font-size:16px
 }
 
 input[type=color]{
-width:48px;
-height:48px;
+width:40px;
+height:40px;
 border:0
 }
 
 input#name{
-width:120px;
-padding:12px;
-font-size:15px
+width:105px;
+padding:10px;
+font-size:14px
 }
 
 input#text{
 flex:1;
-padding:12px;
-min-width:150px;
-font-size:15px;
+padding:10px;
+min-width:120px;
+font-size:14px;
 transition: border 0.3s, box-shadow 0.3s;
 }
 
 button[type=submit]{
 border:0;
-border-radius:8px;
-padding:12px 20px;
+border-radius:6px;
+padding:10px 15px;
 background:#e00000;
 color:#fff;
 font-weight:bold;
 cursor:pointer;
+font-size:14px;
 }
 
 .tab-btn{
 background:#4338ca;
 color:#fff;
 border:0;
-border-radius:8px;
-padding:12px 14px;
+border-radius:6px;
+padding:10px 10px;
 font-weight:bold;
 cursor:pointer;
-font-size:14px;
+font-size:13px;
 transition:background 0.2s;
 }
 .tab-btn:hover{
@@ -321,8 +355,8 @@ background:#4f46e5;
 
 .action-btns{
 display:flex;
-gap:8px;
-margin-top:12px;
+gap:6px;
+margin-top:10px;
 flex-wrap:wrap
 }
 
@@ -330,10 +364,10 @@ flex-wrap:wrap
 background:#333;
 color:#fff;
 border:1px solid #555;
-padding:9px 12px;
-border-radius:8px;
+padding:8px 10px;
+border-radius:6px;
 cursor:pointer;
-font-size:13px;
+font-size:12px;
 font-weight:bold
 }
 
@@ -345,64 +379,17 @@ font-weight:bold
 
 .note{
 color:#aaa;
-font-size:13px
-}
-
-.drawer-overlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.5);
-z-index:998;
-display:none
-}
-
-.user-drawer{
-position:fixed;
-top:0;
-right:-290px;
-width:280px;
-height:100%;
-background:#181818;
-border-left:1px solid #333;
-z-index:999;
-transition:right .3s;
-padding:20px;
-overflow-y:auto
-}
-
-.user-drawer.open{
-right:0
-}
-
-.drawer-header{
-display:flex;
-justify-content:space-between;
-border-bottom:1px solid #333;
-padding-bottom:10px;
-margin-bottom:15px
-}
-
-.drawer-header h3{
-margin:0;
-color:#ff5555
-}
-
-.close-drawer{
-background:none;
-border:0;
-color:#fff;
-font-size:20px;
-cursor:pointer;
+font-size:12px
 }
 
 .user-list-item{
-padding:10px;
-margin:6px 0;
+padding:6px 8px;
+margin:4px 0;
 background:#222;
-border-radius:8px;
+border-radius:6px;
 display:flex;
 flex-direction:column;
-gap:6px;
+gap:4px;
 transition: background 0.2s;
 }
 .user-list-item:hover{
@@ -411,20 +398,24 @@ background:#2a2a2a;
 .user-info-row{
 display:flex;
 align-items:center;
-gap:8px;
+gap:6px;
 font-weight:bold;
+font-size:12px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
 }
 .user-action-row{
 display:flex;
-gap:6px;
+gap:4px;
 }
 .user-action-btn{
 background:#333;
 border:0;
 color:#fff;
-padding:4px 8px;
-border-radius:4px;
-font-size:11px;
+padding:2px 5px;
+border-radius:3px;
+font-size:10px;
 cursor:pointer;
 font-weight:bold;
 }
@@ -435,16 +426,16 @@ font-weight:bold;
 .whisper-indicator {
 display: none;
 position: absolute;
-top: -28px;
-left: 170px;
+top: -26px;
+left: 150px;
 background: #581c87;
 color: #e9d5ff;
-font-size: 12px;
-padding: 4px 10px;
-border-radius: 6px;
+font-size: 11px;
+padding: 3px 8px;
+border-radius: 5px;
 border: 1px solid #c084fc;
 align-items: center;
-gap: 6px;
+gap: 5px;
 z-index: 10;
 }
 .whisper-indicator.active {
@@ -456,7 +447,7 @@ border: 0;
 color: #ff8080;
 font-weight: bold;
 cursor: pointer;
-font-size: 13px;
+font-size: 12px;
 }
 
 .modal-overlay{
@@ -500,18 +491,35 @@ justify-content:flex-end;
 margin-top:15px
 }
 
-@media(max-width:600px){
-.radio-banner{
-align-items:flex-start;
-flex-direction:column
+/* Mobil cihazlar için sağ sütun boyutu ince ayarı */
+@media(max-width:768px){
+.app-container{
+padding:5px;
+gap:6px;
 }
-
-.live-badge{
-align-self:flex-end
+.sidebar-right{
+width:105px; 
+padding:6px;
+height:calc(100vh - 60px);
 }
-
+.sidebar-header span{
+font-size:11px;
+}
+.user-info-row{
+font-size:11px;
+}
+.user-action-btn{
+font-size:9px;
+padding:2px 3px;
+}
+.card{
+padding:10px;
+}
 .radio-logo-text h1{
-font-size:19px
+font-size:15px;
+}
+.radio-logo-text span{
+font-size:10px;
 }
 }
 </style>
@@ -521,11 +529,9 @@ font-size:19px
 
 <header>
 <div>🎙️ Kral FM & Muhabbet</div>
-<div>
-<button id="menuTrigger" class="menu-trigger" type="button">☰</button>
-</div>
 </header>
 
+<div class="app-container">
 <main>
 <div class="card radio-player-card">
 <div class="radio-banner">
@@ -550,7 +556,7 @@ font-size:19px
 <div class="popup-player-box">
 <a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a>
 <a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a>
-<div id="radioStatus" class="note" style="margin-top:8px;text-align:center">
+<div id="radioStatus" class="note" style="margin-top:6px;text-align:center">
 📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.
 </div>
 </div>
@@ -599,14 +605,14 @@ font-size:19px
 </div>
 </main>
 
-<div id="drawerOverlay" class="drawer-overlay"></div>
-<aside id="userDrawer" class="user-drawer">
-<div class="drawer-header">
-<h3>👥 Çevrimiçi Üyeler</h3>
-<button id="closeDrawer" class="close-drawer" type="button">✕</button>
+<!-- Çevrimiçi Üyeler Paneli: Bilgisayar ve Mobilde Her Zaman Sağda -->
+<aside class="sidebar-right">
+<div class="sidebar-header">
+<span>👥 Üyeler</span>
 </div>
-<div id="onlineUsersList">Kimse yok...</div>
+<div id="onlineUsersList" class="sidebar-users-area">Kimse yok...</div>
 </aside>
+</div>
 
 <div id="requestModal" class="modal-overlay">
 <div class="modal-box">
@@ -644,7 +650,7 @@ const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
 let onlineUserNames = [];
-let activeWhisperTarget = null; // Aktif fısıldanan kişi
+let activeWhisperTarget = null;
 
 let uid = localStorage.getItem("kralfm_uid");
 if(!uid){
@@ -666,25 +672,10 @@ const staticBots=[
 {name:"RadyoDinliyorum",avatar:"🎧"}
 ];
 
-function openDrawer(){
-$("userDrawer").classList.add("open");
-$("drawerOverlay").style.display="block";
-}
-
-function closeDrawer(){
-$("userDrawer").classList.remove("open");
-$("drawerOverlay").style.display="none";
-}
-
-$("menuTrigger").onclick=openDrawer;
-$("closeDrawer").onclick=closeDrawer;
-$("drawerOverlay").onclick=closeDrawer;
-
 function time(t){
 return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
 }
 
-// TAB (Etiketleme) Fonksiyonu
 function mentionUser(username){
   const textInput = $("text");
   const cleanName = username.replace(":", "").trim();
@@ -699,7 +690,6 @@ function mentionUser(username){
   }, 1000);
 }
 
-// Özel Fısıltı Modunu Başlat
 function startWhisper(username) {
   activeWhisperTarget = username.replace(":", "").trim();
   $("whisperTargetName").textContent = activeWhisperTarget;
@@ -711,7 +701,6 @@ function startWhisper(username) {
   textInput.focus();
 }
 
-// Fısıltı Modunu İptal Et
 function cancelWhisper() {
   activeWhisperTarget = null;
   $("whisperIndicator").classList.remove("active");
@@ -756,7 +745,6 @@ if(!box||!d)return;
 
 const myCurrentName = $("name").value.trim() || defaultGuestName;
 
-// GİZLİ FISILTI FİLTRESİ: Eğer bu mesaj özel bir fısıltıysa (targetUser varsa), sadece gönderen ve alan görsün
 if(d.targetUser && d.targetUser !== myCurrentName && d.name !== myCurrentName) {
   return;
 }
@@ -787,7 +775,6 @@ n.onclick = () => mentionUser(d.name);
 
 let msgText = d.text || "";
 
-// Geriye dönük uyumluluk: Eski etiketleri de otomatik olarak whisper yapısına bağla
 if(!d.targetUser && msgText.includes("@" + myCurrentName)){
   d.type = "whisper";
 }
@@ -822,16 +809,6 @@ Object.values(data).forEach(d=>{
 appendMessage(d);
 });
 });
-
-function botReply(text,user){
-const m=text.toLowerCase();
-if(user.toLowerCase()==="kral bot")return null;
-if(m.includes("selam"))return "Aleykümselam @"+user+" 👋";
-if(m.includes("merhaba"))return "Merhaba @"+user+"! Kral FM'e hoş geldin. 📻";
-if(m.includes("kahve"))return "☕ Sayın @"+user+", kahveniz hazır! Afiyet olsun.";
-if(m.includes("istek"))return "🎵 İstek mesajınız yayıncıya iletildi. Keyifli dinlemeler!";
-return null;
-}
 
 async function registerPresence(){
 const activeName=$("name").value.trim()||defaultGuestName;
@@ -921,125 +898,54 @@ actionRow.className = "user-action-row";
 const mentionBtn = document.createElement("button");
 mentionBtn.type = "button";
 mentionBtn.className = "user-action-btn mention-action";
-mentionBtn.textContent = "Etiketle";
+mentionBtn.textContent = "Etiket";
 mentionBtn.onclick = (e) => {
   e.stopPropagation();
   mentionUser(name);
-  closeDrawer();
 };
 
 const whisperBtn = document.createElement("button");
 whisperBtn.type = "button";
 whisperBtn.className = "user-action-btn whisper-action";
-whisperBtn.textContent = "💬 Fısılda";
+whisperBtn.textContent = "Fısılda";
 whisperBtn.onclick = (e) => {
   e.stopPropagation();
   startWhisper(name);
-  closeDrawer();
 };
 
 actionRow.append(mentionBtn, whisperBtn);
 d.append(infoRow, actionRow);
-
-// Kutunun kendisine tıklayınca da direkt etiketlesin
-d.onclick = () => {
-  mentionUser(name);
-  closeDrawer();
-};
-
 $("onlineUsersList").appendChild(d);
 }
 
-async function sendMsg(text,type="user",customName=null,customAvatar=null,customColor=null){
-const n=customName||($("name").value.trim()||defaultGuestName);
-const av=customAvatar||$("userAvatar").value;
-const col=customColor||$("userColor").value;
+$("form").onsubmit = async (e) => {
+  e.preventDefault();
+  const textInput = $("text");
+  const nameInput = $("name");
+  const text = textInput.value.trim();
+  const name = nameInput.value.trim() || defaultGuestName;
+  const avatar = $("userAvatar").value;
+  const color = $("userColor").value;
 
-await registerPresence();
+  if(!text) return;
 
-let targetUser = null;
-let finalType = type;
+  let msgType = "text";
+  let targetUser = null;
 
-// Eğer fısıltı modundaysak hedef kişiyi ekle
-if (activeWhisperTarget && type === "user") {
-  targetUser = activeWhisperTarget;
-  finalType = "whisper";
-}
-
-await push(messagesRef,{
-name:n,
-text,
-color:col,
-avatar:av,
-type: finalType,
-targetUser: targetUser,
-createdAt:Date.now()
-});
-
-// Eğer fısıltı modundaysak mesaj gönderildikten sonra modu temizle
-if(activeWhisperTarget) {
-  cancelWhisper();
-}
-
-if(!targetUser) {
-  const reply=botReply(text,n);
-  if(reply){
-    setTimeout(()=>{
-    push(messagesRef,{
-    name:"Kral Bot",
-    text:reply,
-    type:"bot",
-    createdAt:Date.now()
-    });
-    },500);
+  if (activeWhisperTarget) {
+    msgType = "whisper";
+    targetUser = activeWhisperTarget;
   }
-}
-}
 
-$("form").onsubmit=async e=>{
-e.preventDefault();
-const t=$("text").value.trim();
-if(!t)return;
+  await push(messagesRef, {
+    name: name,
+    text: text,
+    avatar: avatar,
+    color: color,
+    type: msgType,
+    targetUser: targetUser,
+    createdAt: Date.now()
+  });
 
-try{
-await sendMsg(t);
-$("statusText").textContent="Sohbet odası hazır. 🤖";
-$("text").value="";
-}catch(err){
-$("statusText").textContent="Mesaj gönderilemedi.";
-}
-};
-
-$("sendApplause").onclick=()=>sendMsg("👏 Coşkulu bir alkış gönderdi!","applause");
-$("sendCoffee").onclick=()=>sendMsg("☕ Herkese sıcacık kahve ikram etti!");
-$("sendHeart").onclick=()=>sendMsg("❤️ Kucak dolusu sevgiler gönderdi!");
-$("sendFire").onclick=()=>sendMsg("🔥 Ortamı alevlendirdi!","action");
-
-$("clearChat").onclick=async()=>{
-if(confirm("Sohbet odasındaki tüm mesajlar herkes için silinecek. Emin misiniz?")){
-await set(messagesRef,null);
-$("statusText").textContent="Ekran herkeste temizlendi.";
-}
-};
-
-$("openRequestModal").onclick=()=>{$("requestModal").style.display="flex";};
-$("closeRequestModal").onclick=()=>{$("requestModal").style.display="none";};
-
-$("sendRequest").onclick=async()=>{
-const a=$("songArtist").value.trim();
-const t=$("songTitle").value.trim();
-if(!a||!t){alert("Lütfen sanatçı ve şarkı adını yazın.");return;}
-
-try{
-await sendMsg('🎵 İSTEK PARÇA: '+a+' - "'+t+'"',"request");
-$("songArtist").value="";
-$("songTitle","").value="";
-$("requestModal").style.display="none";
-$("statusText").textContent="Sohbet odası hazır. 🤖";
-}catch(err){
-$("statusText").textContent="Mesaj gönderilemedi.";
-}
-};
-</script>
-</body>
-</html>
+  textInput.value = "";
+  if (a
