@@ -83,7 +83,7 @@ padding:12px;
 margin-bottom:10px;
 display:flex;
 align-items:center;
-justify-content:between;
+justify-content:space-between;
 gap:8px
 }
 
@@ -226,7 +226,7 @@ font-weight:bold
 .whisper-msg{
 background:linear-gradient(135deg,#3b0764,#581c87);
 border:1px solid #c084fc;
-box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+box-shadow:0 0 10px rgba(192,132,252,.5);
 }
 
 .action-msg{
@@ -262,11 +262,11 @@ margin-right:4px;
 cursor:pointer;
 padding:2px 4px;
 border-radius:4px;
-transition:background 0.2s;
+transition:background .2s;
 }
 
 .name:hover{
-background:rgba(255,85,85,0.2);
+background:rgba(255,85,85,.2);
 }
 
 .bot-name{
@@ -322,7 +322,7 @@ flex:1;
 padding:10px;
 min-width:120px;
 font-size:14px;
-transition: border 0.3s, box-shadow 0.3s;
+transition:border .3s,box-shadow .3s;
 }
 
 button[type=submit]{
@@ -345,8 +345,9 @@ padding:10px 10px;
 font-weight:bold;
 cursor:pointer;
 font-size:13px;
-transition:background 0.2s;
+transition:background .2s;
 }
+
 .tab-btn:hover{
 background:#4f46e5;
 }
@@ -388,11 +389,13 @@ border-radius:6px;
 display:flex;
 flex-direction:column;
 gap:4px;
-transition: background 0.2s;
+transition:background .2s;
 }
+
 .user-list-item:hover{
 background:#2a2a2a;
 }
+
 .user-info-row{
 display:flex;
 align-items:center;
@@ -403,10 +406,12 @@ overflow:hidden;
 text-overflow:ellipsis;
 white-space:nowrap;
 }
+
 .user-action-row{
 display:flex;
 gap:4px;
 }
+
 .user-action-btn{
 background:#333;
 border:0;
@@ -417,34 +422,37 @@ font-size:10px;
 cursor:pointer;
 font-weight:bold;
 }
+
 .mention-action{background:#4338ca}
 .whisper-action{background:#7e22ce}
 
-.whisper-indicator {
-display: none;
-position: absolute;
-top: -26px;
-left: 150px;
-background: #581c87;
-color: #e9d5ff;
-font-size: 11px;
-padding: 3px 8px;
-border-radius: 5px;
-border: 1px solid #c084fc;
-align-items: center;
-gap: 5px;
-z-index: 10;
+.whisper-indicator{
+display:none;
+position:absolute;
+top:-26px;
+left:150px;
+background:#581c87;
+color:#e9d5ff;
+font-size:11px;
+padding:3px 8px;
+border-radius:5px;
+border:1px solid #c084fc;
+align-items:center;
+gap:5px;
+z-index:10;
 }
-.whisper-indicator.active {
-display: flex;
+
+.whisper-indicator.active{
+display:flex;
 }
-.cancel-whisper {
-background: none;
-border: 0;
-color: #ff8080;
-font-weight: bold;
-cursor: pointer;
-font-size: 12px;
+
+.cancel-whisper{
+background:none;
+border:0;
+color:#ff8080;
+font-weight:bold;
+cursor:pointer;
+font-size:12px;
 }
 
 .modal-overlay{
@@ -493,17 +501,21 @@ margin-top:15px
 padding:4px;
 gap:4px;
 }
+
 .sidebar-right{
-width:125px; 
+width:125px;
 padding:6px;
 height:calc(100vh - 60px);
 }
+
 .sidebar-header span{
 font-size:11px;
 }
+
 .user-info-row{
 font-size:11px;
 }
+
 .user-action-btn{
 font-size:9px;
 padding:2px 3px;
@@ -519,44 +531,68 @@ padding:2px 3px;
 </header>
 
 <div class="app-container">
+
 <main>
+
+<!-- RADYO BÖLÜMÜNE DOKUNULMADI -->
+
 <div class="card radio-player-card">
+
 <div class="radio-banner">
+
 <div class="radio-logo-box">
+
 <div class="l2mr-logo">
 <svg viewBox="0 0 24 24">
 <path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/>
 </svg>
 </div>
+
 <div class="radio-logo-text">
 <h1>📻 Radyo Kral FM</h1>
 <span>Kesintisiz Canlı Yayın</span>
 </div>
+
 </div>
+
 <div class="live-badge">
 <span class="live-dot"></span> CANLI YAYIN
 </div>
+
 </div>
+
 <div class="radio-description">
 ✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕
 </div>
+
 <div class="popup-player-box">
-<a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a>
-<a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a>
+
+<a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">
+📻 Radyoyu Dinle
+</a>
+
+<a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">
+🌐 Tarayıcıda Radyoyu Aç
+</a>
+
 <div id="radioStatus" class="note" style="margin-top:6px;text-align:center">
 📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.
 </div>
+
 </div>
 </div>
 
 <div class="card">
+
 <h3 style="margin-top:0">💬 Canlı Sohbet Odası</h3>
+
 <div id="messages" class="chat-box-area"></div>
 
 <form id="form" autocomplete="off">
+
 <div id="whisperIndicator" class="whisper-indicator">
-  <span>🔒 <b id="whisperTargetName"></b> kişisine fısıldıyorsunuz</span>
-  <button type="button" id="cancelWhisper" class="cancel-whisper">✕</button>
+<span>🔒 <b id="whisperTargetName"></b> kişisine fısıldıyorsunuz</span>
+<button type="button" id="cancelWhisper" class="cancel-whisper">✕</button>
 </div>
 
 <select id="userAvatar" title="Avatar">
@@ -573,51 +609,119 @@ padding:2px 3px;
 </select>
 
 <input type="color" id="userColor" value="#ff5555">
+
 <input type="text" id="name" maxlength="30" placeholder="Adınız">
+
 <input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
-<button type="button" id="tabButton" class="tab-btn" title="Aktif kullanıcıyı etiketle">@ Tab</button>
+
+<button type="button" id="tabButton" class="tab-btn" title="Aktif kullanıcıyı etiketle">
+@ Tab
+</button>
+
 <button type="submit">Gönder</button>
+
 </form>
 
 <div class="action-btns">
-<button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
-<button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
-<button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
-<button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
-<button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
-<button id="clearChat" class="action-btn" type="button">🗑️ Herkeste Temizle</button>
+
+<button id="sendApplause" class="action-btn applause-btn" type="button">
+👏 Alkış
+</button>
+
+<button id="sendCoffee" class="action-btn coffee-btn" type="button">
+☕ Kahve Ismarla
+</button>
+
+<button id="sendHeart" class="action-btn heart-btn" type="button">
+❤️ Kalp At
+</button>
+
+<button id="sendFire" class="action-btn fire-btn" type="button">
+🔥 Alev Et
+</button>
+
+<button id="openRequestModal" class="action-btn request-btn" type="button">
+🎵 İstek Yap
+</button>
+
+<button id="clearChat" class="action-btn" type="button">
+🗑️ Herkeste Temizle
+</button>
+
 </div>
 
-<p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
+<p id="statusText" class="note">
+Sohbet odası hazırlanıyor... 🤖
+</p>
+
 </div>
 </main>
 
 <aside class="sidebar-right">
+
 <div class="sidebar-header">
 <span>👥 Üyeler</span>
 </div>
-<div id="onlineUsersList" class="sidebar-users-area">Yükleniyor...</div>
+
+<div id="onlineUsersList" class="sidebar-users-area">
+Yükleniyor...
+</div>
+
 </aside>
+
 </div>
 
 <div id="requestModal" class="modal-overlay">
+
 <div class="modal-box">
+
 <h3>🎵 İstek Parça Gönder</h3>
-<p style="font-size:13px;color:#ccc">Yayıncıya duyurmak istediğiniz şarkıyı yazın:</p>
+
+<p style="font-size:13px;color:#ccc">
+Yayıncıya duyurmak istediğiniz şarkıyı yazın:
+</p>
+
 <input id="songArtist" placeholder="Sanatçı Adı">
+
 <input id="songTitle" placeholder="Şarkı Adı">
+
 <div class="modal-actions">
-<button id="closeRequestModal" class="action-btn" type="button">İptal</button>
-<button id="sendRequest" class="action-btn request-btn" type="button">Gönder 🎶</button>
+
+<button id="closeRequestModal" class="action-btn" type="button">
+İptal
+</button>
+
+<button id="sendRequest" class="action-btn request-btn" type="button">
+Gönder 🎶
+</button>
+
 </div>
 </div>
 </div>
 
-<audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
+<audio
+id="applauseSound"
+src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"
+preload="auto">
+</audio>
+
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase, ref, push, onValue, set, remove, set as dbSet} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+push,
+onValue,
+set,
+remove,
+onDisconnect
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+
 
 const firebaseConfig={
 apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",
@@ -629,27 +733,46 @@ messagingSenderId:"638769846511",
 appId:"1:638769846511:web:f6d8abb91564873996"
 };
 
+
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
+
 const messagesRef=ref(db,"messages");
 const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
-let onlineUserNames = [];
-let activeWhisperTarget = null;
 
-let uid = localStorage.getItem("kralfm_uid");
+let onlineUserNames=[];
+let activeWhisperTarget=null;
+
+let uid=localStorage.getItem("kralfm_uid");
+
 if(!uid){
-  uid = "user_" + Math.random().toString(36).slice(2,10);
-  localStorage.setItem("kralfm_uid", uid);
+
+uid="user_"+Math.random().toString(36).slice(2,10);
+
+localStorage.setItem("kralfm_uid",uid);
+
 }
 
-const applause=$("applauseSound");
-const defaultGuestName="Misafir_"+Math.floor(Math.random()*900+100);
 
-if(localStorage.getItem("kralfm_name")) $("name").value = localStorage.getItem("kralfm_name");
-if(localStorage.getItem("kralfm_avatar")) $("userAvatar").value = localStorage.getItem("kralfm_avatar");
-if(localStorage.getItem("kralfm_color")) $("userColor").value = localStorage.getItem("kralfm_color");
+const applause=$("applauseSound");
+
+const defaultGuestName=
+"Misafir_"+Math.floor(Math.random()*900+100);
+
+
+if(localStorage.getItem("kralfm_name"))
+$("name").value=localStorage.getItem("kralfm_name");
+
+if(localStorage.getItem("kralfm_avatar"))
+$("userAvatar").value=localStorage.getItem("kralfm_avatar");
+
+if(localStorage.getItem("kralfm_color"))
+$("userColor").value=localStorage.getItem("kralfm_color");
+
+
+/* BOTLAR */
 
 const staticBots=[
 {name:"DuRu",avatar:"👩"},
@@ -658,290 +781,638 @@ const staticBots=[
 {name:"RadyoDinliyorum",avatar:"🎧"}
 ];
 
+
 function time(t){
-return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
+
+return new Date(t||Date.now()).toLocaleTimeString(
+"tr-TR",
+{
+hour:"2-digit",
+minute:"2-digit"
 }
+);
+
+}
+
+
+/* ETİKET */
 
 function mentionUser(username){
-  const textInput = $("text");
-  const cleanName = username.replace(":", "").trim();
-  textInput.value = "@" + cleanName + " " + textInput.value;
-  textInput.focus();
-  
-  textInput.style.border = "2px solid #c084fc";
-  textInput.style.boxShadow = "0 0 10px #c084fc";
-  setTimeout(() => {
-    textInput.style.border = "";
-    textInput.style.boxShadow = "";
-  }, 1000);
+
+const textInput=$("text");
+
+const cleanName=username
+.replace(":","")
+.trim();
+
+textInput.value=
+"@"+cleanName+" "+textInput.value;
+
+textInput.focus();
+
+textInput.style.border="2px solid #c084fc";
+textInput.style.boxShadow="0 0 10px #c084fc";
+
+setTimeout(()=>{
+
+textInput.style.border="";
+textInput.style.boxShadow="";
+
+},1000);
+
 }
 
-function startWhisper(username) {
-  activeWhisperTarget = username.replace(":", "").trim();
-  $("whisperTargetName").textContent = activeWhisperTarget;
-  $("whisperIndicator").classList.add("active");
-  
-  const textInput = $("text");
-  textInput.style.border = "2px solid #c084fc";
-  textInput.style.boxShadow = "0 0 10px #c084fc";
-  textInput.focus();
+
+/* FISILTI */
+
+function startWhisper(username){
+
+activeWhisperTarget=username
+.replace(":","")
+.trim();
+
+$("whisperTargetName").textContent=
+activeWhisperTarget;
+
+$("whisperIndicator")
+.classList.add("active");
+
+const textInput=$("text");
+
+textInput.style.border="2px solid #c084fc";
+textInput.style.boxShadow="0 0 10px #c084fc";
+
+textInput.focus();
+
 }
 
-function cancelWhisper() {
-  activeWhisperTarget = null;
-  $("whisperIndicator").classList.remove("active");
-  const textInput = $("text");
-  textInput.style.border = "";
-  textInput.style.boxShadow = "";
+
+function cancelWhisper(){
+
+activeWhisperTarget=null;
+
+$("whisperIndicator")
+.classList.remove("active");
+
+const textInput=$("text");
+
+textInput.style.border="";
+textInput.style.boxShadow="";
+
 }
 
-$("cancelWhisper").onclick = cancelWhisper;
 
-function handleTabComplete() {
-  const textInput = $("text");
-  const val = textInput.value.trim();
-  
-  let query = "";
-  if (val.startsWith("@")) {
-    query = val.substring(1).toLowerCase();
-  } else if (val.length > 0) {
-    query = val.toLowerCase();
-  }
+$("cancelWhisper").onclick=cancelWhisper;
 
-  const match = onlineUserNames.find(u => u.toLowerCase().startsWith(query));
-  if (match) {
-    textInput.value = "@" + match + " ";
-  } else if (onlineUserNames.length > 0) {
-    textInput.value = "@" + onlineUserNames[0] + " ";
-  }
-  textInput.focus();
+
+/* TAB TAMAMLAMA */
+
+function handleTabComplete(){
+
+const textInput=$("text");
+
+const val=textInput.value.trim();
+
+let query="";
+
+if(val.startsWith("@")){
+
+query=val
+.substring(1)
+.toLowerCase();
+
+}else if(val.length>0){
+
+query=val.toLowerCase();
+
 }
 
-$("tabButton").onclick = handleTabComplete;
-$("text").addEventListener("keydown", (e) => {
-  if (e.key === "Tab") {
-    e.preventDefault();
-    handleTabComplete();
-  }
+
+let match=null;
+
+
+/* Önce yazılan kelimeye göre ara */
+
+if(query){
+
+match=onlineUserNames.find(
+u=>u.toLowerCase().startsWith(query)
+);
+
+}
+
+
+/* Bulamazsa ilk aktif kullanıcı */
+
+if(!match && onlineUserNames.length>0){
+
+match=onlineUserNames[0];
+
+}
+
+
+if(match){
+
+textInput.value="@"+match+" ";
+
+}
+
+
+textInput.focus();
+
+}
+
+
+$("tabButton").onclick=handleTabComplete;
+
+
+$("text").addEventListener("keydown",(e)=>{
+
+if(e.key==="Tab"){
+
+e.preventDefault();
+
+handleTabComplete();
+
+}
+
 });
 
+
+/* MESAJ GÖSTERME */
+
 function appendMessage(d){
+
 const box=$("messages");
+
 if(!box||!d)return;
 
-const myCurrentName = $("name").value.trim() || defaultGuestName;
 
-if(d.targetUser && d.targetUser !== myCurrentName && d.name !== myCurrentName) {
-  return;
+const myCurrentName=
+$("name").value.trim()||defaultGuestName;
+
+
+/* Özel mesaj sadece gönderen/alıcıya */
+
+if(
+d.targetUser &&
+d.targetUser!==myCurrentName &&
+d.name!==myCurrentName
+){
+
+return;
+
 }
+
 
 const r=document.createElement("div");
+
 const ts=document.createElement("span");
+
 ts.className="time";
-ts.textContent="["+time(d.createdAt)+"] ";
+
+ts.textContent=
+"["+time(d.createdAt)+"] ";
+
 
 if(d.type==="system"){
+
 r.className="msg system-msg";
-r.textContent=ts.textContent+" "+d.text;
+
+r.textContent=
+ts.textContent+" "+d.text;
+
 box.appendChild(r);
+
 box.scrollTop=box.scrollHeight;
+
 return;
+
 }
+
 
 const av=document.createElement("span");
+
 const n=document.createElement("span");
+
 const t=document.createElement("span");
 
+
 av.className="avatar";
-av.textContent=(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
 
-n.className=d.type==="bot"?"name bot-name":"name";
-n.textContent=(d.name||"Misafir")+": ";
-n.onclick = () => mentionUser(d.name);
+av.textContent=
+(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
 
-let msgText = d.text || "";
 
-if(!d.targetUser && msgText.includes("@" + myCurrentName)){
-  d.type = "whisper";
+n.className=
+d.type==="bot"
+?"name bot-name"
+:"name";
+
+n.textContent=
+(d.name||"Misafir")+": ";
+
+n.onclick=()=>mentionUser(d.name);
+
+
+let msgText=d.text||"";
+
+
+/* @ kullanıcı etiketi */
+
+if(
+!d.targetUser &&
+msgText.includes("@"+myCurrentName)
+){
+
+d.type="whisper";
+
 }
+
 
 t.textContent=msgText;
 
-if(d.type==="applause") r.className="msg applause-msg";
-else if(d.type==="request") r.className="msg request-msg";
-else if(d.targetUser || d.type==="whisper") r.className="msg whisper-msg";
-else if(d.type==="action") r.className="msg action-msg";
-else r.className=d.type==="bot"?"msg bot-msg":"msg";
+
+if(d.type==="applause")
+r.className="msg applause-msg";
+
+else if(d.type==="request")
+r.className="msg request-msg";
+
+else if(
+d.targetUser||
+d.type==="whisper"
+)
+r.className="msg whisper-msg";
+
+else if(d.type==="action")
+r.className="msg action-msg";
+
+else
+r.className=
+d.type==="bot"
+?"msg bot-msg"
+:"msg";
+
 
 if(d.type==="bot"){
+
 const b=document.createElement("span");
+
 b.className="bot-badge";
+
 b.textContent="BOT";
-r.append(ts,b,av,n,t);
+
+r.append(
+ts,
+b,
+av,
+n,
+t
+);
+
 }else{
-r.append(ts,av,n,t);
+
+r.append(
+ts,
+av,
+n,
+t
+);
+
 }
 
-if(d.type!=="bot"&&d.color) n.style.color=d.color;
+
+if(
+d.type!=="bot"&&
+d.color
+){
+
+n.style.color=d.color;
+
+}
+
 
 box.appendChild(r);
+
 box.scrollTop=box.scrollHeight;
+
 }
 
-onValue(messagesRef,snap=>{
+
+/* MESAJLARI OKU */
+
+onValue(
+messagesRef,
+snap=>{
+
 const data=snap.val()||{};
+
 $("messages").innerHTML="";
-Object.values(data).forEach(d=>{
+
+Object.values(data)
+.sort(
+(a,b)=>
+(a.createdAt||0)-
+(b.createdAt||0)
+)
+.forEach(d=>{
+
 appendMessage(d);
+
 });
-});
+
+
+$("statusText").textContent=
+"Sohbet odası aktif. 🤖";
+
+},
+error=>{
+
+console.error("Mesaj Firebase hatası:",error);
+
+$("statusText").textContent=
+"⚠️ Sohbet bağlantısında sorun var.";
+
+}
+);
+
+
+/* PRESENCE */
 
 async function registerPresence(){
-const activeName=$("name").value.trim()||defaultGuestName;
-const activeAvatar=$("userAvatar").value;
-const activeColor=$("userColor").value;
 
-localStorage.setItem("kralfm_name", $("name").value.trim());
-localStorage.setItem("kralfm_avatar", activeAvatar);
-localStorage.setItem("kralfm_color", activeColor);
+const activeName=
+$("name").value.trim()||
+defaultGuestName;
 
-const uref=ref(db,"presence/"+uid);
+const activeAvatar=
+$("userAvatar").value;
+
+const activeColor=
+$("userColor").value;
+
+
+localStorage.setItem(
+"kralfm_name",
+$("name").value.trim()
+);
+
+localStorage.setItem(
+"kralfm_avatar",
+activeAvatar
+);
+
+localStorage.setItem(
+"kralfm_color",
+activeColor
+);
+
+
+const uref=
+ref(db,"presence/"+uid);
+
 
 try{
-await set(uref,{
+
+await set(
+uref,
+{
 name:activeName,
 avatar:activeAvatar,
 color:activeColor,
 createdAt:Date.now()
-});
-
-let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "0") + 1;
-localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
-
-if(!sessionStorage.getItem("kralfm_joined_logged")){
-  sessionStorage.setItem("kralfm_joined_logged", "true");
-  await push(messagesRef,{
-    name: "Sistem",
-    text: activeName + " sohbete giriş yaptı.",
-    type: "system",
-    createdAt: Date.now()
-  });
 }
+);
+
+
+/*
+Sekme kapanınca Firebase otomatik
+olarak kullanıcıyı çevrim dışı yapar.
+*/
+
+onDisconnect(uref)
+.remove();
+
+
+if(
+!sessionStorage.getItem(
+"kralfm_joined_logged"
+)
+){
+
+sessionStorage.setItem(
+"kralfm_joined_logged",
+"true"
+);
+
+
+await push(
+messagesRef,
+{
+name:"Sistem",
+text:
+activeName+
+" sohbete giriş yaptı.",
+type:"system",
+createdAt:Date.now()
+}
+);
+
+}
+
+
+$("statusText").textContent=
+"Sohbet odası aktif. 🤖";
+
+
 }catch(e){
+
 console.error("Presence hata:",e);
+
+$("statusText").textContent=
+"⚠️ Firebase bağlantısı kurulamadı.";
+
 }
+
 }
+
 
 registerPresence();
 
-window.addEventListener("beforeunload", () => {
-  let openTabs = parseInt(localStorage.getItem("kralfm_open_tabs_" + uid) || "1") - 1;
-  localStorage.setItem("kralfm_open_tabs_" + uid, openTabs);
 
-  if (openTabs <= 0) {
-    localStorage.removeItem("kralfm_open_tabs_" + uid);
-    const activeName = $("name").value.trim() || defaultGuestName;
-    const uref = ref(db, "presence/" + uid);
-    
-    remove(uref);
-    
-    push(messagesRef, {
-      name: "Sistem",
-      text: activeName + " sohbetten ayrıldı.",
-      type: "system",
-      createdAt: Date.now()
-    });
-  }
-});
+/*
+Sayfa kapanırken de temizlemeyi dene.
+Asıl güvenilir temizlik onDisconnect'tir.
+*/
 
-$("name").addEventListener("change", registerPresence);
-$("name").addEventListener("blur", registerPresence);
-$("userAvatar").addEventListener("change", registerPresence);
-$("userColor").addEventListener("change", registerPresence);
+window.addEventListener(
+"beforeunload",
+()=>{
 
-onValue(presenceRef,snap=>{
+const uref=
+ref(db,"presence/"+uid);
+
+remove(uref).catch(()=>{});
+
+}
+);
+
+
+$("name").addEventListener(
+"change",
+registerPresence
+);
+
+$("name").addEventListener(
+"blur",
+registerPresence
+);
+
+$("userAvatar").addEventListener(
+"change",
+registerPresence
+);
+
+$("userColor").addEventListener(
+"change",
+registerPresence
+);
+
+
+/* ÇEVRİM İÇİ KULLANICILAR */
+
+onValue(
+presenceRef,
+snap=>{
+
 const users=snap.val()||{};
+
 const arr=Object.values(users);
+
 $("onlineUsersList").innerHTML="";
-onlineUserNames = [];
+
+onlineUserNames=[];
+
+
+/* BOTLAR HER ZAMAN LİSTEDE */
 
 staticBots.forEach(bot=>{
+
 onlineUserNames.push(bot.name);
-renderUserItem(bot.avatar, bot.name);
+
+renderUserItem(
+bot.avatar,
+bot.name,
+true
+);
+
 });
+
+
+/* GERÇEK KULLANICILAR */
 
 arr.forEach(u=>{
+
+if(!u||!u.name)return;
+
 onlineUserNames.push(u.name);
-renderUserItem(u.avatar || "🎧", u.name);
+
+renderUserItem(
+u.avatar||"🎧",
+u.name,
+false
+);
+
 });
-});
 
-function renderUserItem(avatar, name) {
-const d=document.createElement("div");
-d.className="user-list-item";
 
-const infoRow = document.createElement("div");
-infoRow.className = "user-info-row";
-infoRow.textContent = avatar + " " + name;
+if(arr.length===0){
 
-const actionRow = document.createElement("div");
-actionRow.className = "user-action-row";
+$("statusText").textContent=
+"Sohbet aktif. 🤖";
 
-const mentionBtn = document.createElement("button");
-mentionBtn.type = "button";
-mentionBtn.className = "user-action-btn mention-action";
-mentionBtn.textContent = "Etiket";
-mentionBtn.onclick = (e) => {
-  e.stopPropagation();
-  mentionUser(name);
-};
-
-const whisperBtn = document.createElement("button");
-whisperBtn.type = "button";
-whisperBtn.className = "user-action-btn whisper-action";
-whisperBtn.textContent = "Fısılda";
-whisperBtn.onclick = (e) => {
-  e.stopPropagation();
-  startWhisper(name);
-};
-
-actionRow.append(mentionBtn, whisperBtn);
-d.append(infoRow, actionRow);
-$("onlineUsersList").appendChild(d);
 }
 
-// Form Gönderme İşlevi
-$("form").onsubmit = async (e) => {
-  e.preventDefault();
-  const textInput = $("text");
-  const nameInput = $("name");
-  const text = textInput.value.trim();
-  const name = nameInput.value.trim() || defaultGuestName;
-  const avatar = $("userAvatar").value;
-  const color = $("userColor").value;
+},
+error=>{
 
-  if(!text) return;
+console.error(
+"Presence okuma hatası:",
+error
+);
 
-  let msgType = "text";
-  let targetUser = null;
+$("onlineUsersList").innerHTML=
+'<div style="color:#ff7777;font-size:11px;padding:8px">⚠️ Çevrim içi liste alınamadı.</div>';
 
-  if (activeWhisperTarget) {
-    msgType = "whisper";
-    targetUser = activeWhisperTarget;
-  }
+$("statusText").textContent=
+"⚠️ Firebase çevrim içi bağlantısı kontrol edilmeli.";
 
-  await push(messagesRef, {
-    name: name,
-    text: text,
-    avatar: avatar,
-    color: color,
-    type: msgType,
-    targetUser: targetUser,
-    createdAt: Date.now()
-  });
+}
+);
 
-  textInput.value = "";
-  cancelWhisper();
+
+/* KULLANICI LİSTE ELEMANI */
+
+function renderUserItem(
+avatar,
+name,
+isBot=false
+){
+
+const d=document.createElement("div");
+
+d.className="user-list-item";
+
+
+const infoRow=
+document.createElement("div");
+
+infoRow.className="user-info-row";
+
+infoRow.textContent=
+avatar+" "+name;
+
+
+const actionRow=
+document.createElement("div");
+
+actionRow.className="user-action-row";
+
+
+/* ETİKET */
+
+const mentionBtn=
+document.createElement("button");
+
+mentionBtn.type="button";
+
+mentionBtn.className=
+"user-action-btn mention-action";
+
+mentionBtn.textContent="Etiket";
+
+mentionBtn.onclick=(e)=>{
+
+e.stopPropagation();
+
+mentionUser(name);
+
 };
 
-// A
+
+/* FISILTI */
+
+const whisperBtn=
+document.createElement("button");
+
+whisperBtn.type="button";
+
+whisperBtn.className=
+"user-action-btn whisper-action";
+
+whisperBtn.textContent="Fısılda";
+
+whisperBtn.onclick=(e)=>{
+
+e.stopPropagatio
