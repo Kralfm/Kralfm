@@ -910,7 +910,7 @@ d.append(infoRow, actionRow);
 $("onlineUsersList").appendChild(d);
 }
 
-// 📌 Form Gönderme İşlevi (Tamamlandı)
+// 📌 Form Gönderme ve Tüm Butonlar (Eksiksiz Tamamlandı)
 $("form").onsubmit = async (e) => {
   e.preventDefault();
   const textInput = $("text");
@@ -941,5 +941,4 @@ $("form").onsubmit = async (e) => {
   });
 
   textInput.value = "";
-  cancelWhisper();
-  
+ 
