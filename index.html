@@ -19,7 +19,6 @@ align-items: center;
 box-shadow: 0 4px 15px rgba(255,0,0,0.3);
 }
   
-
 .app-container{
 max-width:1300px;
 margin:auto;
@@ -575,7 +574,7 @@ padding:2px 3px;
 
 <input type="color" id="userColor" value="#ff5555">
 <input type="text" id="name" maxlength="30" placeholder="Adınız">
-<input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın..." required>
+<input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın (/me ...)..." required>
 <button type="button" id="tabButton" class="tab-btn" title="Aktif kullanıcıyı etiketle">@ Tab</button>
 <button type="submit">Gönder</button>
 </form>
@@ -586,7 +585,7 @@ padding:2px 3px;
 <button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
 <button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
 <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
-<button id="clearChat" class="action-btn" type="button">🗑️ Herkeste Temizle</button>
+<button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Herkeste Temizle</button>
 </div>
 
 <p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
@@ -615,7 +614,6 @@ padding:2px 3px;
 </div>
 
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
-
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {getDatabase, ref, push, onValue, set, onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
@@ -638,6 +636,8 @@ const presenceRef=ref(db,"presence");
 const $=id=>document.getElementById(id);
 let onlineUserNames = [];
 let activeWhisperTarget = null;
+let heartbeatInterval = null;
+let userRole = sessionStorage.getItem("kralfm_role") || "user";
 
 let uid = localStorage.getItem("kralfm_uid");
 if(!uid){
@@ -749,6 +749,16 @@ box.scrollTop=box.scrollHeight;
 return;
 }
 
+if(d.type==="action"){
+r.className="msg action-msg";
+const t=document.createElement("span");
+t.textContent=`* ${d.name || "Misafir"} ${d.text}`;
+r.append(ts, t);
+box.appendChild(r);
+box.scrollTop=box.scrollHeight;
+return;
+}
+
 const av=document.createElement("span");
 const n=document.createElement("span");
 const t=document.createElement("span");
@@ -771,7 +781,6 @@ t.textContent=msgText;
 if(d.type==="applause") r.className="msg applause-msg";
 else if(d.type==="request") r.className="msg request-msg";
 else if(d.targetUser || d.type==="whisper") r.className="msg whisper-msg";
-else if(d.type==="action") r.className="msg action-msg";
 else r.className=d.type==="bot"?"msg bot-msg":"msg";
 
 if(d.type==="bot"){
@@ -813,10 +822,18 @@ await set(uref,{
 name:activeName,
 avatar:activeAvatar,
 color:activeColor,
-createdAt:Date.now()
+role:userRole,
+lastActive:Date.now()
 });
 
 onDisconnect(uref).remove();
+
+if(heartbeatInterval) clearInterval(heartbeatInterval);
+heartbeatInterval = setInterval(async () => {
+  try {
+    await set(ref(db, "presence/" + uid + "/lastActive"), Date.now());
+  } catch(err) {}
+}, 15000);
 
 const disconnectMsgRef = push(messagesRef);
 onDisconnect(disconnectMsgRef).set({
@@ -828,6 +845,7 @@ createdAt: Date.now()
 
 window.addEventListener("beforeunload", () => {
   try {
+    if(heartbeatInterval) clearInterval(heartbeatInterval);
     uref.onDisconnect().cancel();
     disconnectMsgRef.onDisconnect().cancel();
   } catch(err) {}
@@ -856,28 +874,37 @@ $("userColor").addEventListener("change", registerPresence);
 
 onValue(presenceRef,snap=>{
 const users=snap.val()||{};
-const arr=Object.values(users);
+const now = Date.now();
 $("onlineUsersList").innerHTML="";
 onlineUserNames = [];
 
 staticBots.forEach(bot=>{
 onlineUserNames.push(bot.name);
-renderUserItem(bot.avatar, bot.name);
+renderUserItem(bot.avatar, bot.name, "bot");
 });
 
-arr.forEach(u=>{
-onlineUserNames.push(u.name);
-renderUserItem(u.avatar || "🎧", u.name);
+Object.values(users).forEach(u=>{
+  if (u.lastActive && (now - u.lastActive < 120000)) {
+    onlineUserNames.push(u.name);
+    renderUserItem(u.avatar || "🎧", u.name, u.role);
+  }
 });
 });
 
-function renderUserItem(avatar, name) {
+function renderUserItem(avatar, name, role) {
 const d=document.createElement("div");
 d.className="user-list-item";
 
 const infoRow = document.createElement("div");
 infoRow.className = "user-info-row";
-infoRow.textContent = avatar + " " + name;
+
+let prefix = "";
+if (role === "admin") {
+  prefix = "👑 @";
+}
+
+infoRow.textContent = prefix + " " + avatar + " " + name;
+if (role === "admin") infoRow.style.color = "#ff5555";
 
 const actionRow = document.createElement("div");
 actionRow.className = "user-action-row";
@@ -909,7 +936,7 @@ $("form").onsubmit = async (e) => {
   e.preventDefault();
   const textInput = $("text");
   const nameInput = $("name");
-  const text = textInput.value.trim();
+  let text = textInput.value.trim();
   const name = nameInput.value.trim() || defaultGuestName;
   const avatar = $("userAvatar").value;
   const color = $("userColor").value;
@@ -919,7 +946,10 @@ $("form").onsubmit = async (e) => {
   let msgType = "text";
   let targetUser = null;
 
-  if (activeWhisperTarget) {
+  if (text.toLowerCase().startsWith("/me ")) {
+    msgType = "action";
+    text = text.substring(4).trim();
+  } else if (activeWhisperTarget) {
     msgType = "whisper";
     targetUser = activeWhisperTarget;
   }
@@ -946,10 +976,10 @@ $("sendApplause").onclick = async () => {
   applause.play().catch(()=>{});
   await push(messagesRef, {
     name: name,
-    text: "👏 kocaman bir alkış gönderdi! 🎶",
-    type: "applause",
+    text: "👏 kocaman bir alkış gönderdi!",
     avatar: $("userAvatar").value,
     color: $("userColor").value,
+    type: "applause",
     createdAt: Date.now()
   });
 };
@@ -1023,15 +1053,34 @@ $("sendRequest").onclick = async () => {
 };
 
 $("clearChat").onclick = async () => {
-  if(confirm("Tüm sohbet geçmişini herkesten silmek istediğinize emin misiniz?")) {
+  if (userRole !== "admin") {
+    const pwd = prompt("Yönetici (Admin) şifresini girin:");
+    if (pwd === "123456") {
+      userRole = "admin";
+      sessionStorage.setItem("kralfm_role", "admin");
+      registerPresence();
+      alert("Yönetici yetkisi başarıyla aktif edildi!");
+    } else {
+      alert("Hatalı şifre! Bu komutu sadece yönetici çalıştırabilir.");
+      return;
+    }
+  }
+
+  if (confirm("Tüm sohbet geçmişini herkesten silmek istediğinize emin misiniz?")) {
     try {
       await set(messagesRef, null);
+      await push(messagesRef, {
+        name: "Sistem",
+        text: "Yönetici tarafından sohbet temizlendi.",
+        type: "system",
+        createdAt: Date.now()
+      });
     } catch(err) {
       console.error("Temizleme hatası:", err);
     }
   }
 };
 </script>
-
 </body>
 </html>
+
