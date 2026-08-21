@@ -2,29 +2,58 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Radyo Kral FM & Muhabbet</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
+body{margin:0;background:#0d0d0d;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
 
 header{
 background: linear-gradient(135deg, #1a0505 0%, #2b0000 50%, #0d0d0d 100%);
-border-bottom: 3px solid #ff3333;
-padding: 16px 20px;
+border-bottom: 2px solid #ff3333;
+padding: 10px 15px;
 display: flex;
 justify-content: space-between;
 align-items: center;
-box-shadow: 0 4px 15px rgba(255,0,0,0.3);
+}
+
+.channel-tabs {
+display: flex;
+gap: 2px;
+background: #1a1a1a;
+padding: 5px 10px;
+border-bottom: 1px solid #333;
+overflow-x: auto;
+}
+.channel-tab {
+background: #2b2b2b;
+color: #aaa;
+border: 1px solid #444;
+padding: 6px 14px;
+font-size: 13px;
+cursor: pointer;
+border-radius: 4px 4px 0 0;
+font-weight: bold;
+white-space: nowrap;
+transition: background 0.2s, color 0.2s;
+}
+.channel-tab:hover {
+background: #3a3a3a;
+color: #fff;
+}
+.channel-tab.active {
+background: #ff3333;
+color: #fff;
+border-color: #ff3333;
 }
   
 .app-container{
 max-width:1300px;
 margin:auto;
-padding:10px;
+padding:5px;
 display:flex;
-gap:10px;
+gap:5px;
 align-items:flex-start;
 }
 
@@ -34,14 +63,14 @@ min-width:0;
 }
 
 .sidebar-right{
-width:240px;
-background:#181818;
+width:220px;
+background:#141414;
 border:1px solid #333;
-border-radius:12px;
-padding:10px;
-height:calc(100vh - 80px);
+border-radius:6px;
+padding:8px;
+height:calc(100vh - 120px);
 position:sticky;
-top:10px;
+top:5px;
 display:flex;
 flex-direction:column;
 flex-shrink:0;
@@ -51,9 +80,9 @@ flex-shrink:0;
 display:flex;
 justify-content:space-between;
 border-bottom:1px solid #333;
-padding-bottom:8px;
-margin-bottom:8px;
-font-size:14px;
+padding-bottom:6px;
+margin-bottom:6px;
+font-size:13px;
 font-weight:bold;
 color:#ff5555;
 }
@@ -64,23 +93,23 @@ overflow-y:auto;
 }
 
 .card{
-background:#1e1e1e;
-border-radius:12px;
-padding:15px;
-margin-bottom:12px
+background:#181818;
+border-radius:6px;
+padding:10px;
+margin-bottom:8px;
+border: 1px solid #2a2a2a;
 }
 
 .radio-player-card{
 background:linear-gradient(145deg,#180303,#2a0808);
 border:1px solid #aa0000;
-box-shadow:0 4px 20px rgba(224,0,0,.3)
 }
 
 .radio-banner{
 background:linear-gradient(90deg,#f00,#800000);
-border-radius:8px;
-padding:12px;
-margin-bottom:10px;
+border-radius:4px;
+padding:8px;
+margin-bottom:8px;
 display:flex;
 align-items:center;
 justify-content:space-between;
@@ -90,12 +119,12 @@ gap:8px
 .radio-logo-box{
 display:flex;
 align-items:center;
-gap:10px
+gap:8px
 }
 
 .l2mr-logo{
-width:40px;
-height:40px;
+width:32px;
+height:32px;
 background:#fff;
 border-radius:50%;
 display:flex;
@@ -105,18 +134,18 @@ flex-shrink:0
 }
 
 .l2mr-logo svg{
-width:24px;
-height:24px;
+width:18px;
+height:18px;
 fill:#b00000
 }
 
 .radio-logo-text h1{
 margin:0;
-font-size:18px
+font-size:15px
 }
 
 .radio-logo-text span{
-font-size:12px;
+font-size:11px;
 color:#ffcccc
 }
 
@@ -124,16 +153,16 @@ color:#ffcccc
 background:#000;
 color:#ff3333;
 border:1px solid #f33;
-font-size:10px;
+font-size:9px;
 font-weight:bold;
-padding:4px 8px;
-border-radius:20px;
+padding:3px 6px;
+border-radius:12px;
 white-space:nowrap
 }
 
 .live-dot{
-width:6px;
-height:6px;
+width:5px;
+height:5px;
 background:#f33;
 border-radius:50%;
 display:inline-block
@@ -141,28 +170,28 @@ display:inline-block
 
 .radio-description{
 background:rgba(0,0,0,.4);
-border-left:4px solid red;
-padding:10px;
-border-radius:6px;
-margin-bottom:12px;
-font-size:13px;
+border-left:3px solid red;
+padding:8px;
+border-radius:4px;
+margin-bottom:8px;
+font-size:12px;
 color:#ddd
 }
 
 .popup-player-box{
 background:rgba(0,0,0,.5);
-padding:8px;
-border-radius:8px;
+padding:6px;
+border-radius:6px;
 border:1px solid #333
 }
 
 .play-btn{
 width:100%;
-padding:12px;
-font-size:15px;
+padding:8px;
+font-size:13px;
 background:linear-gradient(180deg,#ff1a1a,#990000);
 border:0;
-border-radius:6px;
+border-radius:4px;
 color:#fff;
 font-weight:bold;
 cursor:pointer;
@@ -174,339 +203,93 @@ text-align:center
 .radio-browser-btn{
 display:block;
 width:100%;
-margin-top:8px;
-padding:10px;
-background:#333;
-border:1px solid #555;
-border-radius:6px;
+margin-top:6px;
+padding:8px;
+background:#252525;
+border:1px solid #444;
+border-radius:4px;
 color:#fff;
 text-decoration:none;
 text-align:center;
 font-weight:bold;
-font-size:13px
+font-size:12px
 }
 
 .chat-box-area{
-height:320px;
+height:280px;
 overflow-y:auto;
-background:#0b0b0b;
-border-radius:8px;
-padding:10px;
-border:1px solid #333
+background:#050505;
+border-radius:4px;
+padding:8px;
+border:1px solid #222;
+font-family: monospace;
 }
 
 .msg{
-background:#292929;
-border-radius:8px;
-padding:8px 10px;
-margin:6px 0;
-word-break:break-word;
-font-size:14px
-}
-
-.bot-msg{
-background:linear-gradient(135deg,#1e1b4b,#31103f);
-border:1px solid #7c3aed
-}
-
-.applause-msg{
-background:linear-gradient(135deg,#3f2b10,#2a1a08);
-border:1px solid #f59e0b;
-color:#fef08a;
-font-weight:bold
-}
-
-.request-msg{
-background:linear-gradient(135deg,#064e3b,#022c22);
-border:1px solid #10b981;
-color:#a7f3d0;
-font-weight:bold
-}
-
-.whisper-msg{
-background:linear-gradient(135deg,#3b0764,#581c87);
-border:1px solid #c084fc;
-box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
-}
-
-.action-msg{
-background:linear-gradient(135deg,#1e3a8a,#172554);
-border:1px solid #3b82f6;
-color:#93c5fd;
-font-style:italic
-}
-
-.system-msg{
-background:#222;
-border:1px dashed #555;
-color:#aaa;
-font-style:italic;
-text-align:center;
-font-size:12px
-}
-
-.time{
-font-size:10px;
-color:#888;
-margin-right:4px
-}
-
-.avatar{
-margin-right:3px
-}
-
-.name{
-font-weight:bold;
-margin-right:4px;
-cursor:pointer;
-padding:2px 4px;
+background:#161616;
 border-radius:4px;
-transition:background 0.2s;
-}
-
-.name:hover{
-background:rgba(255,255,255,0.1);
-}
-
-.bot-name{
-color:#c084fc!important
-}
-
-.bot-badge{
-font-size:9px;
-font-weight:bold;
-padding:2px 5px;
-border-radius:4px;
-margin-right:4px;
-background:#7c3aed
-}
-
-form{
-display:flex;
-gap:6px;
-margin-top:10px;
-align-items:center;
-flex-wrap:wrap;
-position:relative;
-}
-
-select#userAvatar,
-input#name,
-input#text{
-background:#2a2a2a;
-color:#fff;
-border-radius:6px;
-border:0
-}
-
-select#userAvatar{
-padding:10px 6px;
-font-size:16px
-}
-
-input[type=color]{
-width:40px;
-height:40px;
-border:0
-}
-
-input#name{
-width:105px;
-padding:10px;
-font-size:14px
-}
-
-input#text{
-flex:1;
-padding:10px;
-min-width:120px;
-font-size:14px;
-transition: border 0.3s, box-shadow 0.3s;
-}
-
-button[type=submit]{
-border:0;
-border-radius:6px;
-padding:10px 15px;
-background:#e00000;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-font-size:14px;
-}
-
-.tab-btn{
-background:#4338ca;
-color:#fff;
-border:0;
-border-radius:6px;
-padding:10px 10px;
-font-weight:bold;
-cursor:pointer;
-font-size:13px;
-transition:background 0.2s;
-}
-.tab-btn:hover{
-background:#4f46e5;
-}
-
-.action-btns{
-display:flex;
-gap:6px;
-margin-top:10px;
-flex-wrap:wrap
-}
-
-.action-btn{
-background:#333;
-color:#fff;
-border:1px solid #555;
-padding:8px 10px;
-border-radius:6px;
-cursor:pointer;
-font-size:12px;
-font-weight:bold
-}
-
-.applause-btn{background:#d97706}
-.coffee-btn{background:#78350f}
-.heart-btn{background:#be123c}
-.fire-btn{background:#c2410c}
-.request-btn{background:#047857}
-
-.note{
-color:#aaa;
-font-size:12px
-}
-
-.user-list-item{
-padding:6px 8px;
+padding:5px 8px;
 margin:4px 0;
-background:#222;
-border-radius:6px;
-display:flex;
-flex-direction:column;
-gap:4px;
-transition: background 0.2s;
-}
-.user-list-item:hover{
-background:#2a2a2a;
-}
-.user-info-row{
-display:flex;
-align-items:center;
-gap:6px;
-font-weight:bold;
-font-size:12px;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
-}
-.user-action-row{
-display:flex;
-gap:4px;
-}
-.user-action-btn{
-background:#333;
-border:0;
-color:#fff;
-padding:2px 5px;
-border-radius:3px;
-font-size:10px;
-cursor:pointer;
-font-weight:bold;
-}
-.mention-action{background:#4338ca}
-.whisper-action{background:#7e22ce}
-
-.whisper-indicator {
-display: none;
-position: absolute;
-top: -26px;
-left: 150px;
-background: #581c87;
-color: #e9d5ff;
-font-size: 11px;
-padding: 3px 8px;
-border-radius: 5px;
-border: 1px solid #c084fc;
-align-items: center;
-gap: 5px;
-z-index: 10;
-}
-.whisper-indicator.active {
-display: flex;
-}
-.cancel-whisper {
-background: none;
-border: 0;
-color: #ff8080;
-font-weight: bold;
-cursor: pointer;
-font-size: 12px;
+word-break:break-word;
+font-size:13px;
+border-left: 2px solid #444;
 }
 
-.modal-overlay{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.8);
-z-index:1000;
-align-items:center;
-justify-content:center
-}
+.bot-msg{background:#151025;border-left-color: #7c3aed;}
+.applause-msg{background:#221505;border-left-color: #f59e0b;color:#fef08a;font-weight:bold;}
+.request-msg{background:#022018;border-left-color: #10b981;color:#a7f3d0;font-weight:bold;}
+.whisper-msg{background:#1c0c2e;border-left-color: #c084fc;}
+.action-msg{background:#0d1836;border-left-color: #3b82f6;color:#93c5fd;font-style:italic;}
+.system-msg{background:#111;border:1px dashed #333;color:#888;font-style:italic;text-align:center;font-size:11px;}
 
-.modal-box{
-background:#1e1e1e;
-border:1px solid #10b981;
-border-radius:12px;
-padding:20px;
-width:90%;
-max-width:400px
-}
+.time{font-size:10px;color:#666;margin-right:4px;}
+.avatar{margin-right:2px;}
+.name{font-weight:bold;margin-right:4px;cursor:pointer;padding:1px 3px;border-radius:3px;}
+.name:hover{background:rgba(255,255,255,0.1);}
+.bot-name{color:#c084fc!important;}
+.bot-badge{font-size:8px;font-weight:bold;padding:1px 4px;border-radius:3px;margin-right:4px;background:#7c3aed;color:#fff;}
 
-.modal-box h3{
-color:#10b981;
-margin-top:0
-}
+form{display:flex;gap:4px;margin-top:8px;align-items:center;flex-wrap:wrap;position:relative;}
+select#userAvatar,input#name,input#text{background:#222;color:#fff;border-radius:4px;border:1px solid #444;}
+select#userAvatar{padding:8px 4px;font-size:14px;}
+input[type=color]{width:34px;height:34px;border:0;background:none;cursor:pointer;}
+input#name{width:95px;padding:8px;font-size:13px;}
+input#text{flex:1;padding:8px;min-width:100px;font-size:13px;}
+button[type=submit]{border:0;border-radius:4px;padding:8px 12px;background:#e00000;color:#fff;font-weight:bold;cursor:pointer;font-size:13px;}
+.tab-btn{background:#3730a3;color:#fff;border:0;border-radius:4px;padding:8px 8px;font-weight:bold;cursor:pointer;font-size:12px;}
 
-.modal-box input{
-width:100%;
-padding:10px;
-margin:8px 0;
-background:#2a2a2a;
-border:1px solid #444;
-color:#fff;
-border-radius:6px
-}
+.action-btns{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
+.action-btn{background:#252525;color:#fff;border:1px solid #444;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:11px;font-weight:bold;}
+.applause-btn{background:#b45309}
+.coffee-btn{background:#5c2c16}
+.heart-btn{background:#9f1239}
+.fire-btn{background:#9a3412}
+.request-btn{background:#065f46}
 
-.modal-actions{
-display:flex;
-gap:10px;
-justify-content:flex-end;
-margin-top:15px
-}
+.note{color:#888;font-size:11px;}
+.user-list-item{padding:4px 6px;margin:2px 0;background:#1a1a1a;border-radius:4px;display:flex;flex-direction:column;gap:2px;border: 1px solid #252525;}
+.user-info-row{display:flex;align-items:center;gap:4px;font-weight:bold;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.user-action-row{display:flex;gap:3px;}
+.user-action-btn{background:#2a2a2a;border:0;color:#ccc;padding:1px 4px;border-radius:2px;font-size:9px;cursor:pointer;font-weight:bold;}
+.mention-action{background:#3730a3}
+.whisper-action{background:#6b21a8}
+
+.whisper-indicator {display: none;position: absolute;top: -24px;left: 130px;background: #581c87;color: #e9d5ff;font-size: 10px;padding: 2px 6px;border-radius: 4px;border: 1px solid #c084fc;align-items: center;gap: 4px;z-index: 10;}
+.whisper-indicator.active {display: flex;}
+.cancel-whisper {background: none;border: 0;color: #ff8080;font-weight: bold;cursor: pointer;font-size: 11px;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;}
+.modal-box{background:#181818;border:1px solid #065f46;border-radius:8px;padding:15px;width:90%;max-width:350px;}
+.modal-box h3{color:#10b981;margin-top:0;font-size:15px;}
+.modal-box input{width:100%;padding:8px;margin:6px 0;background:#222;border:1px solid #444;color:#fff;border-radius:4px;font-size:13px;}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;}
 
 @media(max-width:768px){
-.app-container{
-padding:4px;
-gap:4px;
-}
-.sidebar-right{
-width:125px; 
-padding:6px;
-height:calc(100vh - 60px);
-}
-.sidebar-header span{
-font-size:11px;
-}
-.user-info-row{
-font-size:11px;
-}
-.user-action-btn{
-font-size:9px;
-padding:2px 3px;
-}
+.app-container{padding:2px;gap:2px;}
+.sidebar-right{width:115px;padding:4px;height:calc(100vh - 100px);}
+.sidebar-header span{font-size:10px;}
+.user-info-row{font-size:10px;}
+.user-action-btn{font-size:8px;padding:1px 2px;}
 }
 </style>
 </head>
@@ -517,39 +300,36 @@ padding:2px 3px;
 <div>🎙️ Kral FM & Muhabbet</div>
 </header>
 
+<div class="channel-tabs" id="channelTabs">
+<button class="channel-tab active" data-channel="Genel-Sohbet">#Genel-Sohbet</button>
+<button class="channel-tab" data-channel="Kral-FM">#Kral-FM</button>
+</div>
+
 <div class="app-container">
 <main>
 <div class="card radio-player-card">
 <div class="radio-banner">
 <div class="radio-logo-box">
 <div class="l2mr-logo">
-<svg viewBox="0 0 24 24">
-<path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/>
-</svg>
+<svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg>
 </div>
 <div class="radio-logo-text">
 <h1>📻 Radyo Kral FM</h1>
 <span>Kesintisiz Canlı Yayın</span>
 </div>
 </div>
-<div class="live-badge">
-<span class="live-dot"></span> CANLI YAYIN
+<div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div>
 </div>
-</div>
-<div class="radio-description">
-✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕
-</div>
+<div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div>
 <div class="popup-player-box">
 <a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a>
 <a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a>
-<div id="radioStatus" class="note" style="margin-top:6px;text-align:center">
-📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.
-</div>
+<div id="radioStatus" class="note" style="margin-top:4px;text-align:center">📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.</div>
 </div>
 </div>
 
 <div class="card">
-<h3 style="margin-top:0">💬 Canlı Sohbet Odası</h3>
+<h3 id="currentChannelTitle" style="margin-top:0;font-size:14px;">💬 Canlı Sohbet Odası (#Genel-Sohbet)</h3>
 <div id="messages" class="chat-box-area"></div>
 
 <form id="form" autocomplete="off">
@@ -571,30 +351,28 @@ padding:2px 3px;
 <option value="🎧">🎧 Kulaklık</option>
 </select>
 
-<input type="color" id="userColor" value="#ff5555">
+<input type="color" id="userColor" value="#ff5555" title="Yazı Rengi">
 <input type="text" id="name" maxlength="30" placeholder="Adınız">
-<input type="text" id="text" maxlength="300" placeholder="Mesaj (/admin, /sop, /op)..." required>
+<input type="text" id="text" maxlength="300" placeholder="Mesajınız..." required>
 <button type="button" id="tabButton" class="tab-btn" title="Aktif kullanıcıyı etiketle">@ Tab</button>
-<button type="submit">Gönder</button>
+<button type="submit">GÖNDER</button>
 </form>
 
 <div class="action-btns">
 <button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
-<button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
-<button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
-<button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
+<button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve</button>
+<button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp</button>
+<button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev</button>
 <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
-<button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Admin & Temizle</button>
+<button id="clearChat" class="action-btn" type="button" style="background:#991b1b;">🗑️ Temizle</button>
 </div>
 
-<p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
+<p id="statusText" class="note" style="margin-top:4px;">Sohbet odası aktif. 🤖</p>
 </div>
 </main>
 
 <aside class="sidebar-right">
-<div class="sidebar-header">
-<span>👥 Üyeler</span>
-</div>
+<div class="sidebar-header"><span>👥 Üyeler</span></div>
 <div id="onlineUsersList" class="sidebar-users-area">Yükleniyor...</div>
 </aside>
 </div>
@@ -602,7 +380,7 @@ padding:2px 3px;
 <div id="requestModal" class="modal-overlay">
 <div class="modal-box">
 <h3>🎵 İstek Parça Gönder</h3>
-<p style="font-size:13px;color:#ccc">Yayıncıya duyurmak istediğiniz şarkıyı yazın:</p>
+<p style="font-size:12px;color:#ccc">Yayıncıya duyurmak istediğiniz şarkıyı yazın:</p>
 <input id="songArtist" placeholder="Sanatçı Adı">
 <input id="songTitle" placeholder="Şarkı Adı">
 <div class="modal-actions">
@@ -611,6 +389,7 @@ padding:2px 3px;
 </div>
 </div>
 </div>
+
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -628,7 +407,6 @@ appId:"1:638769846511:web:f6d8abb91564873996"
 
 const app=initializeApp(firebaseConfig);
 const db=getDatabase(app);
-const messagesRef=ref(db,"messages");
 const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
@@ -637,6 +415,9 @@ let activeUsersData = {};
 let activeWhisperTarget = null;
 let heartbeatInterval = null;
 let userRole = sessionStorage.getItem("kralfm_role") || "user";
+
+let currentChannel = "Genel-Sohbet";
+let messagesRef = ref(db, "channels/" + currentChannel + "/messages");
 
 let uid = localStorage.getItem("kralfm_uid");
 if(!uid){
@@ -664,26 +445,25 @@ return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute
 
 function mentionUser(username){
   const textInput = $("text");
-  const cleanName = username.replace(/^[👑⭐🛡️👤]\s*/, "").replace(":", "").trim();
+  const cleanName = username.replace(/^[~&@%+👑⭐🛡️👤]\s*/, "").replace(":", "").trim();
   textInput.value = "@" + cleanName + " " + textInput.value;
   textInput.focus();
   
   textInput.style.border = "2px solid #c084fc";
-  textInput.style.boxShadow = "0 0 10px #c084fc";
+  textInput.style.boxShadow = "0 0 8px #c084fc";
   setTimeout(() => {
-    textInput.style.border = "";
+    textInput.style.border = "1px solid #444";
     textInput.style.boxShadow = "";
   }, 1000);
 }
 
 function startWhisper(username) {
-  activeWhisperTarget = username.replace(/^[👑⭐🛡️👤]\s*/, "").replace(":", "").trim();
+  activeWhisperTarget = username.replace(/^[~&@%+👑⭐🛡️👤]\s*/, "").replace(":", "").trim();
   $("whisperTargetName").textContent = activeWhisperTarget;
   $("whisperIndicator").classList.add("active");
   
   const textInput = $("text");
   textInput.style.border = "2px solid #c084fc";
-  textInput.style.boxShadow = "0 0 10px #c084fc";
   textInput.focus();
 }
 
@@ -691,8 +471,7 @@ function cancelWhisper() {
   activeWhisperTarget = null;
   $("whisperIndicator").classList.remove("active");
   const textInput = $("text");
-  textInput.style.border = "";
-  textInput.style.boxShadow = "";
+  textInput.style.border = "1px solid #444";
 }
 
 $("cancelWhisper").onclick = cancelWhisper;
@@ -761,17 +540,21 @@ function appendMessage(d){
 
   const roleSpan = document.createElement("span");
   if (d.role === "admin") {
-    roleSpan.textContent = "👑 ";
-    roleSpan.style.color = "#ff5555";
+    roleSpan.textContent = "~";
+    roleSpan.style.color = "#ff3333";
+    roleSpan.style.fontWeight = "bold";
   } else if (d.role === "sop") {
-    roleSpan.textContent = "⭐ ";
-    roleSpan.style.color = "#facc15";
+    roleSpan.textContent = "&";
+    roleSpan.style.color = "#f472b6";
+    roleSpan.style.fontWeight = "bold";
   } else if (d.role === "op") {
-    roleSpan.textContent = "🛡️ ";
+    roleSpan.textContent = "@";
     roleSpan.style.color = "#38bdf8";
+    roleSpan.style.fontWeight = "bold";
   } else {
-    roleSpan.textContent = "👤 ";
-    roleSpan.style.color = "#22c55e";
+    roleSpan.textContent = "+";
+    roleSpan.style.color = "#4ade80";
+    roleSpan.style.fontWeight = "bold";
   }
 
   const av=document.createElement("span");
@@ -812,12 +595,29 @@ function appendMessage(d){
   box.scrollTop=box.scrollHeight;
 }
 
-onValue(messagesRef,snap=>{
-  const data=snap.val()||{};
-  $("messages").innerHTML="";
-  Object.values(data).forEach(d=>{
-    appendMessage(d);
+function bindChannelMessages() {
+  onValue(messagesRef, snap => {
+    const data = snap.val() || {};
+    $("messages").innerHTML = "";
+    Object.values(data).forEach(d => {
+      appendMessage(d);
+    });
   });
+}
+
+bindChannelMessages();
+
+document.querySelectorAll(".channel-tab").forEach(tab => {
+  tab.onclick = (e) => {
+    document.querySelectorAll(".channel-tab").forEach(t => t.classList.remove("active"));
+    e.target.classList.add("active");
+    
+    currentChannel = e.target.getAttribute("data-channel");
+    $("currentChannelTitle").textContent = `💬 Canlı Sohbet Odası (#${currentChannel})`;
+    
+    messagesRef = ref(db, "channels/" + currentChannel + "/messages");
+    bindChannelMessages();
+  };
 });
 
 async function registerPresence(){
@@ -849,12 +649,6 @@ async function registerPresence(){
         await set(ref(db, "presence/" + uid + "/lastActive"), Date.now());
       } catch(err) {}
     }, 15000);
-
-    window.addEventListener("beforeunload", () => {
-      try {
-        if(heartbeatInterval) clearInterval(heartbeatInterval);
-      } catch(err) {}
-    });
 
     if(!sessionStorage.getItem("kralfm_joined_logged")){
       sessionStorage.setItem("kralfm_joined_logged", "true");
@@ -905,21 +699,21 @@ function renderUserItem(avatar, name, role) {
 
   const roleSpan = document.createElement("span");
   if (role === "admin") {
-    roleSpan.textContent = "👑 ";
-    roleSpan.style.color = "#ff5555";
+    roleSpan.textContent = "~ ";
+    roleSpan.style.color = "#ff3333";
   } else if (role === "sop") {
-    roleSpan.textContent = "⭐ ";
-    roleSpan.style.color = "#facc15";
+    roleSpan.textContent = "& ";
+    roleSpan.style.color = "#f472b6";
   } else if (role === "op") {
-    roleSpan.textContent = "🛡️ ";
+    roleSpan.textContent = "@ ";
     roleSpan.style.color = "#38bdf8";
   } else {
-    roleSpan.textContent = "👤 ";
-    roleSpan.style.color = "#22c55e";
+    roleSpan.textContent = "+ ";
+    roleSpan.style.color = "#4ade80";
   }
 
   const avSpan = document.createElement("span");
-  avSpan.textContent = (avatar || "👤") + " ";
+  avSpan.textContent = (avatar || "👤") + "";
 
   const nameSpan = document.createElement("span");
   nameSpan.textContent = name;
@@ -932,7 +726,7 @@ function renderUserItem(avatar, name, role) {
   const mentionBtn = document.createElement("button");
   mentionBtn.type = "button";
   mentionBtn.className = "user-action-btn mention-action";
-  mentionBtn.textContent = "Etiket";
+  mentionBtn.textContent = "@ Etiket";
   mentionBtn.onclick = (e) => {
     e.stopPropagation();
     mentionUser(name);
@@ -941,7 +735,7 @@ function renderUserItem(avatar, name, role) {
   const whisperBtn = document.createElement("button");
   whisperBtn.type = "button";
   whisperBtn.className = "user-action-btn whisper-action";
-  whisperBtn.textContent = "Fısılda";
+  whisperBtn.textContent = "🔒 Fısılda";
   whisperBtn.onclick = (e) => {
     e.stopPropagation();
     startWhisper(name);
@@ -960,14 +754,13 @@ async function updateUserRoleByName(targetName, newRole) {
     }
   });
   if (!targetUid) {
-    alert("Odayda çevrimiçi olan '" + targetName + "' adında bir kullanıcı bulunamadı!");
+    alert("Odalarda çevrimiçi '" + targetName + "' bulunamadı!");
     return;
   }
 
   try {
     await set(ref(db, "presence/" + targetUid + "/role"), newRole);
     let roleTitle = newRole.toUpperCase();
-    if (newRole === "user") roleTitle = "Normal Üye";
 
     await push(messagesRef, {
       name: "Sistem",
@@ -1006,7 +799,7 @@ $("form").onsubmit = async (e) => {
         return;
       }
       if (!targetName) {
-        alert("Lütfen hedef kullanıcı adı yazın! Örn: " + cmd + " Isim");
+        alert("Lütfen hedef kullanıcı adı yazın!");
         textInput.value = "";
         return;
       }
@@ -1071,7 +864,7 @@ $("sendCoffee").onclick = async () => {
   const name = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
   await push(messagesRef, {
     name: name,
-    text: "☕ odadakilere sıcak bir kahve ısmarladı. Afiyet olsun! ☕",
+    text: "☕ odadakilere sıcak kahve ısmarladı. Afiyet olsun! ☕",
     type: "applause",
     avatar: $("userAvatar").value,
     color: $("userColor").value,
@@ -1109,12 +902,8 @@ $("sendFire").onclick = async () => {
 };
 
 const requestModal = $("requestModal");
-$("openRequestModal").onclick = () => {
-  requestModal.style.display = "flex";
-};
-$("closeRequestModal").onclick = () => {
-  requestModal.style.display = "none";
-};
+$("openRequestModal").onclick = () => { requestModal.style.display = "flex"; };
+$("closeRequestModal").onclick = () => { requestModal.style.display = "none"; };
 
 $("sendRequest").onclick = async () => {
   const artist = $("songArtist").value.trim();
@@ -1144,25 +933,25 @@ $("sendRequest").onclick = async () => {
 
 $("clearChat").onclick = async () => {
   if (userRole !== "admin") {
-    const pwd = prompt("Yönetici (Admin) şifresini girin:");
+    const pwd = prompt("Yönetici şifresini girin:");
     if (pwd === "123456") {
       userRole = "admin";
       sessionStorage.setItem("kralfm_role", "admin");
       await set(ref(db, "presence/" + uid + "/role"), "admin");
       registerPresence();
-      alert("Yönetici yetkisi başarıyla aktif edildi! Artık komutları kullanabilirsiniz.");
+      alert("Yönetici yetkisi aktif edildi!");
     } else {
       alert("Hatalı şifre!");
       return;
     }
   }
 
-  if (confirm("Tüm sohbet geçmişini herkesten silmek istediğinize emin misiniz?")) {
+  if (confirm("Bu kanaldaki tüm sohbet geçmişini temizlemek istediğinize emin misiniz?")) {
     try {
       await set(messagesRef, null);
       await push(messagesRef, {
         name: "Sistem",
-        text: "Yönetici tarafından sohbet temizlendi.",
+        text: "Yönetici tarafından kanal temizlendi.",
         type: "system",
         createdAt: Date.now()
       });
