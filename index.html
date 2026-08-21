@@ -6,319 +6,312 @@
 <title>Radyo Kral FM & Muhabbet</title>
 
 <style>
-.app-container { display: flex !important; flex-direction: row !important; gap: 10px !important; }
-main, .chat-container { flex: 1 !important; }
-.sidebar-right { width: 250px !important; flex-shrink: 0 !important; }
-
 *{box-sizing:border-box}
 body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}
 
 header{
-background: linear-gradient(135deg, #1a0505 0%, #2b0000 50%, #0d0d0d 100%);
-border-bottom: 3px solid #ff3333;
-padding: 16px 20px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-box-shadow: 0 4px 15px rgba(255,0,0,0.3);
+    background: linear-gradient(135deg, #1a0505 0%, #2b0000 50%, #0d0d0d 100%);
+    border-bottom: 3px solid #ff3333;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(255,0,0,0.3);
 }
   
 .app-container{
-max-width:1300px;
-margin:auto;
-padding:10px;
-display:flex;
-gap:10px;
-align-items:flex-start;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    max-width: 1300px !important;
+    margin: auto !important;
+    padding: 10px !important;
+    gap: 10px !important;
+    width: 100% !important;
 }
 
-main{
-flex:1;
-min-width:0;
+main, .chat-container {
+    flex: 1 !important;
+    min-width: 0 !important;
 }
 
-.sidebar-right{
-width:240px;
-background:#181818;
-border:1px solid #333;
-border-radius:12px;
-padding:10px;
-height:calc(100vh - 80px);
-position:sticky;
-top:10px;
-display:flex;
-flex-direction:column;
-flex-shrink:0;
+.sidebar-right {
+    width: 180px !important;
+    flex-shrink: 0 !important;
+    background:#181818;
+    border:1px solid #333;
+    border-radius:12px;
+    padding:10px;
+    height:calc(100vh - 80px);
+    position:sticky;
+    top:10px;
+    display:flex;
+    flex-direction:column;
 }
 
 .sidebar-header{
-display:flex;
-justify-content:space-between;
-border-bottom:1px solid #333;
-padding-bottom:8px;
-margin-bottom:8px;
-font-size:14px;
-font-weight:bold;
-color:#ff5555;
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid #333;
+    padding-bottom:8px;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:bold;
+    color:#ff5555;
 }
 
 .sidebar-users-area{
-flex:1;
-overflow-y:auto;
+    flex:1;
+    overflow-y:auto;
 }
 
 .card{
-background:#1e1e1e;
-border-radius:12px;
-padding:15px;
-margin-bottom:12px
+    background:#1e1e1e;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:12px
 }
 
 .radio-player-card{
-background:linear-gradient(145deg,#180303,#2a0808);
-border:1px solid #aa0000;
-box-shadow:0 4px 20px rgba(224,0,0,.3)
+    background:linear-gradient(145deg,#180303,#2a0808);
+    border:1px solid #aa0000;
+    box-shadow:0 4px 20px rgba(224,0,0,.3)
 }
 
 .radio-banner{
-background:linear-gradient(90deg,#f00,#800000);
-border-radius:8px;
-padding:12px;
-margin-bottom:10px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:8px
+    background:linear-gradient(90deg,#f00,#800000);
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px
 }
 
 .radio-logo-box{
-display:flex;
-align-items:center;
-gap:10px
+    display:flex;
+    align-items:center;
+    gap:10px
 }
-
 .l2mr-logo{
-width:40px;
-height:40px;
-background:#fff;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-shrink:0
+    width:40px;
+    height:40px;
+    background:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0
 }
 
 .l2mr-logo svg{
-width:24px;
-height:24px;
-fill:#b00000
+    width:24px;
+    height:24px;
+    fill:#b00000
 }
 
 .radio-logo-text h1{
-margin:0;
-font-size:18px
+    margin:0;
+    font-size:18px
 }
 
 .radio-logo-text span{
-font-size:12px;
-color:#ffcccc
+    font-size:12px;
+    color:#ffcccc
 }
 
 .live-badge{
-background:#000;
-color:#ff3333;
-border:1px solid #f33;
-font-size:10px;
-font-weight:bold;
-padding:4px 8px;
-border-radius:20px;
-white-space:nowrap
-}
-
-.live-dot{
-width:6px;
-height:6px;
-background:#f33;
-border-radius:50%;
-display:inline-block
+    background:#000;
+    color:#ff3333;
+    border:1px solid #f33;
+    font-size:10px;
+    font-weight:bold;
+    padding:4px 8px;
+    border-radius:20px;
+    white-space:nowrap
+  }
+  .live-dot{
+    width:6px;
+    height:6px;
+    background:#f33;
+    border-radius:50%;
+    display:inline-block
 }
 
 .radio-description{
-background:rgba(0,0,0,.4);
-border-left:4px solid red;
-padding:10px;
-border-radius:6px;
-margin-bottom:12px;
-font-size:13px;
-color:#ddd
+    background:rgba(0,0,0,.4);
+    border-left:4px solid red;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:12px;
+    font-size:13px;
+    color:#ddd
 }
 
 /* Oda Konusu Stili */
 .room-topic-bar{
-background:linear-gradient(135deg,#1f1b2e,#2d1f45);
-border:1px solid #7c3aed;
-border-radius:8px;
-padding:10px 12px;
-margin-bottom:12px;
-font-size:13px;
-color:#e9d5ff;
-display:flex;
-align-items:center;
-gap:8px;
-box-shadow:0 2px 10px rgba(124,58,237,0.2);
+    background:linear-gradient(135deg,#1f1b2e,#2d1f45);
+    border:1px solid #7c3aed;
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:12px;
+    font-size:13px;
+    color:#e9d5ff;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 2px 10px rgba(124,58,237,0.2);
 }
 
 .popup-player-box{
-background:rgba(0,0,0,.5);
-padding:8px;
-border-radius:8px;
-border:1px solid #333
+    background:rgba(0,0,0,.5);
+    padding:8px;
+    border-radius:8px;
+    border:1px solid #333
 }
 
 .play-btn{
-width:100%;
-padding:12px;
-font-size:15px;
-background:linear-gradient(180deg,#ff1a1a,#990000);
-border:0;
-border-radius:6px;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-text-decoration:none;
-display:block;
-text-align:center
+    width:100%;
+    padding:12px;
+    font-size:15px;
+    background:linear-gradient(180deg,#ff1a1a,#990000);
+    border:0;
+    border-radius:6px;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+    text-decoration:none;
+    display:block;
+    text-align:center
 }
-
-.radio-browser-btn{
-display:block;
-width:100%;
-margin-top:8px;
-padding:10px;
-background:#333;
-border:1px solid #555;
-border-radius:6px;
-color:#fff;
-text-decoration:none;
-text-align:center;
-font-weight:bold;
-font-size:13px
+ .radio-browser-btn{
+    display:block;
+    width:100%;
+    margin-top:8px;
+    padding:10px;
+    background:#333;
+    border:1px solid #555;
+    border-radius:6px;
+    color:#fff;
+    text-decoration:none;
+    text-align:center;
+    font-weight:bold;
+    font-size:13px
 }
 
 .chat-box-area{
-height:300px;
-overflow-y:auto;
-background:#0b0b0b;
-border-radius:8px;
-padding:10px;
-border:1px solid #333
+    height:300px;
+    overflow-y:auto;
+    background:#0b0b0b;
+    border-radius:8px;
+    padding:10px;
+    border:1px solid #333
 }
 
 .msg{
-background:#292929;
-border-radius:8px;
-padding:8px 10px;
-margin:6px 0;
-word-break:break-word;
-font-size:14px;
-position:relative;
+    background:#292929;
+    border-radius:8px;
+    padding:8px 10px;
+    margin:6px 0;
+    word-break:break-word;
+    font-size:14px;
+    position:relative;
 }
 
 .bot-msg{
-background:linear-gradient(135deg,#1e1b4b,#31103f);
-border:1px solid #7c3aed
+    background:linear-gradient(135deg,#1e1b4b,#31103f);
+    border:1px solid #7c3aed
 }
 
 .love-msg{
-background:linear-gradient(135deg,#500b34,#2c0721);
-border:2px solid #ec4899;
-box-shadow: 0 0 15px rgba(236, 72, 153, 0.7);
-color: #fbcfe8;
-font-weight: bold;
+    background:linear-gradient(135deg,#500b34,#2c0721);
+    border:2px solid #ec4899;
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.7);
+    color: #fbcfe8;
+    font-weight: bold;
 }
 
 .applause-msg{
-background:linear-gradient(135deg,#3f2b10,#2a1a08);
-border:1px solid #f59e0b;
-color:#fef08a;
-font-weight:bold
+    background:linear-gradient(135deg,#3f2b10,#2a1a08);
+    border:1px solid #f59e0b;
+    color:#fef08a;
+    font-weight:bold
 }
 
 .request-msg{
-background:linear-gradient(135deg,#064e3b,#022c22);
-border:1px solid #10b981;
-color:#a7f3d0;
-font-weight:bold
+    background:linear-gradient(135deg,#064e3b,#022c22);
+    border:1px solid #10b981;
+    color:#a7f3d0;
+    font-weight:bold
 }
 
 .whisper-msg{
-background:linear-gradient(135deg,#3b0764,#581c87);
-border:1px solid #c084fc;
-box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+    background:linear-gradient(135deg,#3b0764,#581c87);
+    border:1px solid #c084fc;
+    box-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
 }
 
 .action-msg{
-background:linear-gradient(135deg,#1e3a8a,#172554);
-border:1px solid #3b82f6;
-color:#93c5fd;
-font-style:italic
+    background:linear-gradient(135deg,#1e3a8a,#172554);
+    border:1px solid #3b82f6;
+    color:#93c5fd;
+    font-style:italic
 }
 
 .system-msg{
-background:#222;
-border:1px dashed #555;
-color:#aaa;
-font-style:italic;
-text-align:center;
-font-size:12px
+    background:#222;
+    border:1px dashed #555;
+    color:#aaa;
+    font-style:italic;
+    text-align:center;
+    font-size:12px
 }
-
-/* Reaksiyon Alanı Stilleri */
 .msg-reactions {
-display: flex;
-gap: 5px;
-margin-top: 6px;
-align-items: center;
-flex-wrap: wrap;
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .reaction-btn {
-background: rgba(255,255,255,0.08);
-border: 1px solid rgba(255,255,255,0.15);
-border-radius: 12px;
-padding: 2px 6px;
-font-size: 11px;
-color: #fff;
-cursor: pointer;
-display: flex;
-align-items: center;
-gap: 3px;
-transition: background 0.2s;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-size: 11px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition: background 0.2s;
 }
 .reaction-btn:hover {
-background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.2);
 }
 
 .add-reaction-wrapper {
-position: relative;
-display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 .quick-reactions-menu {
-display: none;
-position: absolute;
-bottom: 100%;
-left: 0;
-background: #222;
-border: 1px solid #444;
-border-radius: 8px;
-padding: 4px;
-gap: 4px;
-z-index: 10;
-box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 4px;
+    gap: 4px;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 .quick-reactions-menu.active {
-display: flex;
+    display: flex;
 }
 
 .time{font-size:10px;color:#888;margin-right:4px}
@@ -510,7 +503,7 @@ const staticBots=[
 {name:"KaraKartaL",avatar:"🦅",role:"user"}
 ];
 
-// Web Audio API Bildirim Sesi
+// Web Audio API Mobil Sesli Bildirim
 function playNotificationSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -532,301 +525,9 @@ onValue(topicRef, snap => {
   const tpc = snap.val() || "Radyo Kral FM sohbet odasına hoş geldiniz! Keyifli dinlemeler.";
   $("roomTopicText").textContent = tpc;
 });
+
 function time(t){
 return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"});
-}
-
-function mentionUser(username){
-  const textInput = $("text");
-  const cleanName = username.replace(/^[👑⭐🛡️👤💤]\s*/, "").replace(":", "").trim();
-  textInput.value = "@" + cleanName + " " + textInput.value;
-  textInput.focus();
-}
-
-function startWhisper(username) {
-  activeWhisperTarget = username.replace(/^[👑⭐🛡️👤💤]\s*/, "").replace(":", "").trim();
-  $("whisperTargetName").textContent = activeWhisperTarget;
-  $("whisperIndicator").classList.add("active");
-  $("text").focus();
-}
-
-function cancelWhisper() {
-  activeWhisperTarget = null;
-  $("whisperIndicator").classList.remove("active");
-}
-$("cancelWhisper").onclick = cancelWhisper;
-
-function handleTabComplete() {
-  const textInput = $("text");
-  const val = textInput.value.trim();
-  let query = val.startsWith("@") ? val.substring(1).toLowerCase() : val.toLowerCase();
-  const match = onlineUserNames.find(u => u.toLowerCase().startsWith(query));
-  if (match) {
-    textInput.value = "@" + match + " ";
-  } else if (onlineUserNames.length > 0) {
-    textInput.value = "@" + onlineUserNames[0] + " ";
-  }
-  textInput.focus();
-}
-
-$("tabButton").onclick = handleTabComplete;
-$("text").addEventListener("keydown", (e) => {
-  if (e.key === "Tab") { e.preventDefault(); handleTabComplete(); }
-});
-
-function appendMessage(msgId, d){
-const box=$("messages");
-if(!box||!d)return;
-
-const nameVal = $("name").value.trim();
-const myCurrentName = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
-
-if(d.targetUser && d.type !== "love" && d.targetUser !== myCurrentName && d.name !== myCurrentName) return;
-
-const r=document.createElement("div");
-const ts=document.createElement("span");
-ts.className="time";
-ts.textContent="["+time(d.createdAt)+"] ";
-
-if(d.type==="system"){
-r.className="msg system-msg";
-r.textContent=ts.textContent+" "+d.text;
-box.appendChild(r); box.scrollTop=box.scrollHeight; return;
-}
-
-if(d.type==="action"){
-r.className="msg action-msg";
-const t=document.createElement("span");
-t.textContent=`* ${d.name || "Misafir"} ${d.text}`;
-r.append(ts, t); box.appendChild(r); box.scrollTop=box.scrollHeight; return;
-}
-
-const roleSpan = document.createElement("span");
-if (d.role === "admin") { roleSpan.textContent = "👑 "; roleSpan.style.color = "#ff5555"; }
-else if (d.role === "sop") { roleSpan.textContent = "⭐ "; roleSpan.style.color = "#facc15"; }
-else if (d.role === "op") { roleSpan.textContent = "🛡️ "; roleSpan.style.color = "#38bdf8"; }
-else { roleSpan.textContent = "👤 "; roleSpan.style.color = "#22c55e"; }
-
-const av=document.createElement("span");
-av.className="avatar";
-av.textContent=(d.type==="bot" || d.type==="love"?"🤖":(d.avatar||"👤"))+" ";
-
-const n=document.createElement("span");
-n.className=(d.type==="bot"||d.type==="love")?"name bot-name":"name";
-n.textContent=(d.name||"Misafir")+": ";
-n.onclick = () => mentionUser(d.name);
-if(d.type!=="bot"&&d.type!=="love"&&d.color) n.style.color=d.color;
-
-let msgText = d.text || "";
-if(!d.targetUser && msgText.includes("@" + myCurrentName)){
-  d.type = "whisper";
-  playNotificationSound();
-}
-
-const t=document.createElement("span");
-t.textContent=msgText;
-
-if(d.type==="applause") r.className="msg applause-msg";
-else if(d.type==="request") r.className="msg request-msg";
-else if(d.type==="love") {
-  r.className="msg love-msg";
-  if(d.targetUser && d.targetUser.toLowerCase() === myCurrentName.toLowerCase()){ playNotificationSound(); }
-}
-else if(d.targetUser || d.type==="whisper") {
-  r.className="msg whisper-msg";
-  playNotificationSound();
-}
-else r.className=d.type==="bot"?"msg bot-msg":"msg";
-
-if(d.type==="bot" || d.type==="love"){
-const b=document.createElement("span");
-b.className="bot-badge";
-b.textContent=d.type==="love"?"AŞK BOTU":"BOT";
-r.append(ts,b,av,n,t);
-}else{
-r.append(ts,roleSpan,av,n,t);
-}
-
-// Reaksiyon Alanı
-const reactionsDiv = document.createElement("div");
-reactionsDiv.className = "msg-reactions";
-const reactionsData = d.reactions || {};
-Object.entries(reactionsData).forEach(([emoji, count]) => {
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "reaction-btn";
-  btn.innerHTML = `${emoji} <span>${count}</span>`;
-  btn.onclick = () => addReactionToMsg(msgId, emoji);
-  reactionsDiv.appendChild(btn);
-});
-
-const addWrapper = document.createElement("div");
-addWrapper.className = "add-reaction-wrapper";
-const addBtn = document.createElement("button");
-addBtn.type = "button";
-addBtn.className = "reaction-btn";
-addBtn.textContent = "+ Tepki";
-
-const menu = document.createElement("div");
-menu.className = "quick-reactions-menu";
-["❤️", "🔥", "👍", "😂", "🎉"].forEach(emoji => {
-  const eSpan = document.createElement("button");
-  eSpan.type = "button";
-  eSpan.className = "reaction-btn";
-  eSpan.textContent = emoji;
-  eSpan.onclick = () => { addReactionToMsg(msgId, emoji); menu.classList.remove("active"); };
-  menu.appendChild(eSpan);
-});
-
-addBtn.onclick = (e) => {
-  e.stopPropagation();
-  document.querySelectorAll(".quick-reactions-menu").forEach(m => { if(m!==menu) m.classList.remove("active"); });
-  menu.classList.toggle("active");
-};
-
-addWrapper.append(addBtn, menu);
-reactionsDiv.appendChild(addWrapper);
-r.appendChild(reactionsDiv);
-
-box.appendChild(r);
-box.scrollTop=box.scrollHeight;
-}
-
-async function addReactionToMsg(msgId, emoji) {
-  const currentSnap = await new Promise(resolve => {
-    onValue(ref(db, `messages/${msgId}/reactions/${emoji}`), resolve, { onlyOnce: true });
-  });
-  let currentCount = currentSnap.val() || 0;
-  await set(ref(db, `messages/${msgId}/reactions/${emoji}`), currentCount + 1);
-}
-
-document.addEventListener("click", () => {
-  document.querySelectorAll(".quick-reactions-menu").forEach(m => m.classList.remove("active"));
-});
-
-onValue(messagesRef,snap=>{
-const data=snap.val()||{};
-$("messages").innerHTML="";
-Object.entries(data).forEach(([mId, d])=>{ appendMessage(mId, d); });
-});
-
-async function registerPresence(){
-const nameVal = $("name").value.trim();
-const activeName = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
-const activeAvatar=$("userAvatar").value;
-const activeColor=$("userColor").value;
-
-if(nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") localStorage.setItem("kralfm_name", nameVal);
-localStorage.setItem("kralfm_avatar", activeAvatar);
-localStorage.setItem("kralfm_color", activeColor);
-
-try{
-await set(ref(db,"presence/"+uid),{
-name: activeName,
-avatar: activeAvatar,
-color: activeColor,
-role: userRole,
-isAway: isAwayMode,
-awayReason: awayReasonText,
-lastActive: Date.now()
-});
-
-if(heartbeatInterval) clearInterval(heartbeatInterval);
-heartbeatInterval = setInterval(async () => {
-  try { await set(ref(db, "presence/" + uid + "/lastActive"), Date.now()); } catch(err) {}
-}, 15000);
-
-if(!sessionStorage.getItem("kralfm_joined_logged")){
-  sessionStorage.setItem("kralfm_joined_logged", "true");
-  await push(messagesRef,{ name: "Sistem", text: activeName + " sohbete giriş yaptı.", type: "system", createdAt: Date.now() });
-}
-}catch(e){}
-}
-
-registerPresence();
-
-$("name").addEventListener("change", registerPresence);
-$("name").addEventListener("blur", registerPresence);
-$("userAvatar").addEventListener("change", registerPresence);
-$("userColor").addEventListener("change", registerPresence);
-
-onValue(presenceRef,snap=>{
-activeUsersData=snap.val()||{};
-const now = Date.now();
-$("onlineUsersList").innerHTML="";
-onlineUserNames = [];
-
-staticBots.forEach(bot=>{
-onlineUserNames.push(bot.name);
-renderUserItem(bot.avatar, bot.name, bot.role, false, "");
-});
-
-Object.values(activeUsersData).forEach(u=>{
-  if (u.lastActive && (now - u.lastActive < 120000)) {
-    onlineUserNames.push(u.name);
-    renderUserItem(u.avatar || "👤", u.name, u.role || "user", u.isAway, u.awayReason);
-  }
-});
-});
-
-function renderUserItem(avatar, name, role, isAway, awayReason) {
-const d=document.createElement("div");
-d.className="user-list-item";
-
-const infoRow = document.createElement("div");
-infoRow.className = "user-info-row";
-
-const roleSpan = document.createElement("span");
-if (role === "admin") { roleSpan.textContent = "👑 "; roleSpan.style.color = "#ff5555"; }
-else if (role === "sop") { roleSpan.textContent = "⭐ "; roleSpan.style.color = "#facc15"; }
-else if (role === "op") { roleSpan.textContent = "🛡️ "; roleSpan.style.color = "#38bdf8"; }
-else { roleSpan.textContent = "👤 "; roleSpan.style.color = "#22c55e"; }
-
-const avSpan = document.createElement("span");
-avSpan.textContent = (isAway ? "💤 " : (avatar || "👤") + " ");
-
-const nameSpan = document.createElement("span");
-nameSpan.textContent = name + (isAway && awayReason ? ` (${awayReason})` : "");
-if(isAway) nameSpan.style.color = "#888";
-
-infoRow.append(roleSpan, avSpan, nameSpan);
-
-const actionRow = document.createElement("div");
-actionRow.className = "user-action-row";
-
-const mentionBtn = document.createElement("button");
-mentionBtn.type = "button";
-mentionBtn.className = "user-action-btn mention-action";
-mentionBtn.textContent = "Etiket";
-mentionBtn.onclick = (e) => { e.stopPropagation(); mentionUser(name); };
-
-const whisperBtn = document.createElement("button");
-whisperBtn.type = "button";
-whisperBtn.className = "user-action-btn whisper-action";
-whisperBtn.textContent = "Fısılda";
-whisperBtn.onclick = (e) => { e.stopPropagation(); startWhisper(name); };
-
-actionRow.append(mentionBtn, whisperBtn);
-d.append(infoRow, actionRow);
-$("onlineUsersList").appendChild(d);
-}
-
-async function updateUserRoleByName(targetName, newRole) {
-  let targetUid = null;
-  Object.entries(activeUsersData).forEach(([uId, uData]) => {
-    if (uData.name && uData.name.toLowerCase() === targetName.toLowerCase()) targetUid = uId;
-  });
-
-  if (!targetUid) {
-    alert("Odayda çevrimiçi olan '" + targetName + "' adında bir kullanıcı bulunamadı!");
-    return;
-  }
-
-  try {
-    await set(ref(db, "presence/" + targetUid + "/role"), newRole);
-    let roleTitle = newRole === "user" ? "Normal Üye" : newRole.toUpperCase();
-    await push(messagesRef, { name: "Sistem", text: `Yönetici, ${targetName} adlı kullanıcının yetkisini [ ${roleTitle} ] olarak güncelledi.`, type: "system", createdAt: Date.now() });
-  } catch(err) {}
 }
 
 $("form").onsubmit = async (e) => {
@@ -837,154 +538,86 @@ $("form").onsubmit = async (e) => {
   
   const nameVal = nameInput.value.trim();
   const name = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
+  
   const avatar = $("userAvatar").value;
   const color = $("userColor").value;
 
   if(!text) return;
-
-  // .sev Komutu
-  if (text.startsWith(".")) {
-    const parts = text.split(" ");
-    const cmd = parts[0].toLowerCase();
-    const targetName = parts[1];
-
-    if (cmd === ".sev") {
-      if (!targetName) { alert("Lütfen kime sevgi sözü göndereceğinizi yazın!"); textInput.value = ""; return; }
-      const loveQuotes = [
-        "Gözlerinde kaybolduğum deniz, kalbimin en sakin limanı sensin. İyi ki varsın...",
-        "Seninle geçen her saniye, ömrüme yazılmış en güzel şiir gibidir.",
-        "Dünya kaç bucak bilmem ama benim bütün dünyam senin gülüşünde saklı.",
-        "Uzaklarda olsan da dualarımda, aklımda ve kalbimin en başköşesindesin."
-      ];
-      const randomQuote = loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
-      await push(messagesRef, { name: "AşkBotu", text: `💖 Hey ${targetName}! Sana kalpten gelen özel bir not var: "${randomQuote}"`, type: "love", targetUser: targetName, avatar: "💌", role: "admin", createdAt: Date.now() });
-      textInput.value = ""; return;
-    }
-  }
-
-  // IRC Komutları (/topic, /nick, /away, yetkiler)
+   // IRC Komutları
   if (text.startsWith("/")) {
     const parts = text.split(" ");
     const cmd = parts[0].toLowerCase();
     const arg = parts.slice(1).join(" ");
-    const targetName = parts[1];
 
     if (cmd === "/topic") {
       if (userRole !== "admin" && userRole !== "sop" && userRole !== "op") {
-        alert("Oda konusunu değiştirmek için yetkiniz olmalı!"); textInput.value = ""; return;
+        alert("Oda konusunu değiştirmek için yetkiniz olmalı!");
+        textInput.value = "";
+        return;
       }
-      if (!arg) { alert("Lütfen oda konusu yazın!"); textInput.value = ""; return; }
+      if (!arg) {
+        alert("Lütfen yeni oda konusunu yazın! Örn: /topic Yeni Konu");
+        textInput.value = "";
+        return;
+      }
       await set(topicRef, arg);
-      await push(messagesRef, { name: "Sistem", text: `${name} oda konusunu değiştirdi: "${arg}"`, type: "system", createdAt: Date.now() });
-      textInput.value = ""; return;
+      await push(messagesRef, {
+        name: "Sistem",
+        text: `${name} oda konusunu güncelledi: "${arg}"`,
+        type: "system",
+        createdAt: Date.now()
+      });
+      textInput.value = "";
+      return;
     }
 
     if (cmd === "/nick") {
-      if (!arg) { alert("Lütfen yeni rumuz yazın!"); textInput.value = ""; return; }
+      if (!arg) {
+        alert("Lütfen yeni rumuz yazın! Örn: /nick YeniIsim");
+        textInput.value = "";
+        return;
+      }
       nameInput.value = arg;
-      await registerPresence();
-      await push(messagesRef, { name: "Sistem", text: `${name} rumuzunu "${arg}" yaptı.`, type: "system", createdAt: Date.now() });
-      textInput.value = ""; return;
+      await push(messagesRef, {
+        name: "Sistem",
+        text: `${name} rumuzunu "${arg}" olarak değiştirdi.`,
+        type: "system",
+        createdAt: Date.now()
+      });
+      textInput.value = "";
+      return;
     }
 
     if (cmd === "/away") {
       isAwayMode = true;
       awayReasonText = arg || "Uzakta";
-      await registerPresence();
-      await push(messagesRef, { name: "Sistem", text: `${name} uzakta moduna geçti (${awayReasonText}).`, type: "system", createdAt: Date.now() });
-      textInput.value = ""; return;
-    }
-
-    if (["/admin", "/sop", "/op", "/deop"].includes(cmd)) {
-      if (userRole !== "admin") { alert("Bu komutu kullanmak için Admin yetkiniz olmalı!"); textInput.value = ""; return; }
-      if (!targetName) { alert("Lütfen hedef kullanıcı adı yazın!"); textInput.value = ""; return; }
-      let newRole = cmd === "/admin" ? "admin" : cmd === "/sop" ? "sop" : cmd === "/op" ? "op" : "user";
-      updateUserRoleByName(targetName, newRole);
-      textInput.value = ""; return;
+      await push(messagesRef, {
+        name: "Sistem",
+        text: `${name} uzakta moduna geçti (${awayReasonText}).`,
+        type: "system",
+        createdAt: Date.now()
+      });
+      textInput.value = "";
+      return;
     }
   }
 
   if (isAwayMode) {
     isAwayMode = false;
     awayReasonText = "";
-    await registerPresence();
-  }
-
-  let msgType = "text";
-  let targetUser = null;
-  if (text.toLowerCase().startsWith("/me ")) {
-    msgType = "action";
-    text = text.substring(4).trim();
-  } else if (activeWhisperTarget) {
-    msgType = "whisper";
-    targetUser = activeWhisperTarget;
   }
 
   await push(messagesRef, {
-    name: name, text: text, avatar: avatar, color: color,
-    role: userRole, type: msgType, targetUser: targetUser, createdAt: Date.now()
+    name: name,
+    text: text,
+    avatar: avatar,
+    color: color,
+    role: userRole,
+    type: "text",
+    createdAt: Date.now()
   });
 
   textInput.value = "";
-  if (activeWhisperTarget) cancelWhisper();
-};
-
-$("sendApplause").onclick = async () => {
-  const nameVal = $("name").value.trim();
-  const name = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
-  applause.currentTime = 0; applause.play().catch(()=>{});
-  await push(messagesRef, { name: name, text: "👏 kocaman bir alkış gönderdi!", avatar: $("userAvatar").value, color: $("userColor").value, role: userRole, type: "applause", createdAt: Date.now() });
-};
-
-$("sendCoffee").onclick = async () => {
-  const nameVal = $("name").value.trim();
-  const name = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
-  await push(messagesRef, { name: name, text: "☕ odadakilere sıcak bir kahve ısmarladı. Afiyet olsun! ☕", type: "applause", avatar: $("userAvatar").value, color: $("userColor").value, role: userRole, createdAt: Date.now() });
-};
-
-$("sendHeart").onclick = async () => {
-  const nameVal = $("name").value.trim();
-  const name = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
-  await push(messagesRef, { name: name, text: "❤️ odadaki herkese sevgi dolu kalpler gönderdi! 🥰", type: "applause", avatar: $("userAvatar").value, color: $("userColor").value, role: userRole, createdAt: Date.now() });
-};
-
-$("sendFire").onclick = async () => {
-  const nameVal = $("name").value.trim();
-  const name = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
-  await push(messagesRef, { name: name, text: "🔥 ortamın altını üstüne getiriyor, ortalık alev alev! 🔥", type: "applause", avatar: $("userAvatar").value, color: $("userColor").value, role: userRole, createdAt: Date.now() });
-};
-
-const requestModal = $("requestModal");
-$("openRequestModal").onclick = () => { requestModal.style.display = "flex"; };
-$("closeRequestModal").onclick = () => { requestModal.style.display = "none"; };
-
-$("sendRequest").onclick = async () => {
-  const artist = $("songArtist").value.trim();
-  const title = $("songTitle").value.trim();
-  const nameVal = $("name").value.trim();
-  const name = (nameVal !== "" && nameVal !== "undefined" && nameVal !== "Undefined") ? nameVal : defaultGuestName;
-  if(!artist || !title) { alert("Lütfen sanatçı ve şarkı adını girin!"); return; }
-  await push(messagesRef, { name: name, text: `🎵 İstek Parça: ${artist} - ${title} (Yayıncıya iletildi!)`, type: "request", avatar: $("userAvatar").value, color: $("userColor").value, role: userRole, createdAt: Date.now() });
-  $("songArtist").value = ""; $("songTitle").value = ""; requestModal.style.display = "none";
-};
-
-$("clearChat").onclick = async () => {
-  if (userRole !== "admin") {
-    const pwd = prompt("Yönetici (Admin) şifresini girin:");
-    if (pwd === "123456") {
-      userRole = "admin";
-      sessionStorage.setItem("kralfm_role", "admin");
-      await set(ref(db, "presence/" + uid + "/role"), "admin");
-      registerPresence();
-      alert("Yönetici yetkisi aktif edildi!");
-    } else { alert("Hatalı şifre!"); return; }
-  }
-  if (confirm("Tüm sohbet geçmişini herkesten silmek istediğinize emin misiniz?")) {
-    try {
-      await set(messagesRef, null);
-      await push(messagesRef, { name: "Sistem", text: "Yönetici tarafından sohbet temizlendi.", type: "system", createdAt: Date.now() });
-    } catch(err) {}
-  }
 };
 </script>
 </body>
