@@ -257,7 +257,6 @@ margin-right:3px
 
 .name{
 font-weight:bold;
-color:#ff5555;
 margin-right:4px;
 cursor:pointer;
 padding:2px 4px;
@@ -266,7 +265,7 @@ transition:background 0.2s;
 }
 
 .name:hover{
-background:rgba(255,85,85,0.2);
+background:rgba(255,255,255,0.1);
 }
 
 .bot-name{
@@ -560,6 +559,7 @@ padding:2px 3px;
 </div>
 
 <select id="userAvatar" title="Avatar">
+<option value="👤">👤 Kullanıcı</option>
 <option value="👩">👩 Kadın</option>
 <option value="👨">👨 Erkek</option>
 <option value="🕶️">🕶️ Karizmatik</option>
@@ -569,12 +569,11 @@ padding:2px 3px;
 <option value="🎙️">🎙️ Mikrofon</option>
 <option value="🌟">🌟 Yıldız</option>
 <option value="🎧">🎧 Kulaklık</option>
-<option value="🎉">🎉 Parti</option>
 </select>
 
 <input type="color" id="userColor" value="#ff5555">
 <input type="text" id="name" maxlength="30" placeholder="Adınız">
-<input type="text" id="text" maxlength="300" placeholder="Mesajınızı yazın (/me ...)..." required>
+<input type="text" id="text" maxlength="300" placeholder="Mesaj (/admin, /sop, /op)..." required>
 <button type="button" id="tabButton" class="tab-btn" title="Aktif kullanıcıyı etiketle">@ Tab</button>
 <button type="submit">Gönder</button>
 </form>
@@ -585,7 +584,7 @@ padding:2px 3px;
 <button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
 <button id="sendFire" class="action-btn fire-btn" type="button">🔥 Alev Et</button>
 <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
-<button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Herkeste Temizle</button>
+<button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Admin & Temizle</button>
 </div>
 
 <p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
@@ -635,6 +634,7 @@ const presenceRef=ref(db,"presence");
 
 const $=id=>document.getElementById(id);
 let onlineUserNames = [];
+let activeUsersData = {};
 let activeWhisperTarget = null;
 let heartbeatInterval = null;
 let userRole = sessionStorage.getItem("kralfm_role") || "user";
@@ -653,10 +653,10 @@ if(localStorage.getItem("kralfm_avatar")) $("userAvatar").value = localStorage.g
 if(localStorage.getItem("kralfm_color")) $("userColor").value = localStorage.getItem("kralfm_color");
 
 const staticBots=[
-{name:"KraL",avatar:"⚫"},
-{name:"VeLhasıL",avatar:"👨"},
-{name:"SüRmeneLi",avatar:"⚫"},
-{name:"KaraKartaL",avatar:"🦅"}
+{name:"KraL",avatar:"⚫",role:"admin"},
+{name:"VeLhasıL",avatar:"👨",role:"sop"},
+{name:"SüRmeneLi",avatar:"⚫",role:"op"},
+{name:"KaraKartaL",avatar:"🦅",role:"user"}
 ];
 
 function time(t){
@@ -665,7 +665,7 @@ return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute
 
 function mentionUser(username){
   const textInput = $("text");
-  const cleanName = username.replace(":", "").trim();
+  const cleanName = username.replace(/^[👑⭐🛡️👤]\s*/, "").replace(":", "").trim();
   textInput.value = "@" + cleanName + " " + textInput.value;
   textInput.focus();
   
@@ -678,7 +678,7 @@ function mentionUser(username){
 }
 
 function startWhisper(username) {
-  activeWhisperTarget = username.replace(":", "").trim();
+  activeWhisperTarget = username.replace(/^[👑⭐🛡️👤]\s*/, "").replace(":", "").trim();
   $("whisperTargetName").textContent = activeWhisperTarget;
   $("whisperIndicator").classList.add("active");
   
@@ -760,16 +760,33 @@ box.scrollTop=box.scrollHeight;
 return;
 }
 
+// Rol Rozeti / İşareti
+const roleSpan = document.createElement("span");
+if (d.role === "admin") {
+  roleSpan.textContent = "👑 ";
+  roleSpan.style.color = "#ff5555";
+} else if (d.role === "sop") {
+  roleSpan.textContent = "⭐ ";
+  roleSpan.style.color = "#facc15";
+} else if (d.role === "op") {
+  roleSpan.textContent = "🛡️ ";
+  roleSpan.style.color = "#38bdf8";
+} else {
+  roleSpan.textContent = "👤 ";
+  roleSpan.style.color = "#22c55e"; // Normal üyenin insan figürü yeşil
+}
+
 const av=document.createElement("span");
-const n=document.createElement("span");
-const t=document.createElement("span");
-
 av.className="avatar";
-av.textContent=(d.type==="bot"?"🤖":(d.avatar||"🎧"))+" ";
+av.textContent=(d.type==="bot"?"🤖":(d.avatar||"👤"))+" ";
 
+const n=document.createElement("span");
 n.className=d.type==="bot"?"name bot-name":"name";
 n.textContent=(d.name||"Misafir")+": ";
 n.onclick = () => mentionUser(d.name);
+
+// Kullanıcının kendi seçtiği renk geçerlidir
+if(d.type!=="bot"&&d.color) n.style.color=d.color;
 
 let msgText = d.text || "";
 
@@ -790,10 +807,8 @@ b.className="bot-badge";
 b.textContent="BOT";
 r.append(ts,b,av,n,t);
 }else{
-r.append(ts,av,n,t);
+r.append(ts,roleSpan,av,n,t);
 }
-
-if(d.type!=="bot"&&d.color) n.style.color=d.color;
 
 box.appendChild(r);
 box.scrollTop=box.scrollHeight;
@@ -865,20 +880,20 @@ $("userAvatar").addEventListener("change", registerPresence);
 $("userColor").addEventListener("change", registerPresence);
 
 onValue(presenceRef,snap=>{
-const users=snap.val()||{};
+activeUsersData=snap.val()||{};
 const now = Date.now();
 $("onlineUsersList").innerHTML="";
 onlineUserNames = [];
 
 staticBots.forEach(bot=>{
 onlineUserNames.push(bot.name);
-renderUserItem(bot.avatar, bot.name, "bot");
+renderUserItem(bot.avatar, bot.name, bot.role);
 });
 
-Object.values(users).forEach(u=>{
+Object.values(activeUsersData).forEach(u=>{
   if (u.lastActive && (now - u.lastActive < 120000)) {
     onlineUserNames.push(u.name);
-    renderUserItem(u.avatar || "🎧", u.name, u.role);
+    renderUserItem(u.avatar || "👤", u.name, u.role || "user");
   }
 });
 });
@@ -890,13 +905,28 @@ d.className="user-list-item";
 const infoRow = document.createElement("div");
 infoRow.className = "user-info-row";
 
-let prefix = "";
+const roleSpan = document.createElement("span");
 if (role === "admin") {
-  prefix = "👑 @";
+  roleSpan.textContent = "👑 ";
+  roleSpan.style.color = "#ff5555";
+} else if (role === "sop") {
+  roleSpan.textContent = "⭐ ";
+  roleSpan.style.color = "#facc15";
+} else if (role === "op") {
+  roleSpan.textContent = "🛡️ ";
+  roleSpan.style.color = "#38bdf8";
+} else {
+  roleSpan.textContent = "👤 ";
+  roleSpan.style.color = "#22c55e"; // Yan listede normal üye insan figürü yeşil
 }
 
-infoRow.textContent = prefix + " " + avatar + " " + name;
-if (role === "admin") infoRow.style.color = "#ff5555";
+const avSpan = document.createElement("span");
+avSpan.textContent = (avatar || "👤") + " ";
+
+const nameSpan = document.createElement("span");
+nameSpan.textContent = name;
+
+infoRow.append(roleSpan, avSpan, nameSpan);
 
 const actionRow = document.createElement("div");
 actionRow.className = "user-action-row";
@@ -924,6 +954,35 @@ d.append(infoRow, actionRow);
 $("onlineUsersList").appendChild(d);
 }
 
+async function updateUserRoleByName(targetName, newRole) {
+  let targetUid = null;
+  Object.entries(activeUsersData).forEach(([uId, uData]) => {
+    if (uData.name && uData.name.toLowerCase() === targetName.toLowerCase()) {
+      targetUid = uId;
+    }
+  });
+
+  if (!targetUid) {
+    alert("Odayda çevrimiçi olan '" + targetName + "' adında bir kullanıcı bulunamadı!");
+    return;
+  }
+
+  try {
+    await set(ref(db, "presence/" + targetUid + "/role"), newRole);
+    let roleTitle = newRole.toUpperCase();
+    if (newRole === "user") roleTitle = "Normal Üye";
+
+    await push(messagesRef, {
+      name: "Sistem",
+      text: `Yönetici, ${targetName} adlı kullanıcının yetkisini [ ${roleTitle} ] olarak güncelledi.`,
+      type: "system",
+      createdAt: Date.now()
+    });
+  } catch(err) {
+    console.error("Rol güncelleme hatası:", err);
+  }
+}
+
 $("form").onsubmit = async (e) => {
   e.preventDefault();
   const textInput = $("text");
@@ -937,6 +996,35 @@ $("form").onsubmit = async (e) => {
   const color = $("userColor").value;
 
   if(!text) return;
+
+  if (text.startsWith("/")) {
+    const parts = text.split(" ");
+    const cmd = parts[0].toLowerCase();
+    const targetName = parts[1];
+
+    if (["/admin", "/sop", "/op", "/deop"].includes(cmd)) {
+      if (userRole !== "admin") {
+        alert("Bu komutu kullanmak için Admin yetkiniz olmalı!");
+        textInput.value = "";
+        return;
+      }
+      if (!targetName) {
+        alert("Lütfen hedef kullanıcı adı yazın! Örn: " + cmd + " Isim");
+        textInput.value = "";
+        return;
+      }
+
+      let newRole = "user";
+      if (cmd === "/admin") newRole = "admin";
+      else if (cmd === "/sop") newRole = "sop";
+      else if (cmd === "/op") newRole = "op";
+      else if (cmd === "/deop") newRole = "user";
+
+      updateUserRoleByName(targetName, newRole);
+      textInput.value = "";
+      return;
+    }
+  }
 
   let msgType = "text";
   let targetUser = null;
@@ -954,6 +1042,7 @@ $("form").onsubmit = async (e) => {
     text: text,
     avatar: avatar,
     color: color,
+    role: userRole,
     type: msgType,
     targetUser: targetUser,
     createdAt: Date.now()
@@ -975,6 +1064,7 @@ $("sendApplause").onclick = async () => {
     text: "👏 kocaman bir alkış gönderdi!",
     avatar: $("userAvatar").value,
     color: $("userColor").value,
+    role: userRole,
     type: "applause",
     createdAt: Date.now()
   });
@@ -989,6 +1079,7 @@ $("sendCoffee").onclick = async () => {
     type: "applause",
     avatar: $("userAvatar").value,
     color: $("userColor").value,
+    role: userRole,
     createdAt: Date.now()
   });
 };
@@ -1002,6 +1093,7 @@ $("sendHeart").onclick = async () => {
     type: "applause",
     avatar: $("userAvatar").value,
     color: $("userColor").value,
+    role: userRole,
     createdAt: Date.now()
   });
 };
@@ -1015,6 +1107,7 @@ $("sendFire").onclick = async () => {
     type: "applause",
     avatar: $("userAvatar").value,
     color: $("userColor").value,
+    role: userRole,
     createdAt: Date.now()
   });
 };
@@ -1044,6 +1137,7 @@ $("sendRequest").onclick = async () => {
     type: "request",
     avatar: $("userAvatar").value,
     color: $("userColor").value,
+    role: userRole,
     createdAt: Date.now()
   });
 
@@ -1058,10 +1152,11 @@ $("clearChat").onclick = async () => {
     if (pwd === "123456") {
       userRole = "admin";
       sessionStorage.setItem("kralfm_role", "admin");
+      await set(ref(db, "presence/" + uid + "/role"), "admin");
       registerPresence();
-      alert("Yönetici yetkisi başarıyla aktif edildi!");
+      alert("Yönetici yetkisi başarıyla aktif edildi! Artık komutları kullanabilirsiniz.");
     } else {
-      alert("Hatalı şifre! Bu komutu sadece yönetici çalıştırabilir.");
+      alert("Hatalı şifre!");
       return;
     }
   }
