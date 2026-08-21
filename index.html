@@ -794,6 +794,7 @@ if(!d.targetUser && msgText.includes("@" + myCurrentName)){
   d.type = "whisper";
 }
 
+const t=document.createElement("span"); // <-- DÜZELTME: Metin elemanı yeniden eklendi
 t.textContent=msgText;
 
 if(d.type==="applause") r.className="msg applause-msg";
@@ -807,7 +808,7 @@ b.className="bot-badge";
 b.textContent="BOT";
 r.append(ts,b,av,n,t);
 }else{
-r.append(ts,roleSpan,av,n,t);
+r.append(ts,roleSpan,av,n,t,t); // Alternatif olarak t eklendi
 }
 
 box.appendChild(r);
@@ -917,7 +918,7 @@ if (role === "admin") {
   roleSpan.style.color = "#38bdf8";
 } else {
   roleSpan.textContent = "👤 ";
-  roleSpan.style.color = "#22c55e"; // Yan listede normal üye insan figürü yeşil
+  roleSpan.style.color = "#22c55e";
 }
 
 const avSpan = document.createElement("span");
