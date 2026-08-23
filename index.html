@@ -44,7 +44,7 @@ header{background:var(--header-bg);border-bottom:3px solid var(--header-border);
 .time{font-size:10px;color:#888;margin-right:4px}.avatar{margin-right:3px}.name{font-weight:bold;margin-right:4px;cursor:pointer;padding:2px 4px;border-radius:4px}.bot-name{color:#c084fc!important}.bot-badge{font-size:9px;font-weight:bold;padding:2px 5px;border-radius:4px;margin-right:4px;background:#7c3aed}
 form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;position:relative}select#userAvatar,input#name,input#text{background:rgba(0,0,0,.3);color:var(--text);border-radius:6px;border:1px solid var(--sidebar-border)}select#userAvatar{padding:10px 6px;font-size:16px}input[type=color]{width:40px;height:40px;border:0;background:transparent;cursor:pointer}input#name{width:105px;padding:10px;font-size:14px}input#text{flex:1;padding:10px;min-width:120px;font-size:14px}button[type=submit]{border:0;border-radius:6px;padding:10px 15px;background:var(--primary);color:#fff;font-weight:bold;cursor:pointer;font-size:14px}.tab-btn{background:var(--primary);opacity:.9;color:#fff;border:0;border-radius:6px;padding:10px;font-weight:bold;cursor:pointer;font-size:13px}.action-btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.action-btn{background:#333;color:#fff;border:1px solid #555;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}.applause-btn{background:#d97706}.coffee-btn{background:#78350f}.heart-btn{background:#be123c}.sev-btn{background:#db2777}.horon-btn{background:#0284c7}.confetti-btn{background:#9333ea}.theme-btn{background:var(--primary)}.party-btn{background:#16a34a}.request-btn{background:#047857}.note{color:#aaa;font-size:12px}
 .user-list-item{padding:6px 8px;margin:4px 0;background:rgba(0,0,0,.3);border-radius:6px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--sidebar-border)}.user-list-item.away-user{opacity:.55;border-left:3px solid #f59e0b}.user-info-row{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.away-badge{font-size:9px;background:#f59e0b;color:#000;padding:1px 4px;border-radius:3px;font-weight:bold;margin-left:auto}.user-action-row{display:flex;gap:4px}.user-action-btn{background:#333;border:0;color:#fff;padding:2px 5px;border-radius:3px;font-size:10px;cursor:pointer;font-weight:bold}.mention-action{background:#4338ca}.whisper-action{background:#7e22ce}.whisper-unread{background:#dc2626!important;color:#fff!important}
-.floating-emoji{position:fixed;bottom:-50px;font-size:32px;z-index:99999;pointer-events:none;animation:floatUpEffect 5s ease-out forwards}@keyframes floatUpEffect{0%{transform:translateY(0) scale(.4) rotate(0);opacity:1}50%{transform:translateY(-55vh) scale(1.3) rotate(15deg);opacity:.9}100%{transform:translateY(-110vh) scale(1) rotate(-15deg);opacity:0}}
+.floating-emoji{position:fixed;bottom:-50px;font-size:32px;z-index:99999;pointer-events:none;animation:floatUpEffect 4s ease-out forwards}@keyframes floatUpEffect{0%{transform:translateY(0) scale(.4) rotate(0);opacity:1}50%{transform:translateY(-55vh) scale(1.3) rotate(15deg);opacity:.9}100%{transform:translateY(-110vh) scale(1) rotate(-15deg);opacity:0}}
 @keyframes partyStrobe{0%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(180deg)}100%{filter:hue-rotate(360deg)}}.party-active{animation:partyStrobe .4s infinite}
 .mention-toast{position:fixed;top:20px;right:20px;background:var(--primary);color:#fff;padding:12px 18px;border-radius:10px;border:1px solid #fff;box-shadow:0 4px 20px rgba(0,0,0,.5);font-size:14px;z-index:9999;display:flex;align-items:center;gap:10px;animation:slideIn .3s ease-out}@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}.modal-box{background:var(--card-bg);border:2px solid var(--modal-border);border-radius:12px;padding:20px;width:90%;max-width:400px;max-height:85vh;overflow-y:auto}.modal-box h3{color:var(--sidebar-header-color);margin-top:0}.modal-box input{width:100%;padding:10px;margin:8px 0;background:rgba(0,0,0,.4);border:1px solid var(--sidebar-border);color:var(--text);border-radius:6px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}.private-modal-box{background:var(--card-bg);border:2px solid var(--modal-border);box-shadow:0 8px 30px rgba(0,0,0,.5);max-width:380px;width:92%;height:360px;max-height:75vh;display:flex;flex-direction:column;padding:12px}.private-messages-area{flex:1;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:8px;padding:8px;border:1px solid var(--sidebar-border);margin-bottom:6px;font-size:13px}.private-msg{background:rgba(255,255,255,.05);border:1px solid var(--sidebar-border);border-radius:8px;padding:8px 10px;margin:6px 0;font-size:14px;word-break:break-word}.private-emoji-bar{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}.private-emoji-btn{background:rgba(0,0,0,.3);border:1px solid var(--sidebar-border);color:var(--text);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:14px}
@@ -86,7 +86,27 @@ function getCurrentMyName(){const n=$("name").value.trim();return n&&n!=="undefi
 onValue(topicRef,s=>{const d=s.val(),a=$("topicText"),b=$("topicAuthor");if(d&&d.text){a.textContent=d.text;b.textContent=`Güncelleyen Admin: ${d.author||"Kral"} [${time(d.updatedAt||Date.now())}]`}else{a.textContent="Henüz bir topik belirlenmedi. Adminler /topik komutu ile belirleyebilir.";b.textContent=""}});
 function checkAdminUI(){const b=$("editTopicBtn");if(b)b.style.display=window.userRole==="admin"?"inline-block":"none"}
 $("editTopicBtn").onclick=async()=>{if(window.userRole!=="admin"){alert("Topiği düzenlemek için Admin yetkiniz olmalı!");return}const c=$("topicText").textContent,n=prompt("Yeni günün topiğini / özel gün mesajını girin:",c.startsWith("Henüz bir topik")?"":c);if(n!==null){const t=n.trim();if(!t){alert("Topik boş olamaz!");return}await set(topicRef,{text:t,author:getCurrentMyName(),updatedAt:Date.now()})}};
-function triggerScreenShower(a){for(let i=0;i<40;i++){const e=document.createElement("div");e.className="floating-emoji";e.textContent=a[Math.floor(Math.random()*a.length)];e.style.left=Math.random()*95+"vw";e.style.animationDuration=3+Math.random()*2+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),5000)}}
+
+function triggerScreenShower(emojis){
+  const arr = Array.isArray(emojis) ? emojis : [emojis];
+  for(let i=0; i<50; i++){
+    const e=document.createElement("div");
+    e.className="floating-emoji";
+    const chosenEmoji = arr[Math.floor(Math.random()*arr.length)];
+    e.textContent = chosenEmoji;
+    if(chosenEmoji === "❤️" || chosenEmoji === "💖" || chosenEmoji === "💘"){
+      e.style.filter = "drop-shadow(0 0 16px rgba(255, 0, 80, 0.95))";
+      e.style.transform = "scale(1.4)";
+    }
+    e.style.left = Math.random() * 95 + "vw";
+    e.style.top = (Math.random() * 60 + 15) + "vh";
+    e.style.fontSize = (32 + Math.random() * 20) + "px";
+    e.style.animationDuration = "4s";
+    document.body.appendChild(e);
+    setTimeout(()=>e.remove(), 4000);
+  }
+}
+
 let titleInterval=null;function triggerToast(t,b){notificationSound.play().catch(()=>{});if(titleInterval)clearInterval(titleInterval);let x=true;titleInterval=setInterval(()=>{document.title=x?`🔴 ${t}`:"Radyo Kral FM & Muhabbet";x=!x},1000);const old=document.querySelector(".mention-toast");if(old)old.remove();const toast=document.createElement("div");toast.className="mention-toast";toast.innerHTML=`🔔 <b>${b}</b>`;document.body.appendChild(toast);setTimeout(()=>toast.remove(),4000)}
 window.addEventListener("focus",()=>{if(titleInterval){clearInterval(titleInterval);titleInterval=null}document.title="Radyo Kral FM & Muhabbet"});
 function mentionUser(u){const i=$("text"),n=u.replace(/^[👑⭐🛡️👤]\s*/,"").replace(":","").trim();i.value="@"+n+" "+i.value;i.focus()}window.mentionUser=mentionUser;
@@ -114,10 +134,28 @@ if(text.toLowerCase().startsWith("/away")){const reason=text.substring(5).trim()
 if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}
 if(text.startsWith("/")){const p=text.split(" "),cmd=p[0].toLowerCase(),target=p[1];if(["/admin","/sop","/op","/deop"].includes(cmd)){if(window.userRole!=="admin"){alert("Bu komutu kullanmak için Admin yetkiniz olmalı!");input.value="";return}if(!target){alert("Lütfen hedef kullanıcı adı yazın!");input.value="";return}await updateUserRoleByName(target,cmd==="/admin"?"admin":cmd==="/sop"?"sop":cmd==="/op"?"op":"user");input.value="";return}}
 let type="text";if(text.toLowerCase().startsWith("/me ")){type="action";text=text.substring(4).trim()}await push(messagesRef,{name,text,avatar,color,role:window.userRole,type,createdAt:Date.now()});input.value=""};
-async function sendAction(text){const name=getCurrentMyName();if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}triggerScreenShower(text[0]);await push(messagesRef,{name,text,type:"applause",avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()})}
-$("sendHeart").onclick=()=>sendAction("❤️ odadaki herkese sevgi dolu kalpler gönderdi! 🥰");$("sendSev").onclick=()=>sendAction("💖 odadakilere kucak dolusu sevgilerini ve güllerini yolladı! 🌹");$("sendHoron").onclick=()=>sendAction("💃 horon ekibini sahneye sürdü, kemençe eşliğinde coşku tavan yaptı! 🎶🥁");$("sendConfetti").onclick=()=>sendAction("🎉 ortamda konfetiler patlattı, kutlama başladı! 🎊");
-$("sendApplause").onclick=async()=>{const a=$("applauseSound");a.currentTime=0;a.play().catch(()=>{});sendAction(["👏","✨"])};
-$("sendCoffee").onclick=()=>sendAction(["☕","🫖","✨"]);
+
+async function sendAction(text, emojis){
+  const name=getCurrentMyName();
+  if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}
+  triggerScreenShower(emojis || ["✨"]);
+  await push(messagesRef,{name,text,type:"applause",avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()})
+}
+
+$("sendHeart").onclick=()=>sendAction("❤️ odadaki herkese sevgi dolu kalpler gönderdi! 🥰", ["❤️","💖","💘","✨"]);
+$("sendSev").onclick=()=>sendAction("💖 odadakilere kucak dolusu sevgilerini ve güllerini yolladı! 🌹", ["💖","🌹","💐","✨"]);
+
+$("sendHoron").onclick=async()=>{
+  const name=getCurrentMyName();
+  if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}
+  triggerScreenShower(["🎻", "💃", "🕺", "🥁", "🎶", "🇹🇷"]);
+  await push(messagesRef,{name,text:"💃 horon ekibini sahneye sürdü, kemençe eşliğinde coşku tavan yaptı! 🎶🥁",type:"applause",avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()})
+};
+
+$("sendConfetti").onclick=()=>sendAction("🎉 ortamda konfetiler patlattı, kutlama başladı! 🎊", ["🎉","🎊","✨","⭐"]);
+$("sendApplause").onclick=async()=>{const a=$("applauseSound");a.currentTime=0;a.play().catch(()=>{});sendAction("👏 odadakileri alkış yağmuruna tuttu! 🌟", ["👏","✨","🌟"])};
+$("sendCoffee").onclick=()=>sendAction("☕ odadakilere mis gibi Türk kahvesi ısmarladı! 🫖", ["☕","🫖","✨"]);
+
 const themeModal=$("themeModal");$("toggleTheme").onclick=()=>themeModal.style.display="flex";$("closeThemeModal").onclick=()=>themeModal.style.display="none";window.applyThemeSelection=(c,n)=>{document.body.className=c;localStorage.setItem("kralfm_theme",c);themeModal.style.display="none";triggerToast("Tema Değişti",`Aktif Tema: ${n}`)};
 $("partyButton").onclick=async()=>{const name=getCurrentMyName();if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}document.body.classList.add("party-active");triggerScreenShower(["🪩","🎉","🔥","✨","🎵","💃"]);setTimeout(()=>document.body.classList.remove("party-active"),5000);await push(messagesRef,{name,text:"🪩 PARTİ BAŞLADI! Işıklar yanıp sönüyor, herkes piste! 🕺💃",type:"applause",avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()})};
 const requestModal=$("requestModal");$("openRequestModal").onclick=()=>requestModal.style.display="flex";$("closeRequestModal").onclick=()=>requestModal.style.display="none";$("sendRequest").onclick=async()=>{const artist=$("songArtist").value.trim(),title=$("songTitle").value.trim(),name=getCurrentMyName();if(!artist||!title){alert("Lütfen sanatçı ve şarkı adını girin!");return}await push(messagesRef,{name,text:`🎵 İstek Parça: ${artist} - ${title} (Yayıncıya iletildi!)`,type:"request",avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()});$("songArtist").value="";$("songTitle").value="";requestModal.style.display="none"};
