@@ -35,7 +35,7 @@ header{background:var(--header-bg);border-bottom:3px solid var(--header-border);
 .sidebar-users-area{flex:1;overflow-y:auto}.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:15px;margin-bottom:12px;position:relative}
 .topic-card{background:linear-gradient(135deg,#1e1b4b 0%,#31103f 100%)!important;border:1px solid #7c3aed!important;padding:12px 15px!important}
 .radio-player-card{background:var(--radio-card-bg)!important;border:1px solid var(--radio-card-border)!important;box-shadow:0 4px 20px rgba(0,0,0,.4)}
-.radio-banner{background:var(--radio-banner-bg);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.radio-banner{background:var(--radio-banner-bg);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;align-items:center;justify-content:between;gap:8px}
 .radio-logo-box{display:flex;align-items:center;gap:10px}.l2mr-logo{width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.l2mr-logo svg{width:24px;height:24px;fill:var(--primary)}
 .radio-logo-text h1{margin:0;font-size:18px}.radio-logo-text span{font-size:12px;opacity:.8}.live-badge{background:#000;color:var(--primary);border:1px solid var(--primary);font-size:10px;font-weight:bold;padding:4px 8px;border-radius:20px;white-space:nowrap}.live-dot{width:6px;height:6px;background:var(--primary);border-radius:50%;display:inline-block}
 .radio-description{background:rgba(0,0,0,.3);border-left:4px solid var(--primary);padding:10px;border-radius:6px;margin-bottom:12px;font-size:13px;color:#ddd}.popup-player-box{background:rgba(0,0,0,.4);padding:8px;border-radius:8px;border:1px solid var(--sidebar-border)}
@@ -51,7 +51,8 @@ header{background:var(--header-bg);border-bottom:3px solid var(--header-border);
 .action-msg{background:linear-gradient(135deg,#1e3a8a,#172554);border:1px solid #3b82f6;color:#93c5fd;font-style:italic}
 .system-msg{background:rgba(0,0,0,.3);border:1px dashed #555;color:#aaa;font-style:italic;text-align:center;font-size:12px}
 .announcement-msg{background:linear-gradient(135deg,#78350f,#451a03);border:2px solid #f59e0b;color:#fef08a;font-weight:bold;text-align:center;padding:12px}
-.time{font-size:10px;color:#888;margin-right:4px}.avatar{margin-right:3px}.name{font-weight:bold;margin-right:4px;cursor:pointer;padding:2px 4px;border-radius:4px}.bot-name{color:#c084fc!important}.bot-badge{font-size:9px;font-weight:bold;padding:2px 5px;border-radius:4px;margin-right:4px;background:#7c3aed}
+.dj-chat-msg{background:rgba(4,120,87,0.25)!important;border:1px solid #047857!important;color:#ecfdf5!important;display:flex;justify-content:space-between;align-items:center;}
+.time{font-size:10px;color:#888;margin-right:4px}.avatar{margin-right:3px}.name{font-weight:bold;margin-right:4px;cursor:pointer;padding:2px 4px;border-radius:4px}.bot-name{color:#c084fc!important}
 form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;position:relative}select#userAvatar,input#name,input#text{background:rgba(0,0,0,.3);color:var(--text);border-radius:6px;border:1px solid var(--sidebar-border)}select#userAvatar{padding:10px 6px;font-size:16px}input[type=color]{width:40px;height:40px;border:0;background:transparent;cursor:pointer}input#name{width:105px;padding:10px;font-size:14px}input#text{flex:1;padding:10px;min-width:120px;font-size:14px}button[type=submit]{border:0;border-radius:6px;padding:10px 15px;background:var(--primary);color:#fff;font-weight:bold;cursor:pointer;font-size:14px}.tab-btn{background:var(--primary);opacity:.9;color:#fff;border:0;border-radius:6px;padding:10px;font-weight:bold;cursor:pointer;font-size:13px}.action-btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.action-btn{background:#333;color:#fff;border:1px solid #555;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}.applause-btn{background:#d97706}.coffee-btn{background:#78350f}.heart-btn{background:#be123c}.sev-btn{background:#db2777}.horon-btn{background:#0284c7}.confetti-btn{background:#9333ea}.theme-btn{background:var(--primary)}.party-btn{background:#16a34a}.request-btn{background:#047857}.note{color:#aaa;font-size:12px}
 .user-list-item{padding:6px 8px;margin:4px 0;background:rgba(0,0,0,.3);border-radius:6px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--sidebar-border)}.user-list-item.away-user{opacity:.55;border-left:3px solid #f59e0b}.user-info-row{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.away-badge{font-size:9px;background:#f59e0b;color:#000;padding:1px 4px;border-radius:3px;font-weight:bold;margin-left:auto}.user-action-row{display:flex;gap:4px}.user-action-btn{background:#333;border:0;color:#fff;padding:2px 5px;border-radius:3px;font-size:10px;cursor:pointer;font-weight:bold}.mention-action{background:#4338ca}.whisper-action{background:#7e22ce}.whisper-unread{background:#dc2626!important;color:#fff!important}
 
@@ -68,7 +69,8 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
 .login-glowing-box{background:linear-gradient(145deg,#1c1008,#2a1a0f)!important;border:2px solid #ff7700!important;box-shadow:0 0 35px rgba(255,119,0,.65),inset 0 0 15px rgba(255,140,0,.2)!important;animation:modalGlowPulse 3s infinite alternate}
 @keyframes modalGlowPulse{0%{box-shadow:0 0 25px rgba(255,119,0,.5)}100%{box-shadow:0 0 40px rgba(255,140,0,.85)}}
-.modal-box{background:var(--card-bg);border:2px solid var(--modal-border);border-radius:12px;padding:20px;width:90%;max-width:400px;max-height:85vh;overflow-y:auto}.modal-box h3{color:var(--sidebar-header-color);margin-top:0}.modal-box input{width:100%;padding:10px;margin:8px 0;background:rgba(0,0,0,.4);border:1px solid var(--sidebar-border);color:var(--text);border-radius:6px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}
+.modal-box{background:var(--card-bg);border:2px solid var(--modal-border);border-radius:12px;padding:20px;width:90%;max-width:550px;max-height:90vh;overflow-y:auto}.modal-box h3{color:var(--sidebar-header-color);margin-top:0}.modal-box input{width:100%;padding:10px;margin:8px 0;background:rgba(0,0,0,.4);border:1px solid var(--sidebar-border);color:var(--text);border-radius:6px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}
+
 .private-modal-box{background:var(--card-bg);border:2px solid var(--modal-border);box-shadow:0 8px 30px rgba(0,0,0,.5);max-width:380px;width:92%;height:360px;max-height:75vh;display:flex;flex-direction:column;padding:12px}.private-messages-area{flex:1;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:8px;padding:8px;border:1px solid var(--sidebar-border);margin-bottom:6px;font-size:13px}.private-msg{background:rgba(255,255,255,.05);border:1px solid var(--sidebar-border);border-radius:8px;padding:8px 10px;margin:6px 0;font-size:14px;word-break:break-word}.private-emoji-bar{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}.private-emoji-btn{background:rgba(0,0,0,.3);border:1px solid var(--sidebar-border);color:var(--text);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:14px}
 
 @media(max-width:768px){
@@ -77,6 +79,7 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
   .sidebar-header span{font-size:10px}
   .user-info-row{font-size:10px}
   .user-action-btn{font-size:8px;padding:2px 2px}
+  .modal-box{width:95%;padding:12px;max-height:95vh;}
 }
 </style>
 </head>
@@ -84,7 +87,7 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 <header>
   <div>🎙️ Radyo Kral FM & Muhabbet</div>
   <div style="display:flex;gap:6px;align-items:center;">
-    <button id="toggleDJBtn" class="action-btn" type="button" style="background:#047857;padding:6px 10px;font-size:12px;display:none;">🎙️ Yayın Al</button>
+    <button id="openDjRoomModalBtn" class="action-btn" type="button" style="background:#047857;padding:6px 12px;font-size:12px;display:none;">🎙️ DJ Odası</button>
     <button id="openLoginModalBtn" class="action-btn" type="button" style="background:var(--primary);padding:6px 12px;font-size:12px;">👤 Profil / Giriş</button>
     <button id="headerLogoutBtn" class="action-btn" type="button" style="background:#b91c1c;padding:6px 12px;font-size:12px;display:none;">🚪 Çıkış Yap</button>
   </div>
@@ -93,11 +96,46 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 <main>
 <div id="topicCard" class="card topic-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div style="font-size:13px;line-height:1.4;flex:1;">📌 <b style="color:#c084fc;">Günün Topiği:</b> <span id="topicText">Yükleniyor...</span></div><button id="editTopicBtn" type="button" class="user-action-btn" style="background:#7c3aed;padding:4px 10px;font-size:11px;display:none;">Düzenle</button></div><div id="topicAuthor" style="font-size:10px;color:#a78bfa;margin-top:4px;"></div></div>
 <div class="card radio-player-card"><div class="radio-banner"><div class="radio-logo-box"><div class="l2mr-logo"><svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg></div><div class="radio-logo-text"><h1>📻 Radyo Kral FM</h1><span>Kesintisiz Canlı Yayın</span></div></div><div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div></div><div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div><div class="popup-player-box"><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a><div id="radioStatus" class="note" style="margin-top:6px;text-align:center">📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.</div></div></div>
+
 <div class="card"><h3 style="margin-top:0">💬 Genel Sohbet Odası</h3><div id="messages" class="chat-box-area"></div>
-<form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
-<div class="action-btns"><button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button><button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button><button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button><button id="sendSev" class="action-btn sev-btn" type="button">💖 Sev</button><button id="sendHoron" class="action-btn horon-btn" type="button">💃 Horon</button><button id="sendConfetti" class="action-btn confetti-btn" type="button">🎉 Konfeti</button><button id="toggleTheme" class="action-btn theme-btn" type="button">🎨 Tema Seç</button><button id="partyButton" class="action-btn party-btn" type="button">🪩 Parti</button><button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button><button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Admin & Temizle</button></div><p id="statusText" class="note">Sohbet odası hazır. 🤖</p></div>
+<form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
+<div class="action-btns"><button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button><button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button><button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button><button id="sendSev" class="action-btn sev-btn" type="button">💖 Sev</button><button id="sendHoron" class="action-btn horon-btn" type="button">💃 Horon</button><button id="sendConfetti" class="action-btn confetti-btn" type="button">🎉 Konfeti</button><button id="toggleTheme" class="action-btn theme-btn" type="button">🎨 Tema Seç</button><button id="partyButton" class="action-btn party-btn" type="button">🪩 Parti</button><button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button><button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Sohbeti Temizle</button></div><p id="statusText" class="note">Sohbet odası hazır. 🤖</p></div>
 </main>
 <aside class="sidebar-right"><div class="sidebar-header"><span>👥 Üyeler</span></div><div id="onlineUsersList" class="sidebar-users-area">Yükleniyor...</div></aside>
+</div>
+
+<!-- ŞİFRELİ DJ KONTROL ODASI -->
+<div id="djRoomModal" class="modal-overlay">
+  <div class="modal-box" style="background: linear-gradient(135deg, #022c22 0%, #064e3b 100%); border-color: #34d399;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #047857;padding-bottom:10px;margin-bottom:12px;background:rgba(4,120,87,0.2);padding:8px 12px;border-radius:8px;">
+      <h3 style="margin:0; font-size:14px; color:#34d399; text-shadow:0 0 10px rgba(52,211,153,0.6); letter-spacing:0.5px;">🎙️ 𝓚𝓡𝓐𝓛 𝓕𝓜 ✦ 𝘿𝙅 𝓢𝓣𝓤𝘿𝓞 & 𝓚𝓞𝓝𝓣𝓡𝓞𝓛</h3>
+      <button id="closeDjRoomModal" class="action-btn" style="background:#b91c1c;padding:3px 10px;font-size:11px;" type="button">✕ Kapat</button>
+    </div>
+    
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; border:1px solid #047857;">
+      <div>
+        <div style="font-size:13px; font-weight:bold; color:#a7f3d0;">Stüdyo Durumu: <span id="djRoomStatusText" style="color:#fde047;">Yayına Hazır</span></div>
+        <div style="font-size:11px; color:#cbd5e1;">Yayın alarak kulaklığı takın ve mikrofona geçin!</div>
+      </div>
+      <button id="modalToggleDJBtn" class="action-btn" type="button" style="background:#047857; padding:10px 16px; font-size:13px;">🎙️ Yayın Al</button>
+    </div>
+
+    <div style="background:rgba(0,0,0,0.3); border:1px solid #047857; border-radius:8px; padding:8px 10px; margin-bottom:10px;">
+      <div style="font-size:12px; font-weight:bold; color:#34d399; margin-bottom:4px;">🎧 Aktif DJ'ler (Rozetleriyle):</div>
+      <div id="djActiveList" style="display:flex; gap:6px; flex-wrap:wrap; font-size:12px; min-height:22px; align-items:center;"></div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <div style="font-size:12px; font-weight:bold; color:#34d399;">💬 Stüdyo İçi Haberleşme</div>
+      <button id="clearAllDjMsgBtn" class="action-btn" type="button" style="background:#b91c1c; padding:3px 8px; font-size:11px;">🗑️ Toplu Sil</button>
+    </div>
+    <div id="djMessages" class="chat-box-area" style="height:200px; background:rgba(0,0,0,0.4);"></div>
+    
+    <form id="djForm" autocomplete="off" style="margin-top:8px; display:flex; gap:6px;">
+      <input type="text" id="djText" maxlength="300" placeholder="Stüdyo içi mesaj yaz..." required style="flex:1; padding:10px; background:rgba(0,0,0,.4); color:#fff; border:1px solid #047857; border-radius:6px; font-size:13px; margin:0;">
+      <button type="submit" style="background:#047857; color:#fff; border:0; border-radius:6px; padding:10px 16px; font-weight:bold; cursor:pointer; font-size:13px;">Gönder</button>
+    </form>
+  </div>
 </div>
 
 <div id="loginModal" class="modal-overlay" style="display:flex;">
@@ -127,7 +165,7 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase,ref,push,onValue,set,remove,get} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase,ref,push,onValue,set,remove,get,update} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",authDomain:"kralfm-muhabbet.firebaseapp.com",databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",projectId:"kralfm-muhabbet",storageBucket:"kralfm-muhabbet.firebasestorage.app",messagingSenderId:"638769846511",appId:"1:638769846511:web:f6d8abb91564873996"};
 const app=initializeApp(firebaseConfig),db=getDatabase(app),messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence"),privateMessagesRef=ref(db,"privateMessages"),topicRef=ref(db,"topic"),usersRef=ref(db,"users");
 const $=id=>document.getElementById(id);window.$=$;
@@ -167,10 +205,20 @@ window.addEventListener("DOMContentLoaded", () => {
     if(localStorage.getItem("kralfm_avatar")) $("userAvatar").value = localStorage.getItem("kralfm_avatar");
     if(localStorage.getItem("kralfm_color")) $("userColor").value = localStorage.getItem("kralfm_color");
     
+    // Veritabanından rolü senkronize et
+    const userKey = normalizeNick(savedName);
+    get(ref(db, "users/" + userKey)).then(snap => {
+      if(snap.exists() && snap.val().role) {
+        window.userRole = snap.val().role;
+        sessionStorage.setItem("kralfm_role", window.userRole);
+      }
+      checkAdminUI();
+      registerPresence();
+    });
+
     $("loginModal").style.display = "none";
     $("headerLogoutBtn").style.display = "inline-block";
-    $("toggleDJBtn").style.display = "inline-block";
-    registerPresence();
+    $("openDjRoomModalBtn").style.display = "inline-block";
 
     if(localStorage.getItem("kralfm_password_protected") !== "true") {
       startGuestReminder();
@@ -181,7 +229,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if(localStorage.getItem("kralfm_color")) $("loginColor").value = localStorage.getItem("kralfm_color");
     
     $("headerLogoutBtn").style.display = "none";
-    $("toggleDJBtn").style.display = "none";
+    $("openDjRoomModalBtn").style.display = "none";
     $("loginModal").style.display = "flex";
   }
 });
@@ -209,38 +257,135 @@ $("headerLogoutBtn").onclick = async () => {
     localStorage.removeItem("kralfm_logged");
     localStorage.removeItem("kralfm_name");
     localStorage.removeItem("kralfm_password_protected");
+    sessionStorage.removeItem("kralfm_dj_authed");
+    sessionStorage.removeItem("kralfm_role");
     location.reload();
   }
 };
 
-// ŞİFRELİ DJ YAYIN ALMA SİSTEMİ
-$("toggleDJBtn").onclick = async () => {
+// DJ Odası Giriş Kontrolü (Sadece Kayıtlı / Şifreli Nick Sahipleri veya Yetkililer Girebilir)
+$("openDjRoomModalBtn").onclick = () => {
+  const isPasswordProtected = localStorage.getItem("kralfm_password_protected") === "true";
+  const isStaff = ["admin", "sop", "op"].includes(window.userRole);
+
+  if (!isPasswordProtected && !isStaff) {
+    alert("❌ DJ Odasına yalnızca şifreli (kayıtlı) nick sahipleri ve yetkililer girebilir! Lütfen profil butonuna basarak nickinizi şifreleyin.");
+    return;
+  }
+
+  if (sessionStorage.getItem("kralfm_dj_authed") === "true") {
+    $("djRoomModal").style.display = "flex";
+    return;
+  }
+  
+  const pass = prompt("🔒 DJ Odası şifresini girin:");
+  if(pass !== "4161") {
+    alert("❌ Hatalı şifre! DJ Odasına giriş yapamazsınız.");
+    return;
+  }
+  
+  sessionStorage.setItem("kralfm_dj_authed", "true");
+  $("djRoomModal").style.display = "flex";
+};
+
+$("closeDjRoomModal").onclick = () => {
+  $("djRoomModal").style.display = "none";
+};
+
+// Toplu Silme Butonu (Sadece Yetkililer: admin, sop, op)
+$("clearAllDjMsgBtn").onclick = async () => {
+  if(!["admin", "sop", "op"].includes(window.userRole)) {
+    alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP veya Admin yapabilir).");
+    return;
+  }
+  if(confirm("Stüdyo içindeki tüm mesajları toplu olarak silmek istediğinize emin misiniz?")) {
+    try {
+      const snapshot = await get(messagesRef);
+      if(snapshot.exists()) {
+        const updates = {};
+        snapshot.forEach(childSnap => {
+          const val = childSnap.val();
+          if(val.type === "dj") {
+            updates[childSnap.key] = null;
+          }
+        });
+        if(Object.keys(updates).length > 0) {
+          await update(messagesRef, updates);
+        }
+      }
+    } catch(err) {
+      alert("Toplu silme sırasında bir hata oluştu.");
+    }
+  }
+};
+
+$("modalToggleDJBtn").onclick = async () => {
   const currentName = $("name").value.trim();
   if(!isDJMode) {
-    const djPass = prompt("🎙️ DJ Yayın şifresini girin:");
-    if(djPass !== "1234") { // Varsayılan DJ şifresi: 1234 (İstediğiniz gibi değiştirebilirsiniz)
-      alert("❌ Hatalı DJ şifresi! Yayın alma yetkiniz yok.");
-      return;
-    }
     preDJName = currentName.startsWith("DJ ") ? currentName.substring(3) : currentName;
     const newName = "DJ " + preDJName;
     $("name").value = newName;
     isDJMode = true;
-    $("toggleDJBtn").textContent = "🛑 Yayını Bitir";
-    $("toggleDJBtn").style.background = "#b91c1c";
+    $("modalToggleDJBtn").textContent = "🛑 Yayını Bitir";
+    $("modalToggleDJBtn").style.background = "#b91c1c";
+    $("djRoomStatusText").textContent = "Yayındasınız (Mikrofon Sizinle!)";
+    $("djRoomStatusText").style.color = "#34d399";
+    
     await registerPresence();
-    await push(messagesRef, {name: newName, text: "🎙️ Canlı yayını devraldı, stüdyo mikrofonda! Keyifli dinlemeler...", type: "system", createdAt: Date.now()});
-    triggerToast("Yayın Başladı", "🎙️ DJ koltuğuna oturdunuz ve isminizin başına DJ eki eklendi!");
+    await push(messagesRef, {name: newName, text: `🎙️ Canlı Yayın Başladı! ${newName} stüdyoya girdi, mikrofon başında frekansları sallıyor! Şahane parçalarla coşku tavan yapıyor, kulaklıkları takın! 🎧🔥`, type: "system", createdAt: Date.now()});
+    await push(messagesRef, {name: newName, text: "Yayın aktif hale getirildi. İyi yayınlar dileriz!", type: "dj", role: window.userRole, createdAt: Date.now()});
+    triggerToast("Yayın Başladı", "🎙️ Mikrofon sizde, şahane bir yayın dileriz!");
   } else {
     $("name").value = preDJName;
     isDJMode = false;
-    $("toggleDJBtn").textContent = "🎙️ Yayın Al";
-    $("toggleDJBtn").style.background = "#047857";
+    $("modalToggleDJBtn").textContent = "🎙️ Yayın Al";
+    $("modalToggleDJBtn").style.background = "#047857";
+    $("djRoomStatusText").textContent = "Yayına Hazır";
+    $("djRoomStatusText").style.color = "#fde047";
+    
     await registerPresence();
-    await push(messagesRef, {name: preDJName, text: "🛑 Canlı yayını tamamladı, mikrofonu bıraktı.", type: "system", createdAt: Date.now()});
+    await push(messagesRef, {name: preDJName, text: `🛑 Yayın Sona Erdi! DJ ${preDJName} mikrofonu bıraktı, yayın sona erdi. Katılan ve dinleyen herkese kocaman teşekkürler! 📻✨`, type: "system", createdAt: Date.now()});
     triggerToast("Yayın Bitti", "🛑 Yayın sona erdi, normal isminize döndünüz.");
   }
 };
+
+$("djForm").onsubmit = async e => {
+  e.preventDefault();
+  const input = $("djText");
+  const text = input.value.trim();
+  const name = getCurrentMyName();
+  input.value = "";
+  if(!text) return;
+  await push(messagesRef, {name, text, avatar: $("userAvatar").value, color: $("userColor").value, role: window.userRole, type: "dj", createdAt: Date.now()});
+};
+
+function updateActiveDJsUI() {
+  const activeList = $("djActiveList");
+  if(!activeList) return;
+  activeList.innerHTML = "";
+  let activeCount = 0;
+
+  Object.values(activeUsersData).forEach(u => {
+    if(u.lastActive && Date.now() - u.lastActive < 120000 && u.isDJ) {
+      activeCount++;
+      const badge = document.createElement("span");
+      badge.style.padding = "3px 8px";
+      badge.style.background = "rgba(0,0,0,0.4)";
+      badge.style.border = "1px solid #34d399";
+      badge.style.borderRadius = "12px";
+      badge.style.fontWeight = "bold";
+      badge.style.color = "#34d399";
+      
+      const rBadge = u.role === "admin" ? "👑 " : u.role === "sop" ? "⭐ " : u.role === "op" ? "🛡️ " : "👤 ";
+      badge.textContent = "🎙️ " + rBadge + u.name;
+      activeList.appendChild(badge);
+    }
+  });
+
+  if(activeCount === 0) {
+    activeList.innerHTML = `<span style="color:#aaa; font-style:italic;">Şu an aktif yayıncı yok.</span>`;
+  }
+}
 
 $("confirmLoginBtn").onclick = async () => {
   const enteredName = $("loginNameInput").value.trim();
@@ -256,12 +401,15 @@ $("confirmLoginBtn").onclick = async () => {
     const snapshot = await get(userDocRef);
     const userData = snapshot.val();
     if(userData) {
-      if(userData.password !== enteredPassword) { alert("❌ Bu takma ad şifre korumalıdır! Girdiğiniz şifre hatalı."); return; }
+      if(userData.password !== enteredPassword) { alert("❌ Bu nick şifre korumalıdır! Hatalı şifre."); return; }
       $("userAvatar").value = userData.avatar || $("loginAvatar").value;
       $("userColor").value = userData.color || $("loginColor").value;
+      window.userRole = userData.role || "user";
     } else {
-      await set(userDocRef, { originalName: enteredName, password: enteredPassword, avatar: $("loginAvatar").value, color: $("loginColor").value, createdAt: Date.now() });
+      window.userRole = "user";
+      await set(userDocRef, { originalName: enteredName, password: enteredPassword, avatar: $("loginAvatar").value, color: $("loginColor").value, role: "user", createdAt: Date.now() });
     }
+    sessionStorage.setItem("kralfm_role", window.userRole);
     if(guestReminderTimer) { clearTimeout(guestReminderTimer); guestReminderTimer = null; }
     $("name").value = enteredName;
     localStorage.setItem("kralfm_name", enteredName);
@@ -271,7 +419,8 @@ $("confirmLoginBtn").onclick = async () => {
     localStorage.setItem("kralfm_password_protected", "true");
     $("loginModal").style.display = "none";
     $("headerLogoutBtn").style.display = "inline-block";
-    $("toggleDJBtn").style.display = "inline-block";
+    $("openDjRoomModalBtn").style.display = "inline-block";
+    checkAdminUI();
     await registerPresence();
     triggerToast("Giriş Başarılı", `Hoş geldin, ${enteredName}! 🎶`);
   } catch(err) { alert("Bağlantı hatası oluştu."); }
@@ -284,17 +433,20 @@ $("guestLoginBtn").onclick = async () => {
   if(isBot) { alert("⚠️ Bu isim sistem botuna aittir!"); return; }
   const snapshot = await get(ref(db, "users/" + userKey));
   if(snapshot.exists()) { alert("⚠️ Bu takma ad şifre korumalıdır!"); return; }
+  window.userRole = "user";
+  sessionStorage.setItem("kralfm_role", "user");
   $("name").value = enteredName;
   $("userAvatar").value = $("loginAvatar").value;
   $("userColor").value = $("loginColor").value;
   localStorage.setItem("kralfm_name", enteredName);
-  localStorage.setItem("kralfm_avatar", $("userAvatar").value);
-  localStorage.setItem("kralfm_color", $("userColor").value);
+  localStorage.setItem("kralfm_avatar", $("loginAvatar").value);
+  localStorage.setItem("kralfm_color", $("loginColor").value);
   localStorage.setItem("kralfm_logged", "true");
   localStorage.removeItem("kralfm_password_protected");
   $("loginModal").style.display = "none";
   $("headerLogoutBtn").style.display = "inline-block";
-  $("toggleDJBtn").style.display = "inline-block";
+  $("openDjRoomModalBtn").style.display = "inline-block";
+  checkAdminUI();
   await registerPresence();
   triggerToast("Misafir Girişi", `Hoş geldin, ${enteredName}! ☕`);
   startGuestReminder();
@@ -303,8 +455,8 @@ $("guestLoginBtn").onclick = async () => {
 function time(t){return new Date(t||Date.now()).toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})}
 function getCurrentMyName(){const n=$("name").value.trim();return n&&n!=="undefined"?n:defaultGuestName}window.getCurrentMyName=getCurrentMyName;
 onValue(topicRef,s=>{const d=s.val(),a=$("topicText"),b=$("topicAuthor");if(d&&d.text){a.textContent=d.text;b.textContent=`Güncelleyen Admin: ${d.author||"Kral"} [${time(d.updatedAt||Date.now())}]`}else{a.textContent="Henüz bir topik belirlenmedi.";b.textContent=""}});
-function checkAdminUI(){const b=$("editTopicBtn");if(b)b.style.display=window.userRole==="admin"?"inline-block":"none"}
-$("editTopicBtn").onclick=async()=>{if(window.userRole!=="admin"){alert("Admin yetkiniz olmalı!");return}const n=prompt("Yeni topiği girin:");if(n!==null){const t=n.trim();if(t)await set(topicRef,{text:t,author:getCurrentMyName(),updatedAt:Date.now()})}};
+function checkAdminUI(){const b=$("editTopicBtn");if(b)b.style.display=["admin","sop","op"].includes(window.userRole)?"inline-block":"none"}
+$("editTopicBtn").onclick=async()=>{if(!["admin","sop","op"].includes(window.userRole)){alert("Yetkiniz olmalı!");return}const n=prompt("Yeni topiği girin:");if(n!==null){const t=n.trim();if(t)await set(topicRef,{text:t,author:getCurrentMyName(),updatedAt:Date.now()})}};
 
 function triggerScreenShower(emojis){
   const arr = Array.isArray(emojis) ? emojis : [emojis];
@@ -417,14 +569,84 @@ function appendMessage(key, d){
   r.append(ts,role,av,n,t);box.appendChild(r);box.scrollTop=box.scrollHeight
 }
 
-onValue(messagesRef,s=>{$("messages").innerHTML="";Object.entries(s.val()||{}).forEach(([k,d])=>appendMessage(k,d))});
+function appendDJMessage(key, d){
+  const box=$("djMessages");if(!box||!d)return;
+  const r=document.createElement("div");r.className="msg dj-chat-msg";
+  
+  const contentSpan = document.createElement("span");
+  const ts=document.createElement("span");ts.className="time";ts.textContent="["+time(d.createdAt)+"] ";
+  const role=document.createElement("span");role.textContent=d.role==="admin"?"👑 ":d.role==="sop"?"⭐ ":d.role==="op"?"🛡️ ":"👤 ";
+  const av=document.createElement("span");av.className="avatar";av.textContent=(d.avatar||"🎙️")+" ";
+  const n=document.createElement("span");n.className="name";n.textContent=(d.name||"DJ")+": ";
+  if(d.color)n.style.color=d.color;
+  const t=document.createElement("span");t.textContent=d.text||"";
+  contentSpan.append(ts,role,av,n,t);
+
+  const cleanMyName = getCurrentMyName();
+  const canDelete = ["admin", "sop", "op"].includes(window.userRole) || (d.name && d.name.replace(/^DJ\s+/, "") === cleanMyName.replace(/^DJ\s+/, ""));
+
+  if(canDelete) {
+    const delBtn = document.createElement("button");
+    delBtn.className = "delete-btn";
+    delBtn.textContent = "Sil";
+    delBtn.style.cssText = "background:#b91c1c; color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer; font-size:11px; flex-shrink:0; margin-left:8px;";
+    delBtn.onclick = async () => {
+      if(confirm("Bu stüdyo mesajını silmek istediğinize emin misiniz?")) {
+        await remove(ref(db, "messages/" + key));
+      }
+    };
+    r.append(contentSpan, delBtn);
+  } else {
+    r.append(contentSpan);
+  }
+
+  box.appendChild(r);
+  box.scrollTop=box.scrollHeight;
+}
+
+onValue(messagesRef,s=>{
+  const mainBox=$("messages");const djBox=$("djMessages");
+  if(mainBox) mainBox.innerHTML="";
+  if(djBox) djBox.innerHTML="";
+  
+  Object.entries(s.val()||{}).forEach(([k,d])=>{
+    if(d.type==="dj"){
+      appendDJMessage(k, d);
+    } else {
+      appendMessage(k, d);
+    }
+  });
+});
+
 onValue(privateMessagesRef,s=>{latestPrivateData=s.val()||{};renderPrivateMessages();const me=getCurrentMyName().toLowerCase(),target=(window.activePrivateTarget||"").toLowerCase();Object.entries(latestPrivateData).forEach(([id,m])=>{const sn=(m.sender||"").toLowerCase(),rn=(m.recipient||"").toLowerCase();if(rn===me&&sn!==me&&!processedPrivateMsgIds.has(id)){processedPrivateMsgIds.add(id);if(m.createdAt>pageLoadTime){if(sn!==target)unreadPrivateCounts[m.sender]=(unreadPrivateCounts[m.sender]||0)+1;updateOnlineUsersUI();openPrivateChat(m.sender);triggerToast(`${m.sender} fısıldadı!`,`${m.sender}: "${(m.text||"").substring(0,25)}..."`)}}})});
 $("privateForm").onsubmit=async e=>{e.preventDefault();const t=$("privateText").value.trim(),me=getCurrentMyName();if(!t||!window.activePrivateTarget)return;$("privateText").value="";await push(privateMessagesRef,{sender:me,recipient:window.activePrivateTarget,text:t,createdAt:Date.now()})};
-let heartbeatInterval=null;async function registerPresence(){const n=getCurrentMyName(),a=$("userAvatar").value,c=$("userColor").value;const u=ref(db,"presence/"+uid);try{await set(u,{name:n,avatar:a,color:c,role:window.userRole,isAway:window.isUserAway,lastActive:Date.now()});checkAdminUI();if(heartbeatInterval)clearInterval(heartbeatInterval);heartbeatInterval=setInterval(()=>set(ref(db,"presence/"+uid+"/lastActive"),Date.now()).catch(()=>{}),15000)}catch(e){}}
-onValue(presenceRef,s=>{activeUsersData=s.val()||{};updateOnlineUsersUI()});
+
+let heartbeatInterval=null;async function registerPresence(){const n=getCurrentMyName(),a=$("userAvatar").value,c=$("userColor").value;const u=ref(db,"presence/"+uid);try{await set(u,{name:n,avatar:a,color:c,role:window.userRole,isAway:window.isUserAway,isDJ:isDJMode,lastActive:Date.now()});checkAdminUI();if(heartbeatInterval)clearInterval(heartbeatInterval);heartbeatInterval=setInterval(()=>set(ref(db,"presence/"+uid+"/lastActive"),Date.now()).catch(()=>{}),15000)}catch(e){}}
+
+onValue(presenceRef,s=>{activeUsersData=s.val()||{};updateOnlineUsersUI();updateActiveDJsUI()});
 function updateOnlineUsersUI(){$("onlineUsersList").innerHTML="";onlineUserNames=[];staticBots.forEach(b=>{onlineUserNames.push(b.name);renderUserItem(b.avatar,b.name,b.role,false)});Object.values(activeUsersData).forEach(u=>{if(u.lastActive&&Date.now()-u.lastActive<120000){onlineUserNames.push(u.name);renderUserItem(u.avatar||"👤",u.name,u.role||"user",u.isAway||false)}})}
 window.updateOnlineUsersUI=updateOnlineUsersUI;
 function renderUserItem(a,n,r,away){const d=document.createElement("div");d.className=away?"user-list-item away-user":"user-list-item";const row=document.createElement("div");row.className="user-info-row";const rs=document.createElement("span");rs.textContent=r==="admin"?"👑 ":r==="sop"?"⭐ ":r==="op"?"🛡️ ":"👤 ";const av=document.createElement("span");av.textContent=(a||"👤")+" ";const ns=document.createElement("span");ns.textContent=n;row.append(rs,av,ns);if(away){const tag=document.createElement("span");tag.className="away-badge";tag.textContent="Away 🌙";row.appendChild(tag)}const ar=document.createElement("div");ar.className="user-action-row";const mb=document.createElement("button");mb.type="button";mb.className="user-action-btn mention-action";mb.textContent="Etiket";mb.onclick=e=>{e.stopPropagation();mentionUser(n)};const wb=document.createElement("button");wb.type="button";const cnt=Object.entries(unreadPrivateCounts).find(([k])=>k.toLowerCase()===n.toLowerCase());const count=cnt?cnt[1]:0;wb.className=count>0?"user-action-btn whisper-action whisper-unread":"user-action-btn whisper-action";wb.textContent=count>0?`Fısılda (${count})`:"Fısılda";wb.onclick=e=>{e.stopPropagation();openPrivateChat(n)};ar.append(mb,wb);d.append(row,ar);$("onlineUsersList").appendChild(d)}
+
+async function changeUserRole(targetNick, newRole) {
+  const cleanTarget = targetNick.replace(/^@/, "").trim();
+  const key = normalizeNick(cleanTarget);
+  const targetRef = ref(db, "users/" + key);
+  const snap = await get(targetRef);
+  if(!snap.exists()) {
+    alert("❌ Veritabanında kayıtlı '" + cleanTarget + "' adında bir kullanıcı bulunamadı!");
+    return;
+  }
+  await update(targetRef, { role: newRole });
+  
+  Object.entries(activeUsersData).forEach(async ([pUid, pVal]) => {
+    if(normalizeNick(pVal.name) === key) {
+      await update(ref(db, "presence/" + pUid), { role: newRole });
+    }
+  });
+
+  await push(messagesRef, {name: "Sistem", text: `Yetki Güncellendi: ${cleanTarget} adlı kullanıcının yetkisi ${newRole.toUpperCase()} olarak değiştirildi!`, type: "system", createdAt: Date.now()});
+}
 
 $("form").onsubmit=async e=>{
   e.preventDefault();
@@ -432,9 +654,35 @@ $("form").onsubmit=async e=>{
   let text=input.value.trim(),name=getCurrentMyName(),avatar=$("userAvatar").value,color=$("userColor").value;
   input.value=""; 
   if(!text)return;
-  if(text.toLowerCase().startsWith("/topik ")){if(window.userRole!=="admin"){alert("Admin yetkiniz olmalı!");return}const t=text.substring(7).trim();if(t)await set(topicRef,{text:t,author:name,updatedAt:Date.now()});return;}
-  if(text.toLowerCase().startsWith("/duyuru ")){if(window.userRole!=="admin"){alert("Admin yetkiniz olmalı!");return}const t=text.substring(8).trim();if(t)await push(messagesRef,{name,text:t,type:"announcement",avatar,color,role:window.userRole,createdAt:Date.now()});return;}
-  if(text.toLowerCase().startsWith("/away")){window.isUserAway=true;await set(ref(db,"presence/"+uid+"/isAway"),true);await push(messagesRef,{name,text:"klavyeden uzaklaştı",type:"action",createdAt:Date.now()});return;}
+
+  if(text.toLowerCase().startsWith("/sop ")){
+    if(window.userRole !== "admin") { alert("❌ Bu komutu yalnızca Admin kullanabilir!"); return; }
+    const target = text.substring(5).trim();
+    await changeUserRole(target, "sop");
+    return;
+  }
+  if(text.toLowerCase().startsWith("/op ")){
+    if(!["admin", "sop"].includes(window.userRole)) { alert("❌ Bu komutu yalnızca Admin veya SOP kullanabilir!"); return; }
+    const target = text.substring(4).trim();
+    await changeUserRole(target, "op");
+    return;
+  }
+  if(text.toLowerCase().startsWith("/user ")){
+    if(!["admin", "sop"].includes(window.userRole)) { alert("❌ Bu komutu yalnızca Admin veya SOP kullanabilir!"); return; }
+    const target = text.substring(6).trim();
+    await changeUserRole(target, "user");
+    return;
+  }
+
+  if(text.toLowerCase().startsWith("/topik ")){
+    if(!["admin", "sop", "op"].includes(window.userRole)){alert("Yetkiniz olmalı!");return}
+    const t=text.substring(7).trim();if(t)await set(topicRef,{text:t,author:name,updatedAt:Date.now()});return;
+  }
+  if(text.toLowerCase().startsWith("/duyuru ")){
+    if(!["admin", "sop", "op"].includes(window.userRole)){alert("Yetkiniz olmalı!");return}
+    const t=text.substring(8).trim();if(t)await push(messagesRef,{name,text:t,type:"announcement",avatar,color,role:window.userRole,createdAt:Date.now()});return;
+  }
+  if(text.toLowerCase().startsWith("/away")){window.isUserAway=true;await set(ref(db,"presence/"+uid+"/isAway"),true);await push(messagesRef,{name,text:"klavyedeni uzaklaştı",type:"action",createdAt:Date.now()});return;}
   if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}
   let type="text";
   if(text.toLowerCase().startsWith("/me ")){type="action";text=text.substring(4).trim()}
@@ -457,7 +705,28 @@ $("partyButton").onclick=()=>sendActionWithEffect("🪩 PARTİ BAŞLADI! Işıkl
 
 const themeModal=$("themeModal");$("toggleTheme").onclick=()=>themeModal.style.display="flex";$("closeThemeModal").onclick=()=>themeModal.style.display="none";window.applyThemeSelection=(c,n)=>{document.body.className=c;localStorage.setItem("kralfm_theme",c);themeModal.style.display="none";triggerToast("Tema Değişti",`Aktif Tema: ${n}`)};
 const requestModal=$("requestModal");$("openRequestModal").onclick=()=>requestModal.style.display="flex";$("closeRequestModal").onclick=()=>requestModal.style.display="none";$("sendRequest").onclick=async()=>{const artist=$("songArtist").value.trim(),title=$("songTitle").value.trim(),name=getCurrentMyName();if(!artist||!title){alert("Sanatçı ve şarkı adını girin!");return}await push(messagesRef,{name,text:`🎵 İstek Parça: ${artist} - ${title}`,type:"request",avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()});$("songArtist").value="";$("songTitle").value="";requestModal.style.display="none"};
-$("clearChat").onclick=async()=>{if(window.userRole!=="admin"){const p=prompt("Admin şifresi:");if(p==="123456"){window.userRole="admin";sessionStorage.setItem("kralfm_role","admin");await set(ref(db,"presence/"+uid+"/role"),"admin");registerPresence();checkAdminUI();alert("Admin yetkisi aktif!")}else{alert("Hatalı şifre!");return}}if(confirm("Tüm sohbet silinsin mi?")){await remove(messagesRef);await push(messagesRef,{name:"Sistem",text:"Yönetici tarafından sohbet temizlendi.",type:"system",createdAt:Date.now()})}};
+
+$("clearChat").onclick = async () => {
+  if (!["admin", "sop", "op"].includes(window.userRole)) {
+    const p = prompt("Yetkili şifresi girin:");
+    if (p === "123456") {
+      window.userRole = "admin";
+      sessionStorage.setItem("kralfm_role", "admin");
+      await set(ref(db, "presence/" + uid + "/role"), "admin");
+      registerPresence();
+      checkAdminUI();
+      alert("Admin yetkisi aktif edildi!");
+    } else {
+      alert("❌ Bu işlem için OP, SOP veya Admin yetkiniz olmalı!");
+      return;
+    }
+  }
+
+  if(confirm("Tüm sohbet ve stüdyo geçmişi temizlensin mi?")) {
+    await remove(messagesRef);
+    await push(messagesRef, {name: "Sistem", text: `${window.userRole.toUpperCase()} yetkilisi tarafından sohbet temizlendi.`, type: "system", createdAt: Date.now()});
+  }
+};
 </script>
 </body>
 </html>
