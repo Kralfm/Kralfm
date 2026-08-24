@@ -205,7 +205,6 @@ window.addEventListener("DOMContentLoaded", () => {
     if(localStorage.getItem("kralfm_avatar")) $("userAvatar").value = localStorage.getItem("kralfm_avatar");
     if(localStorage.getItem("kralfm_color")) $("userColor").value = localStorage.getItem("kralfm_color");
     
-    // Veritabanından rolü senkronize et
     const userKey = normalizeNick(savedName);
     get(ref(db, "users/" + userKey)).then(snap => {
       if(snap.exists() && snap.val().role) {
@@ -263,7 +262,6 @@ $("headerLogoutBtn").onclick = async () => {
   }
 };
 
-// DJ Odası Giriş Kontrolü (Sadece Kayıtlı / Şifreli Nick Sahipleri veya Yetkililer Girebilir)
 $("openDjRoomModalBtn").onclick = () => {
   const isPasswordProtected = localStorage.getItem("kralfm_password_protected") === "true";
   const isStaff = ["admin", "sop", "op"].includes(window.userRole);
@@ -292,7 +290,6 @@ $("closeDjRoomModal").onclick = () => {
   $("djRoomModal").style.display = "none";
 };
 
-// Toplu Silme Butonu (Sadece Yetkililer: admin, sop, op)
 $("clearAllDjMsgBtn").onclick = async () => {
   if(!["admin", "sop", "op"].includes(window.userRole)) {
     alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP veya Admin yapabilir).");
@@ -723,8 +720,20 @@ $("clearChat").onclick = async () => {
   }
 
   if(confirm("Tüm sohbet ve stüdyo geçmişi temizlensin mi?")) {
-    await remove(messagesRef);
-    await push(messagesRef, {name: "Sistem", text: `${window.userRole.toUpperCase()} yetkilisi tarafından sohbet temizlendi.`, type: "system", createdAt: Date.now()});
+    try {
+      const snapshot = await get(messagesRef);
+      if(snapshot.exists()) {
+        const updates = {};
+        snapshot.forEach(childSnap => {
+          updates[childSnap.key] = null;
+        });
+        await update(messagesRef, updates);
+      }
+      await push(messagesRef, {name: "Sistem", text: `${window.userRole.toUpperCase()} yetkilisi tarafından sohbet temizlendi.`, type: "system", createdAt: Date.now()});
+    } catch (err) {
+      console.error("Sohbet temizleme hatası:", err);
+      alert("❌ Sohbet temizlenirken bir hata oluştu.");
+    }
   }
 };
 </script>
