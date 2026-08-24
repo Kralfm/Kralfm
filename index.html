@@ -52,13 +52,24 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 @keyframes modalGlowPulse{0%{box-shadow:0 0 25px rgba(255,119,0,.5)}100%{box-shadow:0 0 40px rgba(255,140,0,.85)}}
 .modal-box{background:var(--card-bg);border:2px solid var(--modal-border);border-radius:12px;padding:20px;width:90%;max-width:400px;max-height:85vh;overflow-y:auto}.modal-box h3{color:var(--sidebar-header-color);margin-top:0}.modal-box input{width:100%;padding:10px;margin:8px 0;background:rgba(0,0,0,.4);border:1px solid var(--sidebar-border);color:var(--text);border-radius:6px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}
 .private-modal-box{background:var(--card-bg);border:2px solid var(--modal-border);box-shadow:0 8px 30px rgba(0,0,0,.5);max-width:380px;width:92%;height:360px;max-height:75vh;display:flex;flex-direction:column;padding:12px}.private-messages-area{flex:1;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:8px;padding:8px;border:1px solid var(--sidebar-border);margin-bottom:6px;font-size:13px}.private-msg{background:rgba(255,255,255,.05);border:1px solid var(--sidebar-border);border-radius:8px;padding:8px 10px;margin:6px 0;font-size:14px;word-break:break-word}.private-emoji-bar{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}.private-emoji-btn{background:rgba(0,0,0,.3);border:1px solid var(--sidebar-border);color:var(--text);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:14px}
-@media(max-width:768px){.app-container{padding:4px;gap:4px}.sidebar-right{width:125px;padding:6px;height:calc(100vh - 60px)}.sidebar-header span{font-size:11px}.user-info-row{font-size:11px}.user-action-btn{font-size:9px;padding:2px 3px}}
+
+/* MOBİLDE SOHBETİ GENİŞLETMEK İÇİN SAĞ PANEL DARALTILDI (95px) */
+@media(max-width:768px){
+  .app-container{padding:2px;gap:2px}
+  .sidebar-right{width:95px;padding:4px;height:calc(100vh - 55px)}
+  .sidebar-header span{font-size:10px}
+  .user-info-row{font-size:10px}
+  .user-action-btn{font-size:8px;padding:2px 2px}
+}
 </style>
 </head>
 <body class="theme-default">
 <header>
   <div>🎙️ Radyo Kral FM & Muhabbet</div>
-  <button id="openLoginModalBtn" class="action-btn" type="button" style="background:var(--primary);padding:6px 12px;font-size:12px;">👤 Profil / Giriş</button>
+  <div style="display:flex;gap:6px;align-items:center;">
+    <button id="openLoginModalBtn" class="action-btn" type="button" style="background:var(--primary);padding:6px 12px;font-size:12px;">👤 Profil / Giriş</button>
+    <button id="headerLogoutBtn" class="action-btn" type="button" style="background:#b91c1c;padding:6px 12px;font-size:12px;display:none;">🚪 Çıkış Yap</button>
+  </div>
 </header>
 <div class="app-container">
 <main>
@@ -98,7 +109,7 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
     <input type="password" id="loginPassword" maxlength="30" placeholder="Şifreniz (Nicki kilitlemek için)" style="width:100%;padding:11px;margin-bottom:12px;background:rgba(0,0,0,.5);color:#fff;border:1px solid #ff7700;border-radius:6px;font-size:14px;">
     
     <button type="button" id="confirmLoginBtn" style="width:100%;padding:11px;font-size:14px;background:linear-gradient(180deg,#ff8800,#cc5500);border:0;border-radius:6px;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(255,119,0,0.5);margin-bottom:8px;">🔒 Şifreli Kaydol / Giriş Yap</button>
-    <button type="button" id="guestLoginBtn" style="width:100%;padding:10px;font-size:13px;background:rgba(255,255,255,0.1);border:1px solid #ff7700;border-radius:6px;color:#ffaa33;font-weight:bold;cursor:pointer;">👤 Şifresiz Misafir Olarak Gir</button>
+    <button type="button" id="guestLoginBtn" style="width:100%;padding:10px;font-size:13px;background:rgba(255,255,255,0.1);border:1px solid #ff7700;border-radius:6px;color:#ffaa33;font-weight:bold;cursor:pointer;margin-bottom:8px;">👤 Şifresiz İsimle Gir</button>
   </div>
 </div>
 
@@ -113,7 +124,6 @@ const firebaseConfig={apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",authDomai
 const app=initializeApp(firebaseConfig),db=getDatabase(app),messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence"),privateMessagesRef=ref(db,"privateMessages"),topicRef=ref(db,"topic"),usersRef=ref(db,"users");
 const $=id=>document.getElementById(id);window.$=$;
 
-// BELİRTTİĞİNİZ TÜM BOTLAR BURADA KORUMA ALTINDADIR
 const staticBots=[
   {name:"KraL",avatar:"⚫",role:"admin"},
   {name:"VeLhasıL",avatar:"👨",role:"sop"},
@@ -128,10 +138,8 @@ const pageLoadTime=Date.now(),notificationSound=new Audio("https://actions.googl
 let uid=localStorage.getItem("kralfm_uid");if(!uid){uid="user_"+Math.random().toString(36).slice(2,10);localStorage.setItem("kralfm_uid",uid)}window.uid=uid;
 const defaultGuestName="Misafir_"+Math.floor(Math.random()*900+100);window.defaultGuestName=defaultGuestName;
 
-// Tema ayarını yükle
 document.body.className=localStorage.getItem("kralfm_theme")||"theme-default";
 
-// TÜRKÇE KARAKTER UYUMLU GELİŞMİŞ NİCK NORMALİZASYON FONKSİYONU
 function normalizeNick(name) {
   return (name || "")
     .toLowerCase()
@@ -151,19 +159,42 @@ function normalizeNick(name) {
 }
 window.normalizeNick = normalizeNick;
 
-// İlk açılışta giriş modalı zorunlu gösterilir
+// SAYFA YÜKLENINCE OTOMATİK GİRİŞ KONTROLÜ
 window.addEventListener("DOMContentLoaded", () => {
-  if(localStorage.getItem("kralfm_name")) {
-    $("loginNameInput").value = localStorage.getItem("kralfm_name");
+  const savedName = localStorage.getItem("kralfm_name");
+  const isLogged = localStorage.getItem("kralfm_logged");
+
+  if(savedName && isLogged === "true") {
+    $("name").value = savedName;
+    if(localStorage.getItem("kralfm_avatar")) $("userAvatar").value = localStorage.getItem("kralfm_avatar");
+    if(localStorage.getItem("kralfm_color")) $("userColor").value = localStorage.getItem("kralfm_color");
+    
+    $("loginModal").style.display = "none";
+    $("headerLogoutBtn").style.display = "inline-block";
+    registerPresence();
+
+    // Eğer şifresiz/korumasız girilmişse arka planda hatırlatıcıyı başlat
+    if(localStorage.getItem("kralfm_password_protected") !== "true") {
+      startGuestReminder();
+    }
+  } else {
+    if(savedName) $("loginNameInput").value = savedName;
+    if(localStorage.getItem("kralfm_avatar")) $("loginAvatar").value = localStorage.getItem("kralfm_avatar");
+    if(localStorage.getItem("kralfm_color")) $("loginColor").value = localStorage.getItem("kralfm_color");
+    
+    $("headerLogoutBtn").style.display = "none";
+    $("loginModal").style.display = "flex";
   }
-  if(localStorage.getItem("kralfm_avatar")) {
-    $("loginAvatar").value = localStorage.getItem("kralfm_avatar");
-  }
-  if(localStorage.getItem("kralfm_color")) {
-    $("loginColor").value = localStorage.getItem("kralfm_color");
-  }
-  $("loginModal").style.display = "flex";
 });
+
+function startGuestReminder() {
+  if(guestReminderTimer) clearTimeout(guestReminderTimer);
+  guestReminderTimer = setTimeout(() => {
+    if(localStorage.getItem("kralfm_password_protected") !== "true") {
+      triggerToast("Nick Koruma Hatırlatması", "1 dakikadır şifresiz isimle giriyorsun! Profil butonuna basarak nickini şifreleyebilirsin 🔒");
+    }
+  }, 60000);
+}
 
 $("openLoginModalBtn").onclick = () => {
   $("loginNameInput").value = $("name").value || localStorage.getItem("kralfm_name") || "";
@@ -173,7 +204,16 @@ $("openLoginModalBtn").onclick = () => {
   $("loginModal").style.display = "flex";
 };
 
-// 1. ŞİFRELİ GİRİŞ / KAYIT KONTROLÜ (BOT & İŞARET/TAKLİT KORUMASI)
+// ÜST MENÜDEKİ ÇIKIŞ YAP BUTONU
+$("headerLogoutBtn").onclick = () => {
+  if(confirm("Hesabınızdan çıkış yapmak istediğinize emin misiniz?")) {
+    localStorage.removeItem("kralfm_logged");
+    localStorage.removeItem("kralfm_name");
+    localStorage.removeItem("kralfm_password_protected");
+    location.reload();
+  }
+};
+
 $("confirmLoginBtn").onclick = async () => {
   const enteredName = $("loginNameInput").value.trim();
   const enteredPassword = $("loginPassword").value;
@@ -193,7 +233,6 @@ $("confirmLoginBtn").onclick = async () => {
     return;
   }
 
-  // BOT KORUMASI (Velhasıl, Kral, Sürmeneli, Karakartal ve nokta/işaret taklitleri)
   const isBot = staticBots.some(b => normalizeNick(b.name) === userKey);
   if(isBot) {
     alert("⚠️ Bu isim veya benzeri bir taklit (nokta, işaret veya Türkçe karakter kombinasyonu) sistem botuna aittir! Kullanılamaz.");
@@ -229,8 +268,11 @@ $("confirmLoginBtn").onclick = async () => {
     localStorage.setItem("kralfm_name", enteredName);
     localStorage.setItem("kralfm_avatar", $("userAvatar").value);
     localStorage.setItem("kralfm_color", $("userColor").value);
+    localStorage.setItem("kralfm_logged", "true");
+    localStorage.setItem("kralfm_password_protected", "true"); // Şifreli giriş yapıldı
 
     $("loginModal").style.display = "none";
+    $("headerLogoutBtn").style.display = "inline-block";
     await registerPresence();
     triggerToast("Giriş Başarılı", `Hoş geldin, ${enteredName}! 🎶`);
 
@@ -240,7 +282,6 @@ $("confirmLoginBtn").onclick = async () => {
   }
 };
 
-// 2. ŞİFRESİZ MİSAFİR GİRİŞİ KONTROLÜ (BOT & İŞARET/TAKLİT KORUMASI)
 $("guestLoginBtn").onclick = async () => {
   const enteredName = $("loginNameInput").value.trim() || defaultGuestName;
   const userKey = normalizeNick(enteredName);
@@ -250,10 +291,9 @@ $("guestLoginBtn").onclick = async () => {
     return;
   }
 
-  // BOT KORUMASI
   const isBot = staticBots.some(b => normalizeNick(b.name) === userKey);
   if(isBot) {
-    alert("⚠️ Bu isim veya benzeri bir taklit (nokta/işaret dahil) sistem botuna aittir! Misafir olarak bu ismi kullanamazsınız.");
+    alert("⚠️ Bu isim veya benzeri bir taklit sistem botuna aittir! Bu ismi kullanamazsınız.");
     return;
   }
 
@@ -262,7 +302,7 @@ $("guestLoginBtn").onclick = async () => {
   try {
     const snapshot = await get(userDocRef);
     if(snapshot.exists()) {
-      alert("⚠️ Bu takma ad şifre korumalıdır! Misafir olarak giremezsiniz, lütfen şifrenizi girin veya başka bir nick seçin.");
+      alert("⚠️ Bu takma ad şifre korumalıdır! Şifresiz olarak giremezsiniz, lütfen şifrenizi girin.");
       return;
     }
 
@@ -273,18 +313,15 @@ $("guestLoginBtn").onclick = async () => {
     localStorage.setItem("kralfm_name", enteredName);
     localStorage.setItem("kralfm_avatar", $("userAvatar").value);
     localStorage.setItem("kralfm_color", $("userColor").value);
+    localStorage.setItem("kralfm_logged", "true");
+    localStorage.removeItem("kralfm_password_protected"); // Şifresiz giriş
 
     $("loginModal").style.display = "none";
+    $("headerLogoutBtn").style.display = "inline-block";
     await registerPresence();
-    triggerToast("Misafir Girişi", `Hoş geldin, ${enteredName}! ☕`);
+    triggerToast("Misafir / Şifresiz Giriş", `Hoş geldin, ${enteredName}! ☕`);
 
-    if(guestReminderTimer) clearTimeout(guestReminderTimer);
-    guestReminderTimer = setTimeout(() => {
-      const currentNick = $("name").value;
-      if(currentNick && currentNick.startsWith("Misafir_")) {
-        triggerToast("Nick Koruma Hatırlatması", "1 dakikadır misafirsin! Profil butonuna basarak nickini şifreleyebilirsin 🔒");
-      }
-    }, 60000);
+    startGuestReminder();
 
   } catch(err) {
     console.error(err);
