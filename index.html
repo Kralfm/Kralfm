@@ -87,7 +87,6 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 <header>
   <div>🎙️ Radyo Kral FM & Muhabbet</div>
   <div style="display:flex;gap:6px;align-items:center;">
-    <button id="openDjRoomModalBtn" class="action-btn" type="button" style="background:#047857;padding:6px 12px;font-size:12px;display:none;">🎙️ DJ Odası</button>
     <button id="openLoginModalBtn" class="action-btn" type="button" style="background:var(--primary);padding:6px 12px;font-size:12px;">👤 Profil / Giriş</button>
     <button id="headerLogoutBtn" class="action-btn" type="button" style="background:#b91c1c;padding:6px 12px;font-size:12px;display:none;">🚪 Çıkış Yap</button>
   </div>
@@ -97,39 +96,31 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 <div id="topicCard" class="card topic-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div style="font-size:13px;line-height:1.4;flex:1;">📌 <b style="color:#c084fc;">Günün Topiği:</b> <span id="topicText">Yükleniyor...</span></div><button id="editTopicBtn" type="button" class="user-action-btn" style="background:#7c3aed;padding:4px 10px;font-size:11px;display:none;">Düzenle</button></div><div id="topicAuthor" style="font-size:10px;color:#a78bfa;margin-top:4px;"></div></div>
 <div class="card radio-player-card"><div class="radio-banner"><div class="radio-logo-box"><div class="l2mr-logo"><svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg></div><div class="radio-logo-text"><h1>📻 Radyo Kral FM</h1><span>Kesintisiz Canlı Yayın</span></div></div><div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div></div><div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div><div class="popup-player-box"><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a><div id="radioStatus" class="note" style="margin-top:6px;text-align:center">📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.</div></div></div>
 
-<!-- SOHBET ODALARI KARTI VE SEKMELERİ -->
+<!-- SOHBET ODALARI KARTI VE ÜÇLÜ SEKMELER -->
 <div class="card">
-  <!-- Yana Kaydırmalı / Sekmeli Oda Seçici -->
+  <!-- 3'lü Oda Seçici Sekmeler -->
   <div style="display:flex; gap:6px; margin-bottom:12px;">
     <button type="button" id="roomBtnGeneral" class="action-btn" style="flex:1; background:var(--primary); font-weight:bold; font-size:13px; padding:10px;">💬 Genel Sohbet</button>
     <button type="button" id="roomBtnRadio" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:10px;">📻 Radyo Odası</button>
+    <button type="button" id="roomBtnDjRoom" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:10px;">🎙️ DJ Stüdyosu</button>
   </div>
 
-  <!-- Genel Sohbet Alanı -->
+  <!-- 1. Genel Sohbet Alanı -->
   <div id="generalChatAreaWrapper">
     <h3 style="margin-top:0">💬 Genel Sohbet Odası</h3>
     <div id="messages" class="chat-box-area"></div>
   </div>
 
-  <!-- Radyo Odası Alanı -->
+  <!-- 2. Radyo Odası Alanı -->
   <div id="radioChatAreaWrapper" style="display:none;">
     <h3 style="margin-top:0; color:#fde047;">📻 Radyo Odası & Müzik Muhabbet</h3>
     <div id="radioMessages" class="chat-box-area" style="background:linear-gradient(135deg,rgba(4,120,87,0.25),rgba(2,44,34,0.25)); border-color:#047857;"></div>
   </div>
 
-  <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
-  <div class="action-btns"><button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button><button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button><button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button><button id="sendSev" class="action-btn sev-btn" type="button">💖 Sev</button><button id="sendHoron" class="action-btn horon-btn" type="button">💃 Horon</button><button id="sendConfetti" class="action-btn confetti-btn" type="button">🎉 Konfeti</button><button id="toggleTheme" class="action-btn theme-btn" type="button">🎨 Tema Seç</button><button id="partyButton" class="action-btn party-btn" type="button">🪩 Parti</button><button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button><button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Sohbeti Temizle</button></div><p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
-</div>
-</main>
-<aside class="sidebar-right"><div class="sidebar-header"><span>👥 Üyeler</span></div><div id="onlineUsersList" class="sidebar-users-area">Yükleniyor...</div></aside>
-</div>
-
-<!-- ŞİFRELİ DJ KONTROL ODASI -->
-<div id="djRoomModal" class="modal-overlay">
-  <div class="modal-box" style="background: linear-gradient(135deg, #022c22 0%, #064e3b 100%); border-color: #34d399;">
+  <!-- 3. Şifreli DJ Stüdyo Alanı (Yeni Sekme Konumu) -->
+  <div id="djRoomAreaWrapper" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #047857;padding-bottom:10px;margin-bottom:12px;background:rgba(4,120,87,0.2);padding:8px 12px;border-radius:8px;">
       <h3 style="margin:0; font-size:14px; color:#34d399; text-shadow:0 0 10px rgba(52,211,153,0.6); letter-spacing:0.5px;">🎙️ 𝓚𝓡𝓐𝓛 𝓕𝓜 ✦ 𝘿𝙅 𝓢𝓣𝓤𝘿𝓞 & 𝓚𝓞𝓝𝓣𝓡𝓞𝓛</h3>
-      <button id="closeDjRoomModal" class="action-btn" style="background:#b91c1c;padding:3px 10px;font-size:11px;" type="button">✕ Kapat</button>
     </div>
     
     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; border:1px solid #047857;">
@@ -156,6 +147,15 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
       <button type="submit" style="background:#047857; color:#fff; border:0; border-radius:6px; padding:10px 16px; font-weight:bold; cursor:pointer; font-size:13px;">Gönder</button>
     </form>
   </div>
+
+  <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
+  <div id="mainFormAreaWrapper">
+    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
+    <div class="action-btns"><button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button><button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button><button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button><button id="sendSev" class="action-btn sev-btn" type="button">💖 Sev</button><button id="sendHoron" class="action-btn horon-btn" type="button">💃 Horon</button><button id="sendConfetti" class="action-btn confetti-btn" type="button">🎉 Konfeti</button><button id="toggleTheme" class="action-btn theme-btn" type="button">🎨 Tema Seç</button><button id="partyButton" class="action-btn party-btn" type="button">🪩 Parti</button><button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button><button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Sohbeti Temizle</button></div><p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
+  </div>
+</div>
+</main>
+<aside class="sidebar-right"><div class="sidebar-header"><span>👥 Üyeler</span></div><div id="onlineUsersList" class="sidebar-users-area">Yükleniyor...</div></aside>
 </div>
 
 <div id="loginModal" class="modal-overlay" style="display:flex;">
@@ -218,15 +218,20 @@ function normalizeNick(name) {
 }
 window.normalizeNick = normalizeNick;
 
-// Oda Sekmesi Geçiş İşlevleri
+// Oda ve Sekme Geçiş İşlevleri (3'lü Sekme Yapısı)
 $("roomBtnGeneral").onclick = () => {
   currentRoom = "general";
   $("roomBtnGeneral").style.background = "var(--primary)";
   $("roomBtnGeneral").style.opacity = "1";
   $("roomBtnRadio").style.background = "#333";
   $("roomBtnRadio").style.opacity = "0.7";
+  $("roomBtnDjRoom").style.background = "#333";
+  $("roomBtnDjRoom").style.opacity = "0.7";
+  
   $("generalChatAreaWrapper").style.display = "block";
   $("radioChatAreaWrapper").style.display = "none";
+  $("djRoomAreaWrapper").style.display = "none";
+  $("mainFormAreaWrapper").style.display = "block";
   $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /sop, /op, /user, /away)...";
 };
 
@@ -236,9 +241,46 @@ $("roomBtnRadio").onclick = () => {
   $("roomBtnRadio").style.opacity = "1";
   $("roomBtnGeneral").style.background = "#333";
   $("roomBtnGeneral").style.opacity = "0.7";
+  $("roomBtnDjRoom").style.background = "#333";
+  $("roomBtnDjRoom").style.opacity = "0.7";
+  
   $("radioChatAreaWrapper").style.display = "block";
   $("generalChatAreaWrapper").style.display = "none";
+  $("djRoomAreaWrapper").style.display = "none";
+  $("mainFormAreaWrapper").style.display = "block";
   $("text").placeholder = "📻 Radyo odasında müzik ve mesaj yaz...";
+};
+
+$("roomBtnDjRoom").onclick = () => {
+  const isPasswordProtected = localStorage.getItem("kralfm_password_protected") === "true";
+  const isStaff = ["admin", "sop", "op"].includes(window.userRole);
+
+  if (!isPasswordProtected && !isStaff) {
+    alert("❌ DJ Odasına yalnızca şifreli (kayıtlı) nick sahipleri ve yetkililer girebilir! Lütfen profil butonuna basarak nickinizi şifreleyin.");
+    return;
+  }
+
+  if (sessionStorage.getItem("kralfm_dj_authed") !== "true") {
+    const pass = prompt("🔒 DJ Odası şifresini girin:");
+    if(pass !== "4161") {
+      alert("❌ Hatalı şifre! DJ Odasına giriş yapamazsınız.");
+      return;
+    }
+    sessionStorage.setItem("kralfm_dj_authed", "true");
+  }
+
+  currentRoom = "dj";
+  $("roomBtnDjRoom").style.background = "#047857";
+  $("roomBtnDjRoom").style.opacity = "1";
+  $("roomBtnGeneral").style.background = "#333";
+  $("roomBtnGeneral").style.opacity = "0.7";
+  $("roomBtnRadio").style.background = "#333";
+  $("roomBtnRadio").style.opacity = "0.7";
+
+  $("djRoomAreaWrapper").style.display = "block";
+  $("generalChatAreaWrapper").style.display = "none";
+  $("radioChatAreaWrapper").style.display = "none";
+  $("mainFormAreaWrapper").style.display = "none";
 };
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -262,7 +304,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     $("loginModal").style.display = "none";
     $("headerLogoutBtn").style.display = "inline-block";
-    $("openDjRoomModalBtn").style.display = "inline-block";
 
     if(localStorage.getItem("kralfm_password_protected") !== "true") {
       startGuestReminder();
@@ -273,7 +314,6 @@ window.addEventListener("DOMContentLoaded", () => {
     if(localStorage.getItem("kralfm_color")) $("loginColor").value = localStorage.getItem("kralfm_color");
     
     $("headerLogoutBtn").style.display = "none";
-    $("openDjRoomModalBtn").style.display = "none";
     $("loginModal").style.display = "flex";
   }
 });
@@ -307,37 +347,9 @@ $("headerLogoutBtn").onclick = async () => {
   }
 };
 
-$("openDjRoomModalBtn").onclick = () => {
-  const isPasswordProtected = localStorage.getItem("kralfm_password_protected") === "true";
-  const isStaff = ["admin", "sop", "op"].includes(window.userRole);
-
-  if (!isPasswordProtected && !isStaff) {
-    alert("❌ DJ Odasına yalnızca şifreli (kayıtlı) nick sahipleri ve yetkililer girebilir! Lütfen profil butonuna basarak nickinizi şifreleyin.");
-    return;
-  }
-
-  if (sessionStorage.getItem("kralfm_dj_authed") === "true") {
-    $("djRoomModal").style.display = "flex";
-    return;
-  }
-  
-  const pass = prompt("🔒 DJ Odası şifresini girin:");
-  if(pass !== "4161") {
-    alert("❌ Hatalı şifre! DJ Odasına giriş yapamazsınız.");
-    return;
-  }
-  
-  sessionStorage.setItem("kralfm_dj_authed", "true");
-  $("djRoomModal").style.display = "flex";
-};
-
-$("closeDjRoomModal").onclick = () => {
-  $("djRoomModal").style.display = "none";
-};
-
 $("clearAllDjMsgBtn").onclick = async () => {
   if(!["admin", "sop", "op"].includes(window.userRole)) {
-    alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP atau Admin yapabilir).");
+    alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP veya Admin yapabilir).");
     return;
   }
   if(confirm("Stüdyo içindeki tüm mesajları toplu olarak silmek istediğinize emin misiniz?")) {
@@ -461,7 +473,6 @@ $("confirmLoginBtn").onclick = async () => {
     localStorage.setItem("kralfm_password_protected", "true");
     $("loginModal").style.display = "none";
     $("headerLogoutBtn").style.display = "inline-block";
-    $("openDjRoomModalBtn").style.display = "inline-block";
     checkAdminUI();
     await registerPresence();
     triggerToast("Giriş Başarılı", `Hoş geldin, ${enteredName}! 🎶`);
@@ -487,7 +498,6 @@ $("guestLoginBtn").onclick = async () => {
   localStorage.removeItem("kralfm_password_protected");
   $("loginModal").style.display = "none";
   $("headerLogoutBtn").style.display = "inline-block";
-  $("openDjRoomModalBtn").style.display = "inline-block";
   checkAdminUI();
   await registerPresence();
   triggerToast("Misafir Girişi", `Hoş geldin, ${enteredName}! ☕`);
@@ -646,7 +656,6 @@ function appendDJMessage(key, d){
   box.scrollTop=box.scrollHeight;
 }
 
-// Tüm odaların mesaj akışını dinleyen ana mekanizma (Hangi odada olursa olsun adınız geçince uyarı verir)
 onValue(messagesRef,s=>{
   const mainBox=$("messages");
   const radioBox=$("radioMessages");
@@ -659,7 +668,6 @@ onValue(messagesRef,s=>{
   const myName = getCurrentMyName().toLowerCase();
   
   Object.entries(s.val()||{}).forEach(([k,d])=>{
-    // Adımızın herhangi bir odada geçip geçmediğini kontrol et (Kendi yazdıklarımız hariç)
     if(d.type !== "dj" && d.type !== "system" && d.type !== "announcement" && d.createdAt > pageLoadTime && !processedMentionMsgIds.has(k)) {
       const senderName = (d.name || "").toLowerCase();
       const textContent = (d.text || "").toLowerCase();
