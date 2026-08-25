@@ -284,6 +284,20 @@ $("roomBtnDjRoom").onclick = () => {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
+  // F5 yenileme tespiti (Eğer sayfa yenilendiyse geçmiş görünmeye devam eder, sıfır girişlerde boş başlar)
+  const isPageReload = (window.performance && window.performance.navigation && window.performance.navigation.type === 1) || 
+                       (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0] && window.performance.getEntriesByType("navigation")[0].type === 'reload');
+
+  if (isPageReload) {
+    if (!sessionStorage.getItem("kralfm_entryTime")) {
+      sessionStorage.setItem("kralfm_entryTime", "0");
+    }
+  } else {
+    if (!sessionStorage.getItem("kralfm_entryTime")) {
+      sessionStorage.setItem("kralfm_entryTime", Date.now().toString());
+    }
+  }
+
   const savedName = localStorage.getItem("kralfm_name");
   const isLogged = localStorage.getItem("kralfm_logged");
 
@@ -343,6 +357,7 @@ $("headerLogoutBtn").onclick = async () => {
     localStorage.removeItem("kralfm_password_protected");
     sessionStorage.removeItem("kralfm_dj_authed");
     sessionStorage.removeItem("kralfm_role");
+    sessionStorage.removeItem("kralfm_entryTime");
     location.reload();
   }
 };
@@ -464,6 +479,7 @@ $("confirmLoginBtn").onclick = async () => {
       await set(userDocRef, { originalName: enteredName, password: enteredPassword, avatar: $("loginAvatar").value, color: $("loginColor").value, role: "user", createdAt: Date.now() });
     }
     sessionStorage.setItem("kralfm_role", window.userRole);
+    sessionStorage.setItem("kralfm_entryTime", Date.now().toString()); // Sıfırdan girişlerde sayfa boş başlasın
     if(guestReminderTimer) { clearTimeout(guestReminderTimer); guestReminderTimer = null; }
     $("name").value = enteredName;
     localStorage.setItem("kralfm_name", enteredName);
@@ -488,6 +504,7 @@ $("guestLoginBtn").onclick = async () => {
   if(snapshot.exists()) { alert("⚠️ Bu takma ad şifre korumalıdır!"); return; }
   window.userRole = "user";
   sessionStorage.setItem("kralfm_role", "user");
+  sessionStorage.setItem("kralfm_entryTime", Date.now().toString()); // Sıfırdan girişlerde sayfa boş başlasın
   $("name").value = enteredName;
   $("userAvatar").value = $("loginAvatar").value;
   $("userColor").value = $("loginColor").value;
@@ -666,8 +683,14 @@ onValue(messagesRef,s=>{
   if(djBox) djBox.innerHTML="";
 
   const myName = getCurrentMyName().toLowerCase();
+  const entryTime = parseInt(sessionStorage.getItem("kralfm_entryTime") || "0");
   
   Object.entries(s.val()||{}).forEach(([k,d])=>{
+    // Yeni giriş yapanlar için sayfa boş başlasın, ancak F5 yenilemelerinde veya geçmiş oturumlarda sohbet akışı korunsun
+    if(entryTime > 0 && d.createdAt < entryTime && d.type !== "system" && d.type !== "announcement" && d.type !== "dj") {
+      return;
+    }
+
     if(d.type !== "dj" && d.type !== "system" && d.type !== "announcement" && d.createdAt > pageLoadTime && !processedMentionMsgIds.has(k)) {
       const senderName = (d.name || "").toLowerCase();
       const textContent = (d.text || "").toLowerCase();
