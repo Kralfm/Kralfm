@@ -165,28 +165,23 @@ button[type=submit]:hover{filter:brightness(1.15);}
 <div id="topicCard" class="card topic-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div style="font-size:13px;line-height:1.4;flex:1;">📌 <b style="color:#c084fc;">Günün Topiği:</b> <span id="topicText">Yükleniyor...</span></div><button id="editTopicBtn" type="button" class="user-action-btn" style="background:#7c3aed;padding:5px 12px;font-size:11px;display:none;">Düzenle</button></div><div id="topicAuthor" style="font-size:10px;color:#a78bfa;margin-top:5px;"></div></div>
 <div class="card radio-player-card"><div class="radio-banner"><div class="radio-logo-box"><div class="l2mr-logo"><svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg></div><div class="radio-logo-text"><h1>💥 Ses Mola Müzik & Muhabbet</h1><span>Kesintisiz Canlı Yayın</span></div></div><div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div></div><div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div><div class="popup-player-box"><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a><div id="radioStatus" class="note" style="margin-top:8px;text-align:center">📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.</div></div></div>
 
-<!-- SOHBET ODALARI KARTI VE ÜÇLÜ SEKMELER -->
 <div class="card">
-  <!-- 3'lü Oda Seçici Sekmeler -->
   <div style="display:flex; gap:8px; margin-bottom:14px;">
     <button type="button" id="roomBtnGeneral" class="action-btn" style="flex:1; background:var(--primary); font-weight:bold; font-size:13px; padding:11px;">💬 Genel Sohbet</button>
     <button type="button" id="roomBtnRadio" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:11px;">📻 Radyo Odası</button>
     <button type="button" id="roomBtnDjRoom" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:11px;">🎙️ DJ Stüdyosu</button>
   </div>
 
-  <!-- 1. Genel Sohbet Alanı -->
   <div id="generalChatAreaWrapper">
     <h3 style="margin-top:0; font-size:15px; color:var(--sidebar-header-color);">💬 Genel Sohbet Odası</h3>
     <div id="messages" class="chat-box-area"></div>
   </div>
 
-  <!-- 2. Radyo Odası Alanı -->
   <div id="radioChatAreaWrapper" style="display:none;">
     <h3 style="margin-top:0; font-size:15px; color:#fde047;">📻 Radyo Odası & Müzik Muhabbet</h3>
     <div id="radioMessages" class="chat-box-area" style="background:linear-gradient(135deg,rgba(4,120,87,0.25),rgba(2,44,34,0.25)); border-color:#047857;"></div>
   </div>
 
-  <!-- 3. Şifreli DJ Stüdyo Alanı (Yeni Sekme Konumu) -->
   <div id="djRoomAreaWrapper" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #047857;padding-bottom:10px;margin-bottom:12px;background:rgba(4,120,87,0.2);padding:10px 14px;border-radius:10px;">
       <h3 style="margin:0; font-size:14px; color:#34d399; text-shadow:0 0 10px rgba(52,211,153,0.6); letter-spacing:0.5px;">🎙️ Ses Mola ✦ 𝘿𝙅 𝓢𝓣𝓤𝘿𝓞 & 𝓚𝓞𝓝𝓣𝓡𝓞𝓛</h3>
@@ -217,7 +212,6 @@ button[type=submit]:hover{filter:brightness(1.15);}
     </form>
   </div>
 
-  <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
   <div id="mainFormAreaWrapper">
     <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimೆಯಿಂದ kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
     <div class="action-btns">
@@ -269,7 +263,7 @@ button[type=submit]:hover{filter:brightness(1.15);}
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase,ref,push,onValue,set,remove,get,update,onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase,ref,push,onValue,set,remove,get,update} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",authDomain:"kralfm-muhabbet.firebaseapp.com",databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",projectId:"kralfm-muhabbet",storageBucket:"kralfm-muhabbet.firebasestorage.app",messagingSenderId:"638769846511",appId:"1:638769846511:web:f6d8abb91564873996"};
 const app=initializeApp(firebaseConfig),db=getDatabase(app),messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence"),privateMessagesRef=ref(db,"privateMessages"),topicRef=ref(db,"topic"),usersRef=ref(db,"users");
 const $=id=>document.getElementById(id);window.$=$;
@@ -468,7 +462,7 @@ $("headerLogoutBtn").onclick = async () => {
 
 $("clearAllDjMsgBtn").onclick = async () => {
   if(!["admin", "sop", "op"].includes(window.userRole)) {
-    alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP veya Admin yapabilir).");
+    alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP atau Admin yapabilir).");
     return;
   }
   if(confirm("Stüdyo içindeki tüm mesajları toplu olarak silmek istediğinize emin misiniz?")) {
@@ -539,7 +533,8 @@ function updateActiveDJsUI() {
   let activeCount = 0;
 
   Object.values(activeUsersData).forEach(u => {
-    if(u.lastActive && Date.now() - u.lastActive < 900000 && u.isDJ && u.name) {
+    // 30 dakikalık zaman aşımı toleransı
+    if(u.lastActive && Date.now() - u.lastActive < 1800000 && u.isDJ && u.name) {
       activeCount++;
       const badge = document.createElement("span");
       badge.style.padding = "3px 8px";
@@ -826,7 +821,7 @@ onValue(messagesRef,s=>{
 onValue(privateMessagesRef,s=>{latestPrivateData=s.val()||{};renderPrivateMessages();const me=getCurrentMyName().toLowerCase(),target=(window.activePrivateTarget||"").toLowerCase();Object.entries(latestPrivateData).forEach(([id,m])=>{const sn=(m.sender||"").toLowerCase(),rn=(m.recipient||"").toLowerCase();if(rn===me&&sn!==me&&!processedPrivateMsgIds.has(id)){processedPrivateMsgIds.add(id);if(m.createdAt>pageLoadTime){if(sn!==target)unreadPrivateCounts[m.sender]=(unreadPrivateCounts[m.sender]||0)+1;updateOnlineUsersUI();openPrivateChat(m.sender);triggerToast(`${m.sender} fısıldadı!`,`${m.sender}: "${(m.text||"").substring(0,25)}..."`)}}})});
 $("privateForm").onsubmit=async e=>{e.preventDefault();const t=$("privateText").value.trim(),me=getCurrentMyName();if(!t||!window.activePrivateTarget)return;$("privateText").value="";await push(privateMessagesRef,{sender:me,recipient:window.activePrivateTarget,text:t,createdAt:Date.now()})};
 
-// === GÜNCELLENEN PRESENCE VE İSİM KONTROL MEKANİZMASI ===
+// === GELİŞTİRİLMİŞ KESİNTİSİZ PRESENCE MEKANİZMASI (MOBİL VE SEKME UYUMLU) ===
 let heartbeatInterval=null;
 async function registerPresence(){
   const n = getCurrentMyName();
@@ -847,7 +842,6 @@ async function registerPresence(){
       lastActive: Date.now()
     });
 
-    onDisconnect(userPresenceRef).remove();
     checkAdminUI();
     
     if(heartbeatInterval) clearInterval(heartbeatInterval);
@@ -862,7 +856,7 @@ async function registerPresence(){
   }
 }
 
-// Sekme değiştirildiğinde veya telefon görüşmesinden dönüldüğünde aktifliği anında tazele
+// Sekme yeniden aktif olduğunda (focus/visible) veya telefonda uygulamaya dönüldüğünde anında tazele
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     const currentValidName = getCurrentMyName();
@@ -870,6 +864,14 @@ document.addEventListener("visibilitychange", () => {
       set(ref(db, "presence/" + uid + "/lastActive"), Date.now()).catch(()=>{});
       registerPresence();
     }
+  }
+});
+
+window.addEventListener("focus", () => {
+  const currentValidName = getCurrentMyName();
+  if(currentValidName && currentValidName !== "undefined") {
+    set(ref(db, "presence/" + uid + "/lastActive"), Date.now()).catch(()=>{});
+    registerPresence();
   }
 });
 
@@ -883,8 +885,8 @@ function updateOnlineUsersUI(){
     renderUserItem(b.avatar,b.name,b.role,false)
   });
   Object.values(activeUsersData).forEach(u=>{
-    // Süre 15 dakikaya çıkarıldı (Telefon konuşmaları ve arka plan sekmeleri için kopmayı önler)
-    if(u && u.name && u.lastActive && Date.now()-u.lastActive < 900000){
+    // 30 dakikalık (1800000ms) genişletilmiş zaman aşımı toleransı (Mobil ve arka plan uyumlu)
+    if(u && u.name && u.lastActive && Date.now()-u.lastActive < 1800000){
       onlineUserNames.push(u.name);
       renderUserItem(u.avatar||"👤",u.name,u.role||"user",u.isAway||false)
     }
