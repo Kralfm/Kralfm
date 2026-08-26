@@ -219,7 +219,7 @@ button[type=submit]:hover{filter:brightness(1.15);}
 
   <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
   <div id="mainFormAreaWrapper">
-    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
+    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimೆಯಿಂದ kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
     <div class="action-btns">
       <button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
       <button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
@@ -269,7 +269,7 @@ button[type=submit]:hover{filter:brightness(1.15);}
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getDatabase,ref,push,onValue,set,remove,get,update} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import {getDatabase,ref,push,onValue,set,remove,get,update,onDisconnect} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",authDomain:"kralfm-muhabbet.firebaseapp.com",databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",projectId:"kralfm-muhabbet",storageBucket:"kralfm-muhabbet.firebasestorage.app",messagingSenderId:"638769846511",appId:"1:638769846511:web:f6d8abb91564873996"};
 const app=initializeApp(firebaseConfig),db=getDatabase(app),messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence"),privateMessagesRef=ref(db,"privateMessages"),topicRef=ref(db,"topic"),usersRef=ref(db,"users");
 const $=id=>document.getElementById(id);window.$=$;
@@ -302,7 +302,6 @@ function normalizeNick(name) {
 }
 window.normalizeNick = normalizeNick;
 
-// Oda ve Sekme Geçiş İşlevleri (3'lü Sekme Yapısı)
 $("roomBtnGeneral").onclick = () => {
   currentRoom = "general";
   $("roomBtnGeneral").style.background = "var(--primary)";
@@ -434,10 +433,32 @@ $("openLoginModalBtn").onclick = () => {
 
 $("headerLogoutBtn").onclick = async () => {
   if(confirm("Hesabınızdan çıkış yapmak istediğinize emin misiniz?")) {
-    try { await remove(ref(db, "presence/" + uid)); } catch(e) {}
+    try {
+      const currentName = getCurrentMyName();
+      await remove(ref(db, "presence/" + uid));
+
+      const privSnap = await get(privateMessagesRef);
+      if(privSnap.exists()) {
+        const updates = {};
+        privSnap.forEach(childSnap => {
+          const val = childSnap.val();
+          if(val.sender === currentName || val.recipient === currentName) {
+            updates[childSnap.key] = null;
+          }
+        });
+        if(Object.keys(updates).length > 0) {
+          await update(privateMessagesRef, updates);
+        }
+      }
+    } catch(e) {
+      console.error("Çıkış temizlik hatası:", e);
+    }
+
     localStorage.removeItem("kralfm_logged");
     localStorage.removeItem("kralfm_name");
     localStorage.removeItem("kralfm_password_protected");
+    localStorage.removeItem("kralfm_avatar");
+    localStorage.removeItem("kralfm_color");
     sessionStorage.removeItem("kralfm_dj_authed");
     sessionStorage.removeItem("kralfm_role");
     sessionStorage.removeItem("kralfm_entryTime");
@@ -518,7 +539,7 @@ function updateActiveDJsUI() {
   let activeCount = 0;
 
   Object.values(activeUsersData).forEach(u => {
-    if(u.lastActive && Date.now() - u.lastActive < 120000 && u.isDJ) {
+    if(u.lastActive && Date.now() - u.lastActive < 900000 && u.isDJ && u.name) {
       activeCount++;
       const badge = document.createElement("span");
       badge.style.padding = "3px 8px";
@@ -805,12 +826,90 @@ onValue(messagesRef,s=>{
 onValue(privateMessagesRef,s=>{latestPrivateData=s.val()||{};renderPrivateMessages();const me=getCurrentMyName().toLowerCase(),target=(window.activePrivateTarget||"").toLowerCase();Object.entries(latestPrivateData).forEach(([id,m])=>{const sn=(m.sender||"").toLowerCase(),rn=(m.recipient||"").toLowerCase();if(rn===me&&sn!==me&&!processedPrivateMsgIds.has(id)){processedPrivateMsgIds.add(id);if(m.createdAt>pageLoadTime){if(sn!==target)unreadPrivateCounts[m.sender]=(unreadPrivateCounts[m.sender]||0)+1;updateOnlineUsersUI();openPrivateChat(m.sender);triggerToast(`${m.sender} fısıldadı!`,`${m.sender}: "${(m.text||"").substring(0,25)}..."`)}}})});
 $("privateForm").onsubmit=async e=>{e.preventDefault();const t=$("privateText").value.trim(),me=getCurrentMyName();if(!t||!window.activePrivateTarget)return;$("privateText").value="";await push(privateMessagesRef,{sender:me,recipient:window.activePrivateTarget,text:t,createdAt:Date.now()})};
 
-let heartbeatInterval=null;async function registerPresence(){const n=getCurrentMyName(),a=$("userAvatar").value,c=$("userColor").value;const u=ref(db,"presence/"+uid);try{await set(u,{name:n,avatar:a,color:c,role:window.userRole,isAway:window.isUserAway,isDJ:isDJMode,lastActive:Date.now()});checkAdminUI();if(heartbeatInterval)clearInterval(heartbeatInterval);heartbeatInterval=setInterval(()=>set(ref(db,"presence/"+uid+"/lastActive"),Date.now()).catch(()=>{}),15000)}catch(e){}}
+// === GÜNCELLENEN PRESENCE VE İSİM KONTROL MEKANİZMASI ===
+let heartbeatInterval=null;
+async function registerPresence(){
+  const n = getCurrentMyName();
+  if(!n || n === "undefined" || n.trim() === "") return;
+
+  const a = $("userAvatar").value || "👤";
+  const c = $("userColor").value || "#ff5555";
+  const userPresenceRef = ref(db, "presence/" + uid);
+  
+  try {
+    await set(userPresenceRef, {
+      name: n,
+      avatar: a,
+      color: c,
+      role: window.userRole,
+      isAway: window.isUserAway,
+      isDJ: isDJMode,
+      lastActive: Date.now()
+    });
+
+    onDisconnect(userPresenceRef).remove();
+    checkAdminUI();
+    
+    if(heartbeatInterval) clearInterval(heartbeatInterval);
+    heartbeatInterval = setInterval(() => {
+      const currentValidName = getCurrentMyName();
+      if(currentValidName && currentValidName !== "undefined") {
+        set(ref(db, "presence/" + uid + "/lastActive"), Date.now()).catch(()=>{});
+      }
+    }, 15000);
+  } catch(e) {
+    console.error("Presence kayıt hatası:", e);
+  }
+}
+
+// Sekme değiştirildiğinde veya telefon görüşmesinden dönüldüğünde aktifliği anında tazele
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    const currentValidName = getCurrentMyName();
+    if(currentValidName && currentValidName !== "undefined") {
+      set(ref(db, "presence/" + uid + "/lastActive"), Date.now()).catch(()=>{});
+      registerPresence();
+    }
+  }
+});
 
 onValue(presenceRef,s=>{activeUsersData=s.val()||{};updateOnlineUsersUI();updateActiveDJsUI()});
-function updateOnlineUsersUI(){$("onlineUsersList").innerHTML="";onlineUserNames=[];staticBots.forEach(b=>{onlineUserNames.push(b.name);renderUserItem(b.avatar,b.name,b.role,false)});Object.values(activeUsersData).forEach(u=>{if(u.lastActive&&Date.now()-u.lastActive<120000){onlineUserNames.push(u.name);renderUserItem(u.avatar||"👤",u.name,u.role||"user",u.isAway||false)}})}
+
+function updateOnlineUsersUI(){
+  $("onlineUsersList").innerHTML="";
+  onlineUserNames=[];
+  staticBots.forEach(b=>{
+    onlineUserNames.push(b.name);
+    renderUserItem(b.avatar,b.name,b.role,false)
+  });
+  Object.values(activeUsersData).forEach(u=>{
+    // Süre 15 dakikaya çıkarıldı (Telefon konuşmaları ve arka plan sekmeleri için kopmayı önler)
+    if(u && u.name && u.lastActive && Date.now()-u.lastActive < 900000){
+      onlineUserNames.push(u.name);
+      renderUserItem(u.avatar||"👤",u.name,u.role||"user",u.isAway||false)
+    }
+  })
+}
 window.updateOnlineUsersUI=updateOnlineUsersUI;
-function renderUserItem(a,n,r,away){const d=document.createElement("div");d.className=away?"user-list-item away-user":"user-list-item";const row=document.createElement("div");row.className="user-info-row";const rs=document.createElement("span");rs.textContent=r==="admin"?"👑 ":r==="sop"?"⭐ ":r==="op"?"🛡️ ":"👤 ";const av=document.createElement("span");av.textContent=(a||"👤")+" ";const ns=document.createElement("span");ns.textContent=n;row.append(rs,av,ns);if(away){const tag=document.createElement("span");tag.className="away-badge";tag.textContent="Away 🌙";row.appendChild(tag)}const ar=document.createElement("div");ar.className="user-action-row";const mb=document.createElement("button");mb.type="button";mb.className="user-action-btn mention-action";mb.textContent="Etiket";mb.onclick=e=>{e.stopPropagation();mentionUser(n)};const wb=document.createElement("button");wb.type="button";const cnt=Object.entries(unreadPrivateCounts).find(([k])=>k.toLowerCase()===n.toLowerCase());const count=cnt?cnt[1]:0;wb.className=count>0?"user-action-btn whisper-action whisper-unread":"user-action-btn whisper-action";wb.textContent=count>0?`Fısılda (${count})`:"Fısılda";wb.onclick=e=>{e.stopPropagation();openPrivateChat(n)};ar.append(mb,wb);d.append(row,ar);$("onlineUsersList").appendChild(d)}
+
+function renderUserItem(a,n,r,away){
+  if(!n || n.trim() === "") return;
+  const d=document.createElement("div");d.className=away?"user-list-item away-user":"user-list-item";
+  const row=document.createElement("div");row.className="user-info-row";
+  const rs=document.createElement("span");rs.textContent=r==="admin"?"👑 ":r==="sop"?"⭐ ":r==="op"?"🛡️ ":"👤 ";
+  const av=document.createElement("span");av.textContent=(a||"👤")+" ";
+  const ns=document.createElement("span");ns.textContent=n;
+  row.append(rs,av,ns);
+  if(away){const tag=document.createElement("span");tag.className="away-badge";tag.textContent="Away 🌙";row.appendChild(tag)}
+  const ar=document.createElement("div");ar.className="user-action-row";
+  const mb=document.createElement("button");mb.type="button";mb.className="user-action-btn mention-action";mb.textContent="Etiket";mb.onclick=e=>{e.stopPropagation();mentionUser(n)};
+  const wb=document.createElement("button");wb.type="button";
+  const cnt=Object.entries(unreadPrivateCounts).find(([k])=>k.toLowerCase()===n.toLowerCase());const count=cnt?cnt[1]:0;
+  wb.className=count>0?"user-action-btn whisper-action whisper-unread":"user-action-btn whisper-action";
+  wb.textContent=count>0?`Fısılda (${count})`:"Fısılda";
+  wb.onclick=e=>{e.stopPropagation();openPrivateChat(n)};
+  ar.append(mb,wb);d.append(row,ar);$("onlineUsersList").appendChild(d)
+}
 
 async function changeUserRole(targetNick, newRole) {
   const cleanTarget = targetNick.replace(/^@/, "").trim();
@@ -824,7 +923,7 @@ async function changeUserRole(targetNick, newRole) {
   await update(targetRef, { role: newRole });
   
   Object.entries(activeUsersData).forEach(async ([pUid, pVal]) => {
-    if(normalizeNick(pVal.name) === key) {
+    if(pVal && pVal.name && normalizeNick(pVal.name) === key) {
       await update(ref(db, "presence/" + pUid), { role: newRole });
     }
   });
