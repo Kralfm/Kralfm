@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ses Mola ve Muhabbet </title>
+<title>Ses Mola ve Muhabbet</title>
 <style>
 :root, body.theme-default {
   --bg: #111;
@@ -27,131 +27,215 @@ body.theme-green{--bg:#022c22;--text:#ecfdf5;--header-bg:linear-gradient(135deg,
 body.theme-blue{--bg:#030712;--text:#f0f9ff;--header-bg:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 50%,#030712 100%);--header-border:#60a5fa;--sidebar-bg:#0f172a;--sidebar-border:#1e3a8a;--sidebar-header-color:#93c5fd;--card-bg:#111827;--card-border:#1e3a8a;--radio-card-bg:linear-gradient(145deg,#0f172a,#1e3a8a);--radio-card-border:#3b82f6;--radio-banner-bg:linear-gradient(90deg,#2563eb,#1d4ed8);--primary:#2563eb;--primary-gradient:linear-gradient(180deg,#3b82f6,#1d4ed8);--modal-border:#60a5fa}
 body.theme-orange{--bg:#1c1008;--text:#fffbeb;--header-bg:linear-gradient(135deg,#7c2d12 0%,#9a3412 50%,#1c1008 100%);--header-border:#fb923c;--sidebar-bg:#22150c;--sidebar-border:#7c2d12;--sidebar-header-color:#fdba74;--card-bg:#2a1a0f;--card-border:#7c2d12;--radio-card-bg:linear-gradient(145deg,#22150c,#431407);--radio-card-border:#ea580c;--radio-banner-bg:linear-gradient(90deg,#ea580c,#c2410c);--primary:#ea580c;--primary-gradient:linear-gradient(180deg,#f97316,#c2410c);--modal-border:#fb923c}
 body.theme-cyber{--bg:#09090b;--text:#fafafa;--header-bg:linear-gradient(135deg,#831843 0%,#500724 50%,#09090b 100%);--header-border:#f43f5e;--sidebar-bg:#121217;--sidebar-border:#831843;--sidebar-header-color:#fb7185;--card-bg:#18181b;--card-border:#831843;--radio-card-bg:linear-gradient(145deg,#121217,#500724);--radio-card-border:#e11d48;--radio-banner-bg:linear-gradient(90deg,#e11d48,#be123c);--primary:#e11d48;--primary-gradient:linear-gradient(180deg,#f43f5e,#be123c);--modal-border:#fb7185}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;overflow-x:hidden;transition:background .3s,color .3s}
-header{background:var(--header-bg);border-bottom:3px solid var(--header-border);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 15px rgba(0,0,0,.4)}
-.app-container{max-width:1300px;margin:auto;padding:10px;display:flex;gap:10px;align-items:flex-start}main{flex:1;min-width:0}
-.sidebar-right{width:240px;background:var(--sidebar-bg);border:1px solid var(--sidebar-border);border-radius:12px;padding:10px;height:calc(100vh - 80px);position:sticky;top:10px;display:flex;flex-direction:column;flex-shrink:0}
-.sidebar-header{display:flex;justify-content:space-between;border-bottom:1px solid var(--sidebar-border);padding-bottom:8px;margin-bottom:8px;font-size:14px;font-weight:bold;color:var(--sidebar-header-color)}
-.sidebar-users-area{flex:1;overflow-y:auto}.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:15px;margin-bottom:12px;position:relative}
-.topic-card{background:linear-gradient(135deg,#1e1b4b 0%,#31103f 100%)!important;border:1px solid #7c3aed!important;padding:12px 15px!important}
-.radio-player-card{background:var(--radio-card-bg)!important;border:1px solid var(--radio-card-border)!important;box-shadow:0 4px 20px rgba(0,0,0,.4)}
-.radio-banner{background:var(--radio-banner-bg);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;align-items:center;justify-content:between;gap:8px}
-.radio-logo-box{display:flex;align-items:center;gap:10px}.l2mr-logo{width:40px;height:40px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.l2mr-logo svg{width:24px;height:24px;fill:var(--primary)}
-.radio-logo-text h1{margin:0;font-size:18px}.radio-logo-text span{font-size:12px;opacity:.8}.live-badge{background:#000;color:var(--primary);border:1px solid var(--primary);font-size:10px;font-weight:bold;padding:4px 8px;border-radius:20px;white-space:nowrap}.live-dot{width:6px;height:6px;background:var(--primary);border-radius:50%;display:inline-block}
-.radio-description{background:rgba(0,0,0,.3);border-left:4px solid var(--primary);padding:10px;border-radius:6px;margin-bottom:12px;font-size:13px;color:#ddd}.popup-player-box{background:rgba(0,0,0,.4);padding:8px;border-radius:8px;border:1px solid var(--sidebar-border)}
-.play-btn{width:100%;padding:12px;font-size:15px;background:var(--primary-gradient);border:0;border-radius:6px;color:#fff;font-weight:bold;cursor:pointer;text-decoration:none;display:block;text-align:center}.radio-browser-btn{display:block;width:100%;margin-top:8px;padding:10px;background:#333;border:1px solid #555;border-radius:6px;color:#fff;text-decoration:none;text-align:center;font-weight:bold;font-size:13px}
-.chat-box-area{height:320px;overflow-y:auto;background:rgba(0,0,0,.5);border-radius:8px;padding:10px;border:1px solid var(--sidebar-border)}.msg{background:rgba(255,255,255,.05);border-radius:8px;padding:8px 10px;margin:6px 0;word-break:break-word;font-size:14px}.bot-msg{background:linear-gradient(135deg,#1e1b4b,#31103f);border:1px solid #7c3aed}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;overflow-x:hidden;transition:background .3s,color .3s}
+
+header{background:var(--header-bg);border-bottom:3px solid var(--header-border);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,0.5);position:relative;}
+header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);}
+
+.app-container{max-width:1300px;margin:auto;padding:12px;display:flex;gap:12px;align-items:flex-start}
+main{flex:1;min-width:0}
+
+.sidebar-right{width:250px;background:var(--sidebar-bg);border:1px solid var(--sidebar-border);border-radius:14px;padding:12px;height:calc(100vh - 85px);position:sticky;top:12px;display:flex;flex-direction:column;flex-shrink:0;box-shadow:0 8px 25px rgba(0,0,0,0.3);}
+.sidebar-header{display:flex;justify-content:space-between;border-bottom:1px solid var(--sidebar-border);padding-bottom:10px;margin-bottom:10px;font-size:14px;font-weight:bold;color:var(--sidebar-header-color);text-transform:uppercase;letter-spacing:0.5px;}
+.sidebar-users-area{flex:1;overflow-y:auto}
+
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:16px;margin-bottom:14px;position:relative;box-shadow:0 6px 20px rgba(0,0,0,0.25);transition:transform 0.2s ease, box-shadow 0.2s ease;}
+.card:hover{box-shadow:0 8px 25px rgba(0,0,0,0.35);}
+
+.topic-card{background:linear-gradient(135deg,#1e1b4b 0%,#31103f 100%)!important;border:1px solid #7c3aed!important;padding:14px 18px!important;box-shadow:0 0 20px rgba(124,58,237,0.25)!important;}
+.radio-player-card{background:var(--radio-card-bg)!important;border:1px solid var(--radio-card-border)!important;box-shadow:0 8px 25px rgba(0,0,0,0.4)}
+
+.radio-banner{background:var(--radio-banner-bg);border-radius:10px;padding:14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:inset 0 1px 3px rgba(255,255,255,0.2);}
+.radio-logo-box{display:flex;align-items:center;gap:12px}
+.l2mr-logo{width:44px;height:44px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 12px rgba(0,0,0,0.5);}
+.l2mr-logo svg{width:26px;height:26px;fill:var(--primary)}
+.radio-logo-text h1{margin:0;font-size:18px;text-shadow:0 2px 4px rgba(0,0,0,0.3)}.radio-logo-text span{font-size:12px;opacity:.9}
+.live-badge{background:#000;color:var(--primary);border:1px solid var(--primary);font-size:10px;font-weight:bold;padding:5px 10px;border-radius:20px;white-space:nowrap;box-shadow:0 0 10px rgba(255,0,0,0.4);}
+.live-dot{width:7px;height:7px;background:var(--primary);border-radius:50%;display:inline-block;box-shadow:0 0 8px var(--primary);animation:pulseDot 1.5s infinite;}
+@keyframes pulseDot{0%{transform:scale(0.95);opacity:1}50%{transform:scale(1.4);opacity:0.6}100%{transform:scale(0.95);opacity:1}}
+
+.radio-description{background:rgba(0,0,0,.35);border-left:4px solid var(--primary);padding:12px;border-radius:6px;margin-bottom:14px;font-size:13px;color:#ddd;line-height:1.4;}
+.popup-player-box{background:rgba(0,0,0,.45);padding:10px;border-radius:10px;border:1px solid var(--sidebar-border)}
+.play-btn{width:100%;padding:13px;font-size:15px;background:var(--primary-gradient);border:0;border-radius:8px;color:#fff;font-weight:bold;cursor:pointer;text-decoration:none;display:block;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.3);transition:all 0.2s;}
+.play-btn:hover{filter:brightness(1.15);transform:translateY(-1px);}
+.radio-browser-btn{display:block;width:100%;margin-top:8px;padding:10px;background:#333;border:1px solid #555;border-radius:8px;color:#fff;text-decoration:none;text-align:center;font-weight:bold;font-size:13px;transition:background 0.2s;}
+.radio-browser-btn:hover{background:#444;}
+
+.chat-box-area{height:340px;overflow-y:auto;background:rgba(0,0,0,.6);border-radius:10px;padding:12px;border:1px solid var(--sidebar-border);box-shadow:inset 0 2px 8px rgba(0,0,0,0.5);}
+.msg{background:rgba(255,255,255,.06);border-radius:8px;padding:9px 12px;margin:7px 0;word-break:break-word;font-size:14px;border:1px solid rgba(255,255,255,0.05);transition:background 0.2s;}
+.bot-msg{background:linear-gradient(135deg,#1e1b4b,#31103f);border:1px solid #7c3aed}
 .applause-msg{background:linear-gradient(135deg,#3f2b10,#2a1a08);border:1px solid #f59e0b;color:#fef08a;font-weight:bold}
 .coffee-msg{background:linear-gradient(135deg,#422006,#271203);border:1px solid #d97706;color:#fed7aa;font-weight:bold}
 .heart-msg{background:linear-gradient(135deg,#4c0519,#2f020f);border:1px solid #e11d48;color:#fbcfe8;font-weight:bold}
 .horon-msg{background:linear-gradient(135deg,#082f49,#0c4a6e);border:1px solid #0284c7;color:#bae6fd;font-weight:bold}
 .confetti-msg{background:linear-gradient(135deg,#3b0764,#2e1065);border:1px solid #9333ea;color:#e9d5ff;font-weight:bold}
 .party-msg{background:linear-gradient(135deg,#064e3b,#022c22);border:1px solid #16a34a;color:#bbf7d0;font-weight:bold}
+.tea-msg{background:linear-gradient(135deg,#3f2b10,#1c1205);border:1px solid #d97706;color:#fef08a;font-weight:bold}
+.kuymak-msg{background:linear-gradient(135deg,#572c0c,#291204);border:1px solid #f59e0b;color:#fde68a;font-weight:bold}
+.fire-msg{background:linear-gradient(135deg,#451a03,#270e03);border:1px solid #ea580c;color:#fed7aa;font-weight:bold}
 .request-msg{background:linear-gradient(135deg,#064e3b,#022c22);border:1px solid #10b981;color:#a7f3d0;font-weight:bold}
 .action-msg{background:linear-gradient(135deg,#1e3a8a,#172554);border:1px solid #3b82f6;color:#93c5fd;font-style:italic}
-.system-msg{background:rgba(0,0,0,.3);border:1px dashed #555;color:#aaa;font-style:italic;text-align:center;font-size:12px}
-.announcement-msg{background:linear-gradient(135deg,#78350f,#451a03);border:2px solid #f59e0b;color:#fef08a;font-weight:bold;text-align:center;padding:12px}
+.system-msg{background:rgba(0,0,0,.35);border:1px dashed #555;color:#aaa;font-style:italic;text-align:center;font-size:12px}
+.announcement-msg{background:linear-gradient(135deg,#78350f,#451a03);border:2px solid #f59e0b;color:#fef08a;font-weight:bold;text-align:center;padding:12px;box-shadow:0 0 15px rgba(245,158,11,0.3);}
 .dj-chat-msg{background:rgba(4,120,87,0.25)!important;border:1px solid #047857!important;color:#ecfdf5!important;display:flex;justify-content:space-between;align-items:center;}
-.time{font-size:10px;color:#888;margin-right:4px}.avatar{margin-right:3px}.name{font-weight:bold;margin-right:4px;cursor:pointer;padding:2px 4px;border-radius:4px}.bot-name{color:#c084fc!important}
-form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;position:relative}select#userAvatar,input#name,input#text{background:rgba(0,0,0,.3);color:var(--text);border-radius:6px;border:1px solid var(--sidebar-border)}select#userAvatar{padding:10px 6px;font-size:16px}input[type=color]{width:40px;height:40px;border:0;background:transparent;cursor:pointer}input#name{width:105px;padding:10px;font-size:14px}input#text{flex:1;padding:10px;min-width:120px;font-size:14px}button[type=submit]{border:0;border-radius:6px;padding:10px 15px;background:var(--primary);color:#fff;font-weight:bold;cursor:pointer;font-size:14px}.tab-btn{background:var(--primary);opacity:.9;color:#fff;border:0;border-radius:6px;padding:10px;font-weight:bold;cursor:pointer;font-size:13px}.action-btns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}.action-btn{background:#333;color:#fff;border:1px solid #555;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold}.applause-btn{background:#d97706}.coffee-btn{background:#78350f}.heart-btn{background:#be123c}.sev-btn{background:#db2777}.horon-btn{background:#0284c7}.confetti-btn{background:#9333ea}.theme-btn{background:var(--primary)}.party-btn{background:#16a34a}.request-btn{background:#047857}.note{color:#aaa;font-size:12px}
-.user-list-item{padding:6px 8px;margin:4px 0;background:rgba(0,0,0,.3);border-radius:6px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--sidebar-border)}.user-list-item.away-user{opacity:.55;border-left:3px solid #f59e0b}.user-info-row{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.away-badge{font-size:9px;background:#f59e0b;color:#000;padding:1px 4px;border-radius:3px;font-weight:bold;margin-left:auto}.user-action-row{display:flex;gap:4px}.user-action-btn{background:#333;border:0;color:#fff;padding:2px 5px;border-radius:3px;font-size:10px;cursor:pointer;font-weight:bold}.mention-action{background:#4338ca}.whisper-action{background:#7e22ce}.whisper-unread{background:#dc2626!important;color:#fff!important}
+
+.time{font-size:10px;color:#888;margin-right:6px}.avatar{margin-right:4px}.name{font-weight:bold;margin-right:6px;cursor:pointer;padding:2px 5px;border-radius:4px;transition:background 0.2s;}.name:hover{background:rgba(255,255,255,0.15)}.bot-name{color:#c084fc!important}
+
+form{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap;position:relative}
+select#userAvatar,input#name,input#text{background:rgba(0,0,0,.4);color:var(--text);border-radius:8px;border:1px solid var(--sidebar-border);box-shadow:inset 0 1px 3px rgba(0,0,0,0.3)}
+select#userAvatar{padding:11px 8px;font-size:16px}
+input[type=color]{width:42px;height:42px;border:0;background:transparent;cursor:pointer;border-radius:8px;}
+input#name{width:110px;padding:11px;font-size:14px}
+input#text{flex:1;padding:11px;min-width:130px;font-size:14px}
+button[type=submit]{border:0;border-radius:8px;padding:11px 18px;background:var(--primary);color:#fff;font-weight:bold;cursor:pointer;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:filter 0.2s;}
+button[type=submit]:hover{filter:brightness(1.15);}
+
+.tab-btn{background:var(--primary);opacity:.9;color:#fff;border:0;border-radius:8px;padding:11px 12px;font-weight:bold;cursor:pointer;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.action-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.action-btn{background:#333;color:#fff;border:1px solid #555;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:all 0.2s;}
+.action-btn:hover{filter:brightness(1.2);transform:translateY(-1px);}
+
+.applause-btn{background:#d97706}
+.coffee-btn{background:#78350f}
+.heart-btn{background:#be123c}
+.sev-btn{background:#db2777}
+.horon-btn{background:#0284c7}
+.confetti-btn{background:#9333ea}
+.theme-btn{background:var(--primary)}
+.party-btn{background:#16a34a}
+.tea-btn{background:#854d0e}
+.kuymak-btn{background:#b45309}
+.fire-btn{background:#c2410c}
+.request-btn{background:#047857}
+.note{color:#aaa;font-size:12px;margin-top:6px;}
+
+.user-list-item{padding:8px 10px;margin:6px 0;background:rgba(0,0,0,.35);border-radius:8px;display:flex;flex-direction:column;gap:5px;border:1px solid var(--sidebar-border);transition:background 0.2s;}
+.user-list-item:hover{background:rgba(255,255,255,.05);}
+.user-list-item.away-user{opacity:.55;border-left:3px solid #f59e0b}
+.user-info-row{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.away-badge{font-size:9px;background:#f59e0b;color:#000;padding:2px 5px;border-radius:4px;font-weight:bold;margin-left:auto}
+.user-action-row{display:flex;gap:5px}
+.user-action-btn{background:#333;border:0;color:#fff;padding:3px 7px;border-radius:4px;font-size:10px;cursor:pointer;font-weight:bold;transition:background 0.2s;}
+.user-action-btn:hover{background:#555;}
+.mention-action{background:#4338ca}
+.whisper-action{background:#7e22ce}
+.whisper-unread{background:#dc2626!important;color:#fff!important;animation:pulseUnread 1s infinite;}
+@keyframes pulseUnread{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 
 .floating-emoji{position:fixed;bottom:-60px;font-size:32px;z-index:99999;pointer-events:none;animation:floatUpEffect 7s ease-out forwards}
 @keyframes floatUpEffect{
   0%{transform:translateY(0) translateX(0) scale(.4) rotate(0deg);opacity:0}
   15%{opacity:1}
   85%{opacity:.9}
-  100%{transform:translateY(-110vh) translateX(var(--drift, 40px)) scale(1.2) rotate(20deg);opacity:0}
+  100%{transform:translateY(-110vh) translateX(var(--drift, 40px)) scale(1.3) rotate(25deg);opacity:0}
 }
 
 @keyframes partyStrobe{0%{filter:hue-rotate(0deg)}50%{filter:hue-rotate(180deg)}100%{filter:hue-rotate(360deg)}}.party-active{animation:partyStrobe .4s infinite}
-.mention-toast{position:fixed;top:20px;right:20px;background:var(--primary);color:#fff;padding:12px 18px;border-radius:10px;border:1px solid #fff;box-shadow:0 4px 20px rgba(0,0,0,.5);font-size:14px;z-index:9999;display:flex;align-items:center;gap:10px;animation:slideIn .3s ease-out}@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);z-index:1000;align-items:center;justify-content:center}
-.login-glowing-box{background:linear-gradient(145deg,#1c1008,#2a1a0f)!important;border:2px solid #ff7700!important;box-shadow:0 0 35px rgba(255,119,0,.65),inset 0 0 15px rgba(255,140,0,.2)!important;animation:modalGlowPulse 3s infinite alternate}
-@keyframes modalGlowPulse{0%{box-shadow:0 0 25px rgba(255,119,0,.5)}100%{box-shadow:0 0 40px rgba(255,140,0,.85)}}
-.modal-box{background:var(--card-bg);border:2px solid var(--modal-border);border-radius:12px;padding:20px;width:90%;max-width:550px;max-height:90vh;overflow-y:auto}.modal-box h3{color:var(--sidebar-header-color);margin-top:0}.modal-box input{width:100%;padding:10px;margin:8px 0;background:rgba(0,0,0,.4);border:1px solid var(--sidebar-border);color:var(--text);border-radius:6px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:15px}
+.mention-toast{position:fixed;top:20px;right:20px;background:var(--primary);color:#fff;padding:14px 20px;border-radius:12px;border:1px solid rgba(255,255,255,0.4);box-shadow:0 6px 25px rgba(0,0,0,.6);font-size:14px;z-index:9999;display:flex;align-items:center;gap:12px;animation:slideIn .3s ease-out}@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-.private-modal-box{background:var(--card-bg);border:2px solid var(--modal-border);box-shadow:0 8px 30px rgba(0,0,0,.5);max-width:380px;width:92%;height:360px;max-height:75vh;display:flex;flex-direction:column;padding:12px}.private-messages-area{flex:1;overflow-y:auto;background:rgba(0,0,0,.4);border-radius:8px;padding:8px;border:1px solid var(--sidebar-border);margin-bottom:6px;font-size:13px}.private-msg{background:rgba(255,255,255,.05);border:1px solid var(--sidebar-border);border-radius:8px;padding:8px 10px;margin:6px 0;font-size:14px;word-break:break-word}.private-emoji-bar{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}.private-emoji-btn{background:rgba(0,0,0,.3);border:1px solid var(--sidebar-border);color:var(--text);padding:4px 8px;border-radius:4px;cursor:pointer;font-size:14px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center}
+.login-glowing-box{background:linear-gradient(145deg,#1c1008,#2a1a0f)!important;border:2px solid #ff7700!important;box-shadow:0 0 40px rgba(255,119,0,.65),inset 0 0 20px rgba(255,140,0,.2)!important;animation:modalGlowPulse 3s infinite alternate}
+@keyframes modalGlowPulse{0%{box-shadow:0 0 30px rgba(255,119,0,.5)}100%{box-shadow:0 0 50px rgba(255,140,0,.9)}}
+.modal-box{background:var(--card-bg);border:2px solid var(--modal-border);border-radius:16px;padding:24px;width:90%;max-width:550px;max-height:90vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,0.6)}.modal-box h3{color:var(--sidebar-header-color);margin-top:0}.modal-box input{width:100%;padding:12px;margin:10px 0;background:rgba(0,0,0,.45);border:1px solid var(--sidebar-border);color:var(--text);border-radius:8px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+.private-modal-box{background:var(--card-bg);border:2px solid var(--modal-border);box-shadow:0 12px 35px rgba(0,0,0,.6);max-width:390px;width:92%;height:380px;max-height:75vh;display:flex;flex-direction:column;padding:14px}.private-messages-area{flex:1;overflow-y:auto;background:rgba(0,0,0,.45);border-radius:8px;padding:10px;border:1px solid var(--sidebar-border);margin-bottom:8px;font-size:13px}.private-msg{background:rgba(255,255,255,.06);border:1px solid var(--sidebar-border);border-radius:8px;padding:9px 12px;margin:7px 0;font-size:14px;word-break:break-word}.private-emoji-bar{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}.private-emoji-btn{background:rgba(0,0,0,.35);border:1px solid var(--sidebar-border);color:var(--text);padding:5px 9px;border-radius:6px;cursor:pointer;font-size:14px;transition:background 0.2s}.private-emoji-btn:hover{background:rgba(255,255,255,0.15)}
 
 @media(max-width:768px){
-  .app-container{padding:2px;gap:2px}
-  .sidebar-right{width:95px;padding:4px;height:calc(100vh - 55px)}
+  .app-container{padding:4px;gap:6px}
+  .sidebar-right{width:100px;padding:6px;height:calc(100vh - 65px)}
   .sidebar-header span{font-size:10px}
   .user-info-row{font-size:10px}
-  .user-action-btn{font-size:8px;padding:2px 2px}
-  .modal-box{width:95%;padding:12px;max-height:95vh;}
+  .user-action-btn{font-size:8px;padding:3px 3px}
+  .modal-box{width:95%;padding:16px;max-height:95vh;}
 }
 </style>
 </head>
 <body class="theme-default">
 <header>
-  <div>🎙️ Ses Mola & Muhabbet</div>
-  <div style="display:flex;gap:6px;align-items:center;">
-    <button id="openLoginModalBtn" class="action-btn" type="button" style="background:var(--primary);padding:6px 12px;font-size:12px;">👤 Profil / Giriş</button>
-    <button id="headerLogoutBtn" class="action-btn" type="button" style="background:#b91c1c;padding:6px 12px;font-size:12px;display:none;">🚪 Çıkış Yap</button>
+  <div style="font-size:16px; font-weight:bold; letter-spacing:0.5px;">🎙️ Ses Mola & Muhabbet</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button id="openLoginModalBtn" class="action-btn" type="button" style="background:var(--primary);padding:7px 14px;font-size:12px;">👤 Profil / Giriş</button>
+    <button id="headerLogoutBtn" class="action-btn" type="button" style="background:#b91c1c;padding:7px 14px;font-size:12px;display:none;">🚪 Çıkış Yap</button>
   </div>
 </header>
 <div class="app-container">
 <main>
-<div id="topicCard" class="card topic-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div style="font-size:13px;line-height:1.4;flex:1;">📌 <b style="color:#c084fc;">Günün Topiği:</b> <span id="topicText">Yükleniyor...</span></div><button id="editTopicBtn" type="button" class="user-action-btn" style="background:#7c3aed;padding:4px 10px;font-size:11px;display:none;">Düzenle</button></div><div id="topicAuthor" style="font-size:10px;color:#a78bfa;margin-top:4px;"></div></div>
-<div class="card radio-player-card"><div class="radio-banner"><div class="radio-logo-box"><div class="l2mr-logo"><svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg></div><div class="radio-logo-text"><h1>💥Ses Mola Müzik & Muhabbet </h1><span>Kesintisiz Canlı Yayın</span></div></div><div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div></div><div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div><div class="popup-player-box"><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a><div id="radioStatus" class="note" style="margin-top:6px;text-align:center">📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.</div></div></div>
+<div id="topicCard" class="card topic-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div style="font-size:13px;line-height:1.4;flex:1;">📌 <b style="color:#c084fc;">Günün Topiği:</b> <span id="topicText">Yükleniyor...</span></div><button id="editTopicBtn" type="button" class="user-action-btn" style="background:#7c3aed;padding:5px 12px;font-size:11px;display:none;">Düzenle</button></div><div id="topicAuthor" style="font-size:10px;color:#a78bfa;margin-top:5px;"></div></div>
+<div class="card radio-player-card"><div class="radio-banner"><div class="radio-logo-box"><div class="l2mr-logo"><svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg></div><div class="radio-logo-text"><h1>💥 Ses Mola Müzik & Muhabbet</h1><span>Kesintisiz Canlı Yayın</span></div></div><div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div></div><div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div><div class="popup-player-box"><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a><div id="radioStatus" class="note" style="margin-top:8px;text-align:center">📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.</div></div></div>
 
 <!-- SOHBET ODALARI KARTI VE ÜÇLÜ SEKMELER -->
 <div class="card">
   <!-- 3'lü Oda Seçici Sekmeler -->
-  <div style="display:flex; gap:6px; margin-bottom:12px;">
-    <button type="button" id="roomBtnGeneral" class="action-btn" style="flex:1; background:var(--primary); font-weight:bold; font-size:13px; padding:10px;">💬 Genel Sohbet</button>
-    <button type="button" id="roomBtnRadio" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:10px;">📻 Radyo Odası</button>
-    <button type="button" id="roomBtnDjRoom" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:10px;">🎙️ DJ Stüdyosu</button>
+  <div style="display:flex; gap:8px; margin-bottom:14px;">
+    <button type="button" id="roomBtnGeneral" class="action-btn" style="flex:1; background:var(--primary); font-weight:bold; font-size:13px; padding:11px;">💬 Genel Sohbet</button>
+    <button type="button" id="roomBtnRadio" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:11px;">📻 Radyo Odası</button>
+    <button type="button" id="roomBtnDjRoom" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:11px;">🎙️ DJ Stüdyosu</button>
   </div>
 
   <!-- 1. Genel Sohbet Alanı -->
   <div id="generalChatAreaWrapper">
-    <h3 style="margin-top:0">💬 Genel Sohbet Odası</h3>
+    <h3 style="margin-top:0; font-size:15px; color:var(--sidebar-header-color);">💬 Genel Sohbet Odası</h3>
     <div id="messages" class="chat-box-area"></div>
   </div>
 
   <!-- 2. Radyo Odası Alanı -->
   <div id="radioChatAreaWrapper" style="display:none;">
-    <h3 style="margin-top:0; color:#fde047;">📻 Radyo Odası & Müzik Muhabbet</h3>
+    <h3 style="margin-top:0; font-size:15px; color:#fde047;">📻 Radyo Odası & Müzik Muhabbet</h3>
     <div id="radioMessages" class="chat-box-area" style="background:linear-gradient(135deg,rgba(4,120,87,0.25),rgba(2,44,34,0.25)); border-color:#047857;"></div>
   </div>
 
   <!-- 3. Şifreli DJ Stüdyo Alanı (Yeni Sekme Konumu) -->
   <div id="djRoomAreaWrapper" style="display:none;">
-    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #047857;padding-bottom:10px;margin-bottom:12px;background:rgba(4,120,87,0.2);padding:8px 12px;border-radius:8px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #047857;padding-bottom:10px;margin-bottom:12px;background:rgba(4,120,87,0.2);padding:10px 14px;border-radius:10px;">
       <h3 style="margin:0; font-size:14px; color:#34d399; text-shadow:0 0 10px rgba(52,211,153,0.6); letter-spacing:0.5px;">🎙️ Ses Mola ✦ 𝘿𝙅 𝓢𝓣𝓤𝘿𝓞 & 𝓚𝓞𝓝𝓣𝓡𝓞𝓛</h3>
     </div>
     
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; border:1px solid #047857;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.35); padding:12px; border-radius:10px; border:1px solid #047857;">
       <div>
         <div style="font-size:13px; font-weight:bold; color:#a7f3d0;">Stüdyo Durumu: <span id="djRoomStatusText" style="color:#fde047;">Yayına Hazır</span></div>
-        <div style="font-size:11px; color:#cbd5e1;">Yayın alarak kulaklığı takın ve mikrofona geçin!</div>
+        <div style="font-size:11px; color:#cbd5e1; margin-top:2px;">Yayın alarak kulaklığı takın ve mikrofona geçin!</div>
       </div>
-      <button id="modalToggleDJBtn" class="action-btn" type="button" style="background:#047857; padding:10px 16px; font-size:13px;">🎙️ Yayın Al</button>
+      <button id="modalToggleDJBtn" class="action-btn" type="button" style="background:#047857; padding:10px 18px; font-size:13px;">🎙️ Yayın Al</button>
     </div>
 
-    <div style="background:rgba(0,0,0,0.3); border:1px solid #047857; border-radius:8px; padding:8px 10px; margin-bottom:10px;">
-      <div style="font-size:12px; font-weight:bold; color:#34d399; margin-bottom:4px;">🎧 Aktif DJ'ler (Rozetleriyle):</div>
+    <div style="background:rgba(0,0,0,0.35); border:1px solid #047857; border-radius:10px; padding:10px 12px; margin-bottom:12px;">
+      <div style="font-size:12px; font-weight:bold; color:#34d399; margin-bottom:6px;">🎧 Aktif DJ'ler (Rozetleriyle):</div>
       <div id="djActiveList" style="display:flex; gap:6px; flex-wrap:wrap; font-size:12px; min-height:22px; align-items:center;"></div>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
       <div style="font-size:12px; font-weight:bold; color:#34d399;">💬 Stüdyo İçi Haberleşme</div>
-      <button id="clearAllDjMsgBtn" class="action-btn" type="button" style="background:#b91c1c; padding:3px 8px; font-size:11px;">🗑️ Toplu Sil</button>
+      <button id="clearAllDjMsgBtn" class="action-btn" type="button" style="background:#b91c1c; padding:4px 10px; font-size:11px;">🗑️ Toplu Sil</button>
     </div>
-    <div id="djMessages" class="chat-box-area" style="height:200px; background:rgba(0,0,0,0.4);"></div>
+    <div id="djMessages" class="chat-box-area" style="height:210px; background:rgba(0,0,0,0.45);"></div>
     
-    <form id="djForm" autocomplete="off" style="margin-top:8px; display:flex; gap:6px;">
-      <input type="text" id="djText" maxlength="300" placeholder="Stüdyo içi mesaj yaz..." required style="flex:1; padding:10px; background:rgba(0,0,0,.4); color:#fff; border:1px solid #047857; border-radius:6px; font-size:13px; margin:0;">
-      <button type="submit" style="background:#047857; color:#fff; border:0; border-radius:6px; padding:10px 16px; font-weight:bold; cursor:pointer; font-size:13px;">Gönder</button>
+    <form id="djForm" autocomplete="off" style="margin-top:10px; display:flex; gap:8px;">
+      <input type="text" id="djText" maxlength="300" placeholder="Stüdyo içi mesaj yaz..." required style="flex:1; padding:11px; background:rgba(0,0,0,.4); color:#fff; border:1px solid #047857; border-radius:8px; font-size:13px; margin:0;">
+      <button type="submit" style="background:#047857; color:#fff; border:0; border-radius:8px; padding:11px 18px; font-weight:bold; cursor:pointer; font-size:13px;">Gönder</button>
     </form>
   </div>
 
   <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
   <div id="mainFormAreaWrapper">
     <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
-    <div class="action-btns"><button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button><button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button><button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button><button id="sendSev" class="action-btn sev-btn" type="button">💖 Sev</button><button id="sendHoron" class="action-btn horon-btn" type="button">💃 Horon</button><button id="sendConfetti" class="action-btn confetti-btn" type="button">🎉 Konfeti</button><button id="toggleTheme" class="action-btn theme-btn" type="button">🎨 Tema Seç</button><button id="partyButton" class="action-btn party-btn" type="button">🪩 Parti</button><button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button><button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Sohbeti Temizle</button></div><p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
+    <div class="action-btns">
+      <button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
+      <button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
+      <button id="sendTea" class="action-btn tea-btn" type="button">🍵 Çay Demle</button>
+      <button id="sendKuymak" class="action-btn kuymak-btn" type="button">🫕 Kuymak İkram Et</button>
+      <button id="sendFire" class="action-btn fire-btn" type="button">🔥 Ateş Et</button>
+      <button id="sendHeart" class="action-btn heart-btn" type="button">❤️ Kalp At</button>
+      <button id="sendSev" class="action-btn sev-btn" type="button">💖 Sev</button>
+      <button id="sendHoron" class="action-btn horon-btn" type="button">💃 Horon</button>
+      <button id="sendConfetti" class="action-btn confetti-btn" type="button">🎉 Konfeti</button>
+      <button id="toggleTheme" class="action-btn theme-btn" type="button">🎨 Tema Seç</button>
+      <button id="partyButton" class="action-btn party-btn" type="button">🪩 Parti</button>
+      <button id="openRequestModal" class="action-btn request-btn" type="button">🎵 İstek Yap</button>
+      <button id="clearChat" class="action-btn" type="button" style="background:#b91c1c;">🗑️ Sohbeti Temizle</button>
+    </div>
+    <p id="statusText" class="note">Sohbet odası hazır. 🤖</p>
   </div>
 </div>
 </main>
@@ -160,28 +244,28 @@ form{display:flex;gap:6px;margin-top:10px;align-items:center;flex-wrap:wrap;posi
 
 <div id="loginModal" class="modal-overlay" style="display:flex;">
   <div class="modal-box login-glowing-box" style="text-align: center;">
-    <h3 style="color:#ffaa33; font-size:20px; margin-bottom:6px;">👑 Radyo Kral FM</h3>
+    <h3 style="color:#ffaa33; font-size:22px; margin-bottom:8px;">👑 Radyo Kral FM</h3>
     <p style="font-size:13px;color:#fde047;margin-bottom:12px; font-weight:bold;">Güvenli Nick Kayıt ve Giriş Paneli</p>
-    <p style="font-size:11px;color:#d1d5db;margin-bottom:12px; line-height:1.4;">Şifre yazıp girerseniz nickiniz tescillenir ve başkası kullanamaz.</p>
+    <p style="font-size:11px;color:#d1d5db;margin-bottom:14px; line-height:1.4;">Şifre yazıp girerseniz nickiniz tescillenir ve başkası kullanamaz.</p>
     
-    <div style="display:flex;gap:10px;margin-bottom:8px;align-items:center;">
-      <select id="loginAvatar" style="flex:1;padding:10px;background:rgba(0,0,0,.5);color:var(--text);border:1px solid #ff7700;border-radius:6px;font-size:16px;">
+    <div style="display:flex;gap:10px;margin-bottom:10px;align-items:center;">
+      <select id="loginAvatar" style="flex:1;padding:11px;background:rgba(0,0,0,.5);color:var(--text);border:1px solid #ff7700;border-radius:8px;font-size:16px;">
         <option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option>
       </select>
-      <input type="color" id="loginColor" value="#ff8800" style="width:45px;height:42px;border:0;background:transparent;cursor:pointer;">
+      <input type="color" id="loginColor" value="#ff8800" style="width:48px;height:45px;border:0;background:transparent;cursor:pointer;">
     </div>
     
-    <input type="text" id="loginNameInput" maxlength="30" placeholder="Takma Adınız (Nick)" style="width:100%;padding:11px;margin-bottom:8px;background:rgba(0,0,0,.5);color:#fff;border:1px solid #ff7700;border-radius:6px;font-size:14px;">
-    <input type="password" id="loginPassword" maxlength="30" placeholder="Şifreniz (Nicki kilitlemek için)" style="width:100%;padding:11px;margin-bottom:12px;background:rgba(0,0,0,.5);color:#fff;border:1px solid #ff7700;border-radius:6px;font-size:14px;">
+    <input type="text" id="loginNameInput" maxlength="30" placeholder="Takma Adınız (Nick)" style="width:100%;padding:12px;margin-bottom:10px;background:rgba(0,0,0,.5);color:#fff;border:1px solid #ff7700;border-radius:8px;font-size:14px;">
+    <input type="password" id="loginPassword" maxlength="30" placeholder="Şifreniz (Nicki kilitlemek için)" style="width:100%;padding:12px;margin-bottom:14px;background:rgba(0,0,0,.5);color:#fff;border:1px solid #ff7700;border-radius:8px;font-size:14px;">
     
-    <button type="button" id="confirmLoginBtn" style="width:100%;padding:11px;font-size:14px;background:linear-gradient(180deg,#ff8800,#cc5500);border:0;border-radius:6px;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(255,119,0,0.5);margin-bottom:8px;">🔒 Şifreli Kaydol / Giriş Yap</button>
-    <button type="button" id="guestLoginBtn" style="width:100%;padding:10px;font-size:13px;background:rgba(255,255,255,0.1);border:1px solid #ff7700;border-radius:6px;color:#ffaa33;font-weight:bold;cursor:pointer;margin-bottom:8px;">👤 Şifresiz İsimle Gir</button>
+    <button type="button" id="confirmLoginBtn" style="width:100%;padding:12px;font-size:14px;background:linear-gradient(180deg,#ff8800,#cc5500);border:0;border-radius:8px;color:#fff;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(255,119,0,0.5);margin-bottom:10px;">🔒 Şifreli Kaydol / Giriş Yap</button>
+    <button type="button" id="guestLoginBtn" style="width:100%;padding:11px;font-size:13px;background:rgba(255,255,255,0.1);border:1px solid #ff7700;border-radius:8px;color:#ffaa33;font-weight:bold;cursor:pointer;">👤 Şifresiz İsimle Gir</button>
   </div>
 </div>
 
 <div id="requestModal" class="modal-overlay"><div class="modal-box"><h3>🎵 İstek Parça Gönder</h3><input id="songArtist" placeholder="Sanatçı Adı"><input id="songTitle" placeholder="Şarkı Adı"><div class="modal-actions"><button id="closeRequestModal" class="action-btn" type="button">İptal</button><button id="sendRequest" class="action-btn request-btn" type="button">Gönder 🎶</button></div></div></div>
-<div id="themeModal" class="modal-overlay"><div class="modal-box"><h3>🎨 Tema Seçimi</h3><div style="display:flex;flex-direction:column;gap:8px;margin-top:12px;"><button type="button" class="action-btn" style="background:#8b0000;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-default','Varsayılan Kral Kırmızı')">🔴 Varsayılan Kral Kırmızı</button><button type="button" class="action-btn" style="background:#4c1d95;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-purple','Gece Moru')">🟣 Gece Moru</button><button type="button" class="action-btn" style="background:#064e3b;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-green','Zümrüt Yeşili')">🟢 Zümrüt Yeşili</button><button type="button" class="action-btn" style="background:#1d4ed8;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-blue','Okyanus Mavisi')">🔵 Okyanus Mavisi</button><button type="button" class="action-btn" style="background:#c2410c;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-orange','Gün Batımı Turuncusu')">🟠 Gün Batımı Turuncusu</button><button type="button" class="action-btn" style="background:#be123c;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-cyber','Neon Siberpunk')">🟣 Neon Siberpunk</button></div><div class="modal-actions" style="margin-top:15px;"><button id="closeThemeModal" class="action-btn" type="button" style="background:#333;">Kapat</button></div></div></div>
-<div id="privateChatModal" class="modal-overlay"><div class="modal-box private-modal-box"><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--sidebar-border);padding-bottom:6px;margin-bottom:6px;"><h3 style="margin:0;font-size:15px;">🔒 Özel Fısıltı: <span id="privateChatTitle"></span></h3><button id="closePrivateModal" class="action-btn" style="background:#b91c1c;padding:2px 8px;font-size:11px;" type="button">✕</button></div><div id="privateMessagesArea" class="private-messages-area"></div><div class="private-emoji-bar"><button type="button" class="private-emoji-btn" data-emoji="😊">😊</button><button type="button" class="private-emoji-btn" data-emoji="❤️">❤️</button><button type="button" class="private-emoji-btn" data-emoji="☕">☕</button><button type="button" class="private-emoji-btn" data-emoji="👍">👍</button><button type="button" class="private-emoji-btn" data-emoji="🔥">🔥</button><button type="button" class="private-emoji-btn" data-emoji="😂">😂</button><button type="button" class="private-emoji-btn" data-emoji="🌹">🌹</button><button type="button" class="private-emoji-btn" data-emoji="🎵">🎵</button></div><form id="privateForm" autocomplete="off" style="margin:0;"><input type="text" id="privateText" maxlength="300" placeholder="Özel mesaj yaz..." required style="flex:1;padding:8px;background:rgba(0,0,0,.4);color:var(--text);border:1px solid var(--sidebar-border);border-radius:6px;font-size:13px;"><button type="submit" style="background:var(--primary);color:#fff;border:0;border-radius:6px;padding:8px 12px;font-weight:bold;cursor:pointer;font-size:13px;">Gönder</button></form></div></div>
+<div id="themeModal" class="modal-overlay"><div class="modal-box"><h3>🎨 Tema Seçimi</h3><div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;"><button type="button" class="action-btn" style="background:#8b0000;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-default','Varsayılan Kral Kırmızı')">🔴 Varsayılan Kral Kırmızı</button><button type="button" class="action-btn" style="background:#4c1d95;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-purple','Gece Moru')">🟣 Gece Moru</button><button type="button" class="action-btn" style="background:#064e3b;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-green','Zümrüt Yeşili')">🟢 Zümrüt Yeşili</button><button type="button" class="action-btn" style="background:#1d4ed8;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-blue','Okyanus Mavisi')">🔵 Okyanus Mavisi</button><button type="button" class="action-btn" style="background:#c2410c;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-orange','Gün Batımı Turuncusu')">🟠 Gün Batımı Turuncusu</button><button type="button" class="action-btn" style="background:#be123c;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-cyber','Neon Siberpunk')">🟣 Neon Siberpunk</button></div><div class="modal-actions" style="margin-top:18px;"><button id="closeThemeModal" class="action-btn" type="button" style="background:#333;">Kapat</button></div></div></div>
+<div id="privateChatModal" class="modal-overlay"><div class="modal-box private-modal-box"><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--sidebar-border);padding-bottom:8px;margin-bottom:8px;"><h3 style="margin:0;font-size:15px;">🔒 Özel Fısıltı: <span id="privateChatTitle"></span></h3><button id="closePrivateModal" class="action-btn" style="background:#b91c1c;padding:3px 9px;font-size:11px;" type="button">✕</button></div><div id="privateMessagesArea" class="private-messages-area"></div><div class="private-emoji-bar"><button type="button" class="private-emoji-btn" data-emoji="😊">😊</button><button type="button" class="private-emoji-btn" data-emoji="❤️">❤️</button><button type="button" class="private-emoji-btn" data-emoji="☕">☕</button><button type="button" class="private-emoji-btn" data-emoji="👍">👍</button><button type="button" class="private-emoji-btn" data-emoji="🔥">🔥</button><button type="button" class="private-emoji-btn" data-emoji="😂">😂</button><button type="button" class="private-emoji-btn" data-emoji="🌹">🌹</button><button type="button" class="private-emoji-btn" data-emoji="🎵">🎵</button></div><form id="privateForm" autocomplete="off" style="margin:0;"><input type="text" id="privateText" maxlength="300" placeholder="Özel mesaj yaz..." required style="flex:1;padding:9px;background:rgba(0,0,0,.4);color:var(--text);border:1px solid var(--sidebar-border);border-radius:8px;font-size:13px;"><button type="submit" style="background:var(--primary);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:bold;cursor:pointer;font-size:13px;">Gönder</button></form></div></div>
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -284,7 +368,6 @@ $("roomBtnDjRoom").onclick = () => {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
-  // F5 yenileme tespiti (Eğer sayfa yenilendiyse geçmiş görünmeye devam eder, sıfır girişlerde boş başlar)
   const isPageReload = (window.performance && window.performance.navigation && window.performance.navigation.type === 1) || 
                        (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0] && window.performance.getEntriesByType("navigation")[0].type === 'reload');
 
@@ -479,7 +562,7 @@ $("confirmLoginBtn").onclick = async () => {
       await set(userDocRef, { originalName: enteredName, password: enteredPassword, avatar: $("loginAvatar").value, color: $("loginColor").value, role: "user", createdAt: Date.now() });
     }
     sessionStorage.setItem("kralfm_role", window.userRole);
-    sessionStorage.setItem("kralfm_entryTime", Date.now().toString()); // Sıfırdan girişlerde sayfa boş başlasın
+    sessionStorage.setItem("kralfm_entryTime", Date.now().toString());
     if(guestReminderTimer) { clearTimeout(guestReminderTimer); guestReminderTimer = null; }
     $("name").value = enteredName;
     localStorage.setItem("kralfm_name", enteredName);
@@ -504,7 +587,7 @@ $("guestLoginBtn").onclick = async () => {
   if(snapshot.exists()) { alert("⚠️ Bu takma ad şifre korumalıdır!"); return; }
   window.userRole = "user";
   sessionStorage.setItem("kralfm_role", "user");
-  sessionStorage.setItem("kralfm_entryTime", Date.now().toString()); // Sıfırdan girişlerde sayfa boş başlasın
+  sessionStorage.setItem("kralfm_entryTime", Date.now().toString());
   $("name").value = enteredName;
   $("userAvatar").value = $("loginAvatar").value;
   $("userColor").value = $("loginColor").value;
@@ -594,6 +677,12 @@ function appendMessageToBox(box, key, d){
       triggerScreenShower(["👏","✨","🌟"]);
     }else if(d.effect === "coffee"){
       triggerScreenShower(["☕","🍫","💧"]);
+    }else if(d.effect === "tea"){
+      triggerScreenShower(["🍵","🫖","🌿","✨"]);
+    }else if(d.effect === "kuymak"){
+      triggerScreenShower(["🧀","🫕","🧈","🍞"]);
+    }else if(d.effect === "fire"){
+      triggerScreenShower(["🔥","💥","⚡","🔥"]);
     }else if(d.effect === "heart"){
       triggerScreenShower(["❤️","💖","💘","💓","💗"]);
     }else if(d.effect === "sev"){
@@ -628,6 +717,9 @@ function appendMessageToBox(box, key, d){
   if(d.type==="bot") msgClass = "msg bot-msg";
   else if(d.effect==="applause") msgClass = "msg applause-msg";
   else if(d.effect==="coffee") msgClass = "msg coffee-msg";
+  else if(d.effect==="tea") msgClass = "msg tea-msg";
+  else if(d.effect==="kuymak") msgClass = "msg kuymak-msg";
+  else if(d.effect==="fire") msgClass = "msg fire-msg";
   else if(d.effect==="heart" || d.effect==="sev") msgClass = "msg heart-msg";
   else if(d.effect==="horon") msgClass = "msg horon-msg";
   else if(d.effect==="confetti") msgClass = "msg confetti-msg";
@@ -686,7 +778,6 @@ onValue(messagesRef,s=>{
   const entryTime = parseInt(sessionStorage.getItem("kralfm_entryTime") || "0");
   
   Object.entries(s.val()||{}).forEach(([k,d])=>{
-    // Yeni giriş yapanlar için sayfa boş başlasın, ancak F5 yenilemelerinde veya geçmiş oturumlarda sohbet akışı korunsun
     if(entryTime > 0 && d.createdAt < entryTime && d.type !== "system" && d.type !== "announcement" && d.type !== "dj") {
       return;
     }
@@ -794,6 +885,9 @@ $("sendHoron").onclick=()=>sendActionWithEffect("🎻 horon ekibini sahneye sür
 $("sendConfetti").onclick=()=>sendActionWithEffect("🎉 ortamda konfetiler patlattı, kutlama başladı! 🎊", "confetti");
 $("sendApplause").onclick=()=>sendActionWithEffect("👏 odadakileri alkış yağmuruna tuttu! 🌟", "applause");
 $("sendCoffee").onclick=()=>sendActionWithEffect("☕ odadakilere mis gibi Türk kahvesi, çikolata ve su ikram etti! 🍫💧", "coffee");
+$("sendTea").onclick=()=>sendActionWithEffect("🍵 odadakilere demlenmiş mis gibi sıcak çay ikram etti, keyifler tavan yaptı! 🫖🌿", "tea");
+$("sendKuymak").onclick=()=>sendActionWithEffect("🫕 odadakilere mis gibi tereyağlı sıcak kuymak ve köy ekmeği ikram etti! 🧀🍞", "kuymak");
+$("sendFire").onclick=()=>sendActionWithEffect("🔥 ortamı ateşe verdi, ortalık yıkılıyor! 💥⚡", "fire");
 $("partyButton").onclick=()=>sendActionWithEffect("🪩 PARTİ BAŞLADI! Işıklar yanıp sönüyor! 🕺💃", "party");
 
 const themeModal=$("themeModal");$("toggleTheme").onclick=()=>themeModal.style.display="flex";$("closeThemeModal").onclick=()=>themeModal.style.display="none";window.applyThemeSelection=(c,n)=>{document.body.className=c;localStorage.setItem("kralfm_theme",c);themeModal.style.display="none";triggerToast("Tema Değişti",`Aktif Tema: ${n}`)};
