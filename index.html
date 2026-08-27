@@ -289,7 +289,7 @@ const $=id=>document.getElementById(id);window.$=$;
 const staticBots=[
   {name:"E`",avatar:"💥",role:"admin"},
   {name:"seS",avatar:"🧕",role:"sop"},
-  {name:"MiNa",avatar:"💫",role:"op"},
+  {name:"MoLa",avatar:"💫",role:"op"},
   {name:"BJK",avatar:"🦅",role:"user"}
 ];
 window.staticBots=staticBots;
@@ -331,7 +331,7 @@ function isUserMuted(nick) {
   return false;
 }
 
-// Oda ve Sekme Geçiş İşlevleri
+// Oda dan Sekme Geçiş İşlevleri
 $("roomBtnGeneral").onclick = () => {
   currentRoom = "general";
   $("roomBtnGeneral").style.background = "var(--primary)";
@@ -577,7 +577,7 @@ function updateActiveDJsUI() {
       badge.style.fontWeight = "bold";
       badge.style.color = "#34d399";
       
-      const rBadge = u.role === "admin" ? "👑 " : u.role === "sop" ? "⭐ " : u.role === "op" ? "🛡️ " : "👤 ";
+      const rBadge = u.role === "admin" ? "% " : u.role === "sop" ? "& " : u.role === "op" ? "@ " : "+👤 ";
       badge.textContent = "🎙️ " + rBadge + u.name;
       activeList.appendChild(badge);
     }
@@ -677,11 +677,18 @@ function triggerScreenShower(emojis){
 let titleInterval=null;function triggerToast(t,b){notificationSound.play().catch(()=>{});if(titleInterval)clearInterval(titleInterval);let x=true;titleInterval=setInterval(()=>{document.title=x?`🔴 ${t}`:"Radyo Kral FM & Muhabbet";x=!x},1000);const old=document.querySelector(".mention-toast");if(old)old.remove();const toast=document.createElement("div");toast.className="mention-toast";toast.innerHTML=`🔔 <b>${b}</b>`;document.body.appendChild(toast);setTimeout(()=>toast.remove(),4000)}
 window.addEventListener("focus",()=>{if(titleInterval){clearInterval(titleInterval);titleInterval=null}document.title="Radyo Kral FM & Muhabbet"});
 
+// Geliştirilmiş Görünürlük ve Bağlantı Yönetimi
 document.addEventListener("visibilitychange", async () => {
   if (document.visibilityState === "visible") {
     if (localStorage.getItem("kralfm_logged") === "true" || $("name").value.trim() !== "") {
       await registerPresence();
     }
+  }
+});
+
+window.addEventListener("pageshow", async (event) => {
+  if (event.persisted || (localStorage.getItem("kralfm_logged") === "true" || $("name").value.trim() !== "")) {
+    await registerPresence();
   }
 });
 
@@ -1182,7 +1189,7 @@ $("sendCoffee").onclick=()=>sendActionWithEffect("☕ odadakilere mis gibi Türk
 $("sendTea").onclick=()=>sendActionWithEffect("🍵 odadakilere demlenmiş mis gibi sıcak çay ikram etti, keyifler tavan yaptı! 🫖🌿", "tea");
 $("sendKuymak").onclick=()=>sendActionWithEffect("🫕 odadakilere mis gibi tereyağlı sıcak kuymak ve köy ekmeği ikram etti! 🧀🍞", "kuymak");
 $("sendFire").onclick=()=>sendActionWithEffect("🔥 ortamı ateşe verdi, ortalık yıkılıyor! 💥⚡", "fire");
-$("partyButton").onclick=()=>sendActionWifEffect("🪩 PARTİ BAŞLADI! Işıklar yanıp sönüyor! 🕺💃", "party");
+$("partyButton").onclick=()=>sendActionWithEffect("🪩 PARTİ BAŞLADI! Işıklar yanıp sönüyor! 🕺💃", "party");
 
 const themeModal=$("themeModal");$("toggleTheme").onclick=()=>themeModal.style.display="flex";$("closeThemeModal").onclick=()=>themeModal.style.display="none";window.applyThemeSelection=(c,n)=>{document.body.className=c;localStorage.setItem("kralfm_theme",c);themeModal.style.display="none";triggerToast("Tema Değişti",`Aktif Tema: ${n}`)};
 const requestModal=$("requestModal");$("openRequestModal").onclick=()=>requestModal.style.display="flex";$("closeRequestModal").onclick=()=>requestModal.style.display="none";$("sendRequest").onclick=async()=>{
@@ -1239,4 +1246,3 @@ $("clearChat").onclick = async () => {
 </script>
 </body>
 </html>
-
