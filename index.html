@@ -84,11 +84,11 @@ main{flex:1;min-width:0}
 .time{font-size:10px;color:#888;margin-right:6px}.avatar{margin-right:4px}.name{font-weight:bold;margin-right:6px;cursor:pointer;padding:2px 5px;border-radius:4px;transition:background 0.2s;}.name:hover{background:rgba(255,255,255,0.15)}.bot-name{color:#c084fc!important}
 
 form{display:flex;gap:8px;margin-top:12px;align-items:center;flex-wrap:wrap;position:relative}
-select#userAvatar,input#name,input#text{background:rgba(0,0,0,.4);color:var(--text);border-radius:8px;border:1px solid var(--sidebar-border);box-shadow:inset 0 1px 3px rgba(0,0,0,0.3)}
+select#userAvatar,input#name,input#text,input#djText{background:rgba(0,0,0,.4);color:var(--text);border-radius:8px;border:1px solid var(--sidebar-border);box-shadow:inset 0 1px 3px rgba(0,0,0,0.3)}
 select#userAvatar{padding:11px 8px;font-size:16px}
 input[type=color]{width:42px;height:42px;border:0;background:transparent;cursor:pointer;border-radius:8px;}
 input#name{width:110px;padding:11px;font-size:14px}
-input#text{flex:1;padding:11px;min-width:130px;font-size:14px}
+input#text,input#djText{flex:1;padding:11px;min-width:130px;font-size:14px}
 button[type=submit]{border:0;border-radius:8px;padding:11px 18px;background:var(--primary);color:#fff;font-weight:bold;cursor:pointer;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:filter 0.2s;}
 button[type=submit]:hover{filter:brightness(1.15);}
 
@@ -211,15 +211,17 @@ button[type=submit]:hover{filter:brightness(1.15);}
     </div>
     <div id="djMessages" class="chat-box-area" style="height:210px; background:rgba(0,0,0,0.45);"></div>
     
+    <!-- DJ Formu Güncellendi: Tab Tuşu Eklendi -->
     <form id="djForm" autocomplete="off" style="margin-top:10px; display:flex; gap:8px;">
-      <input type="text" id="djText" maxlength="300" placeholder="Stüdyo içi mesaj yaz..." required style="flex:1; padding:11px; background:rgba(0,0,0,.4); color:#fff; border:1px solid #047857; border-radius:8px; font-size:13px; margin:0;">
+      <input type="text" id="djText" maxlength="300" placeholder="Stüdyo içi mesaj yaz (@ ile etiketle, Tab kullan)..." required>
+      <button type="button" id="djTabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla" style="background:#047857;">@ Tab</button>
       <button type="submit" style="background:#047857; color:#fff; border:0; border-radius:8px; padding:11px 18px; font-weight:bold; cursor:pointer; font-size:13px;">Gönder</button>
     </form>
   </div>
 
   <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
   <div id="mainFormAreaWrapper">
-    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
+    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelmeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
     <div class="action-btns">
       <button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
       <button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
@@ -266,7 +268,9 @@ button[type=submit]:hover{filter:brightness(1.15);}
 <div id="requestModal" class="modal-overlay"><div class="modal-box"><h3>🎵 İstek Parça Gönder</h3><input id="songArtist" placeholder="Sanatçı Adı"><input id="songTitle" placeholder="Şarkı Adı"><div class="modal-actions"><button id="closeRequestModal" class="action-btn" type="button">İptal</button><button id="sendRequest" class="action-btn request-btn" type="button">Gönder 🎶</button></div></div></div>
 <div id="themeModal" class="modal-overlay"><div class="modal-box"><h3>🎨 Tema Seçimi</h3><div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;"><button type="button" class="action-btn" style="background:#8b0000;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-default','Varsayılan Kral Kırmızı')">🔴 Varsayılan Kral Kırmızı</button><button type="button" class="action-btn" style="background:#4c1d95;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-purple','Gece Moru')">🟣 Gece Moru</button><button type="button" class="action-btn" style="background:#064e3b;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-green','Zümrüt Yeşili')">🟢 Zümrüt Yeşili</button><button type="button" class="action-btn" style="background:#1d4ed8;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-blue','Okyanus Mavisi')">🔵 Okyanus Mavisi</button><button type="button" class="action-btn" style="background:#c2410c;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-orange','Gün Batımı Turuncusu')">🟠 Gün Batımı Turuncusu</button><button type="button" class="action-btn" style="background:#be123c;text-align:left;padding:12px;font-size:13px;" onclick="window.applyThemeSelection('theme-cyber','Neon Siberpunk')">🟣 Neon Siberpunk</button></div><div class="modal-actions" style="margin-top:18px;"><button id="closeThemeModal" class="action-btn" type="button" style="background:#333;">Kapat</button></div></div></div>
 <div id="privateChatModal" class="modal-overlay"><div class="modal-box private-modal-box"><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--sidebar-border);padding-bottom:8px;margin-bottom:8px;"><h3 style="margin:0;font-size:15px;">🔒 Özel Fısıltı: <span id="privateChatTitle"></span></h3><button id="closePrivateModal" class="action-btn" style="background:#b91c1c;padding:3px 9px;font-size:11px;" type="button">✕</button></div><div id="privateMessagesArea" class="private-messages-area"></div><div class="private-emoji-bar"><button type="button" class="private-emoji-btn" data-emoji="😊">😊</button><button type="button" class="private-emoji-btn" data-emoji="❤️">❤️</button><button type="button" class="private-emoji-btn" data-emoji="☕">☕</button><button type="button" class="private-emoji-btn" data-emoji="👍">👍</button><button type="button" class="private-emoji-btn" data-emoji="🔥">🔥</button><button type="button" class="private-emoji-btn" data-emoji="😂">😂</button><button type="button" class="private-emoji-btn" data-emoji="🌹">🌹</button><button type="button" class="private-emoji-btn" data-emoji="🎵">🎵</button></div><form id="privateForm" autocomplete="off" style="margin:0;"><input type="text" id="privateText" maxlength="300" placeholder="Özel mesaj yaz..." required style="flex:1;padding:9px;background:rgba(0,0,0,.4);color:var(--text);border:1px solid var(--sidebar-border);border-radius:8px;font-size:13px;"><button type="submit" style="background:var(--primary);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:bold;cursor:pointer;font-size:13px;">Gönder</button></form></div></div>
+
 <audio id="applauseSound" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" preload="auto"></audio>
+
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {getDatabase,ref,push,onValue,set,remove,get,update} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
@@ -317,6 +321,7 @@ $("roomBtnGeneral").onclick = () => {
   $("djRoomAreaWrapper").style.display = "none";
   $("mainFormAreaWrapper").style.display = "block";
   $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /sop, /op, /user, /away)...";
+  updateOnlineUsersUI();
 };
 
 $("roomBtnRadio").onclick = () => {
@@ -333,9 +338,10 @@ $("roomBtnRadio").onclick = () => {
   $("djRoomAreaWrapper").style.display = "none";
   $("mainFormAreaWrapper").style.display = "block";
   $("text").placeholder = "📻 Radyo odasında müzik ve mesaj yaz...";
+  updateOnlineUsersUI();
 };
 
-$("roomBtnDjRoom").onclick = () => {
+$("roomBtnDjRoom").onclick = async () => {
   const isPasswordProtected = localStorage.getItem("kralfm_password_protected") === "true";
   const isStaff = ["admin", "sop", "op"].includes(window.userRole);
 
@@ -354,6 +360,8 @@ $("roomBtnDjRoom").onclick = () => {
   }
 
   currentRoom = "dj";
+  await update(ref(db, "presence/" + uid), { isDJAuth: true });
+
   $("roomBtnDjRoom").style.background = "#047857";
   $("roomBtnDjRoom").style.opacity = "1";
   $("roomBtnGeneral").style.background = "#333";
@@ -365,11 +373,13 @@ $("roomBtnDjRoom").onclick = () => {
   $("generalChatAreaWrapper").style.display = "none";
   $("radioChatAreaWrapper").style.display = "none";
   $("mainFormAreaWrapper").style.display = "none";
+  
+  updateOnlineUsersUI();
 };
 
 window.addEventListener("DOMContentLoaded", () => {
   const isPageReload = (window.performance && window.performance.navigation && window.performance.navigation.type === 1) || 
-                       (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0] && window.performance.getEntriesByType("navigation")[0].type === 'reload');
+                      (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0] && window.performance.getEntriesByType("navigation")[0].type === 'reload');
 
   if (isPageReload) {
     if (!sessionStorage.getItem("kralfm_entryTime")) {
@@ -434,13 +444,18 @@ $("openLoginModalBtn").onclick = () => {
 
 $("headerLogoutBtn").onclick = async () => {
   if(confirm("Hesabınızdan çıkış yapmak istediğinize emin misiniz?")) {
-    try { await remove(ref(db, "presence/" + uid)); } catch(e) {}
+    const currentName = getCurrentMyName();
+    try {
+      await push(messagesRef, {name: currentName, text: `${currentName} çıkış yaptı (inşallah bir daha geri gelirsin özleyeceğiz seni)`, type: "system", room: "general", createdAt: Date.now()});
+      await remove(ref(db, "presence/" + uid));
+    } catch(e) {}
     localStorage.removeItem("kralfm_logged");
     localStorage.removeItem("kralfm_name");
     localStorage.removeItem("kralfm_password_protected");
     sessionStorage.removeItem("kralfm_dj_authed");
     sessionStorage.removeItem("kralfm_role");
     sessionStorage.removeItem("kralfm_entryTime");
+    sessionStorage.removeItem("kralfm_entry_msg_sent");
     location.reload();
   }
 };
@@ -627,7 +642,8 @@ function triggerScreenShower(emojis){
 
 let titleInterval=null;function triggerToast(t,b){notificationSound.play().catch(()=>{});if(titleInterval)clearInterval(titleInterval);let x=true;titleInterval=setInterval(()=>{document.title=x?`🔴 ${t}`:"Radyo Kral FM & Muhabbet";x=!x},1000);const old=document.querySelector(".mention-toast");if(old)old.remove();const toast=document.createElement("div");toast.className="mention-toast";toast.innerHTML=`🔔 <b>${b}</b>`;document.body.appendChild(toast);setTimeout(()=>toast.remove(),4000)}
 window.addEventListener("focus",()=>{if(titleInterval){clearInterval(titleInterval);titleInterval=null}document.title="Radyo Kral FM & Muhabbet"});
-function mentionUser(u){const i=$("text"),n=u.replace(/^[👑⭐🛡️👤]\s*/,"").replace(":","").trim();i.value="@"+n+" "+i.value;i.focus()}window.mentionUser=mentionUser;
+
+function mentionUser(u){const i=currentRoom === "dj" ? $("djText") : $("text"),n=u.replace(/^[👑⭐🛡️👤]\s*/,"").replace(":","").trim();i.value="@"+n+" "+i.value;i.focus()}window.mentionUser=mentionUser;
 let unreadPrivateCounts={},processedPrivateMsgIds=new Set(),latestPrivateData={},processedEffectIds=new Set(),processedMentionMsgIds=new Set();
 window.unreadPrivateCounts=unreadPrivateCounts;
 
@@ -636,10 +652,9 @@ function openPrivateChat(u){const t=u.replace(/^[👑⭐🛡️👤]\s*/,"").rep
 $("closePrivateModal").onclick=()=>{$("privateChatModal").style.display="none";window.activePrivateTarget=null;updateOnlineUsersUI()};
 document.querySelectorAll(".private-emoji-btn").forEach(b=>b.onclick=()=>{$("privateText").value+=b.dataset.emoji;$("privateText").focus()});
 
-function handleTabComplete(){
-  const i=$("text");
-  if(!i)return;
-  const val=i.value, cursorPos=i.selectionStart;
+function handleTabComplete(inputElement){
+  if(!inputElement)return;
+  const val=inputElement.value, cursorPos=inputElement.selectionStart;
   const textBeforeCursor=val.substring(0,cursorPos);
   const words=textBeforeCursor.split(/\s+/);
   const currentWord=words[words.length-1]||"";
@@ -651,19 +666,23 @@ function handleTabComplete(){
   const suffixText=val.substring(cursorPos);
   
   if(match){
-    i.value=prefixText+"@"+match+" "+suffixText;
+    inputElement.value=prefixText+"@"+match+" "+suffixText;
     const newCursorPos=prefixText.length+match.length+2;
-    i.setSelectionRange(newCursorPos,newCursorPos);
+    inputElement.setSelectionRange(newCursorPos,newCursorPos);
   }else if(onlineUserNames.length>0){
     const firstUser=onlineUserNames[0];
-    i.value=prefixText+"@"+firstUser+" "+suffixText;
+    inputElement.value=prefixText+"@"+firstUser+" "+suffixText;
     const newCursorPos=prefixText.length+firstUser.length+2;
-    i.setSelectionRange(newCursorPos,newCursorPos);
+    inputElement.setSelectionRange(newCursorPos,newCursorPos);
   }
-  i.focus();
+  inputElement.focus();
 }
-$("tabButton").onclick=handleTabComplete;
-$("text").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();handleTabComplete()}});
+
+$("tabButton").onclick=()=>handleTabComplete($("text"));
+$("text").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();handleTabComplete($("text"));}});
+
+$("djTabButton").onclick=()=>handleTabComplete($("djText"));
+$("djText").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();handleTabComplete($("djText"));}});
 
 let partyTimeout = null;
 
@@ -738,7 +757,7 @@ function appendDJMessage(key, d){
   const ts=document.createElement("span");ts.className="time";ts.textContent="["+time(d.createdAt)+"] ";
   const role=document.createElement("span");role.textContent=d.role==="admin"?"👑 ":d.role==="sop"?"⭐ ":d.role==="op"?"🛡️ ":"👤 ";
   const av=document.createElement("span");av.className="avatar";av.textContent=(d.avatar||"🎙️")+" ";
-  const n=document.createElement("span");n.className="name";n.textContent=(d.name||"DJ")+": ";
+  const n=document.createElement("span");n.className="name";n.textContent=(d.name||"DJ")+": ";n.onclick=()=>mentionUser(d.name);
   if(d.color)n.style.color=d.color;
   const t=document.createElement("span");t.textContent=d.text||"";
   contentSpan.append(ts,role,av,n,t);
@@ -805,12 +824,118 @@ onValue(messagesRef,s=>{
 onValue(privateMessagesRef,s=>{latestPrivateData=s.val()||{};renderPrivateMessages();const me=getCurrentMyName().toLowerCase(),target=(window.activePrivateTarget||"").toLowerCase();Object.entries(latestPrivateData).forEach(([id,m])=>{const sn=(m.sender||"").toLowerCase(),rn=(m.recipient||"").toLowerCase();if(rn===me&&sn!==me&&!processedPrivateMsgIds.has(id)){processedPrivateMsgIds.add(id);if(m.createdAt>pageLoadTime){if(sn!==target)unreadPrivateCounts[m.sender]=(unreadPrivateCounts[m.sender]||0)+1;updateOnlineUsersUI();openPrivateChat(m.sender);triggerToast(`${m.sender} fısıldadı!`,`${m.sender}: "${(m.text||"").substring(0,25)}..."`)}}})});
 $("privateForm").onsubmit=async e=>{e.preventDefault();const t=$("privateText").value.trim(),me=getCurrentMyName();if(!t||!window.activePrivateTarget)return;$("privateText").value="";await push(privateMessagesRef,{sender:me,recipient:window.activePrivateTarget,text:t,createdAt:Date.now()})};
 
-let heartbeatInterval=null;async function registerPresence(){const n=getCurrentMyName(),a=$("userAvatar").value,c=$("userColor").value;const u=ref(db,"presence/"+uid);try{await set(u,{name:n,avatar:a,color:c,role:window.userRole,isAway:window.isUserAway,isDJ:isDJMode,lastActive:Date.now()});checkAdminUI();if(heartbeatInterval)clearInterval(heartbeatInterval);heartbeatInterval=setInterval(()=>set(ref(db,"presence/"+uid+"/lastActive"),Date.now()).catch(()=>{}),15000)}catch(e){}}
+let heartbeatInterval=null;
+async function registerPresence(){
+  const n=getCurrentMyName(),a=$("userAvatar").value,c=$("userColor").value;
+  const isDJAuth = sessionStorage.getItem("kralfm_dj_authed") === "true" || ["admin", "sop", "op"].includes(window.userRole);
+  const u=ref(db,"presence/"+uid);
+  try{
+    await set(u,{
+      name: n,
+      avatar: a,
+      color: c,
+      role: window.userRole,
+      isAway: window.isUserAway,
+      isDJ: isDJMode,
+      isDJAuth: isDJAuth,
+      lastActive: Date.now()
+    });
+    
+    await ref(db, "presence/" + uid).onDisconnect().remove();
+    const leaveRef = push(messagesRef);
+    leaveRef.onDisconnect().set({
+      name: n,
+      text: `${n} çıkış yaptı (inşallah bir daha geri gelirsin özleyeceğiz seni)`,
+      type: "system",
+      room: "general",
+      createdAt: Date.now()
+    });
+
+    checkAdminUI();
+    if(heartbeatInterval) clearInterval(heartbeatInterval);
+    heartbeatInterval=setInterval(()=>set(ref(db,"presence/"+uid+"/lastActive"),Date.now()).catch(()=>{}),15000);
+    
+    if(!sessionStorage.getItem("kralfm_entry_msg_sent")) {
+      sessionStorage.setItem("kralfm_entry_msg_sent", "true");
+      await push(messagesRef, {
+        name: n,
+        text: `${n} Ses Mola Muhabbet giriş yaptı`,
+        type: "system",
+        room: "general",
+        createdAt: Date.now()
+      });
+    }
+  }catch(e){}
+}
 
 onValue(presenceRef,s=>{activeUsersData=s.val()||{};updateOnlineUsersUI();updateActiveDJsUI()});
-function updateOnlineUsersUI(){$("onlineUsersList").innerHTML="";onlineUserNames=[];staticBots.forEach(b=>{onlineUserNames.push(b.name);renderUserItem(b.avatar,b.name,b.role,false)});Object.values(activeUsersData).forEach(u=>{if(u.lastActive&&Date.now()-u.lastActive<120000){onlineUserNames.push(u.name);renderUserItem(u.avatar||"👤",u.name,u.role||"user",u.isAway||false)}})}
+
+function updateOnlineUsersUI(){
+  const list=$("onlineUsersList");
+  if(!list) return;
+  list.innerHTML="";
+  onlineUserNames=[];
+  
+  staticBots.forEach(b=>{
+    if(currentRoom !== "dj") {
+      onlineUserNames.push(b.name);
+      renderUserItem(b.avatar,b.name,b.role,false);
+    }
+  });
+
+  Object.values(activeUsersData).forEach(u => {
+    if(u.lastActive && Date.now() - u.lastActive < 120000){
+      const isStaff = ["admin", "sop", "op"].includes(u.role);
+      if(currentRoom === "dj") {
+        if(u.isDJAuth || isStaff) {
+          onlineUserNames.push(u.name);
+          renderUserItem(u.avatar||"👤", u.name, u.role||"user", u.isAway||false);
+        }
+      } else {
+        onlineUserNames.push(u.name);
+        renderUserItem(u.avatar||"👤", u.name, u.role||"user", u.isAway||false);
+      }
+    }
+  });
+}
 window.updateOnlineUsersUI=updateOnlineUsersUI;
-function renderUserItem(a,n,r,away){const d=document.createElement("div");d.className=away?"user-list-item away-user":"user-list-item";const row=document.createElement("div");row.className="user-info-row";const rs=document.createElement("span");rs.textContent=r==="admin"?"👑 ":r==="sop"?"⭐ ":r==="op"?"🛡️ ":"👤 ";const av=document.createElement("span");av.textContent=(a||"👤")+" ";const ns=document.createElement("span");ns.textContent=n;row.append(rs,av,ns);if(away){const tag=document.createElement("span");tag.className="away-badge";tag.textContent="Away 🌙";row.appendChild(tag)}const ar=document.createElement("div");ar.className="user-action-row";const mb=document.createElement("button");mb.type="button";mb.className="user-action-btn mention-action";mb.textContent="Etiket";mb.onclick=e=>{e.stopPropagation();mentionUser(n)};const wb=document.createElement("button");wb.type="button";const cnt=Object.entries(unreadPrivateCounts).find(([k])=>k.toLowerCase()===n.toLowerCase());const count=cnt?cnt[1]:0;wb.className=count>0?"user-action-btn whisper-action whisper-unread":"user-action-btn whisper-action";wb.textContent=count>0?`Fısılda (${count})`:"Fısılda";wb.onclick=e=>{e.stopPropagation();openPrivateChat(n)};ar.append(mb,wb);d.append(row,ar);$("onlineUsersList").appendChild(d)}
+
+function renderUserItem(a,n,r,away){
+  const d=document.createElement("div");
+  d.className=away?"user-list-item away-user":"user-list-item";
+  const row=document.createElement("div");
+  row.className="user-info-row";
+  const rs=document.createElement("span");
+  rs.textContent=r==="admin"?"👑 ":r==="sop"?"⭐ ":r==="op"?"🛡️ ":"👤 ";
+  const av=document.createElement("span");
+  av.textContent=(a||"👤")+" ";
+  const ns=document.createElement("span");
+  ns.textContent=n;
+  row.append(rs,av,ns);
+  if(away){
+    const tag=document.createElement("span");
+    tag.className="away-badge";
+    tag.textContent="Away 🌙";
+    row.appendChild(tag)
+  }
+  const ar=document.createElement("div");
+  ar.className="user-action-row";
+  const mb=document.createElement("button");
+  mb.type="button";
+  mb.className="user-action-btn mention-action";
+  mb.textContent="Etiket";
+  mb.onclick=e=>{e.stopPropagation();mentionUser(n)};
+  const wb=document.createElement("button");
+  wb.type="button";
+  const cnt=Object.entries(unreadPrivateCounts).find(([k])=>k.toLowerCase()===n.toLowerCase());
+  const count=cnt?cnt[1]:0;
+  wb.className=count>0?"user-action-btn whisper-action whisper-unread":"user-action-btn whisper-action";
+  wb.textContent=count>0?`Fısılda (${count})`:"Fısılda";
+  wb.onclick=e=>{e.stopPropagation();openPrivateChat(n)};
+  ar.append(mb,wb);
+  d.append(row,ar);
+  $("onlineUsersList").appendChild(d)
+}
 
 async function changeUserRole(targetNick, newRole) {
   const cleanTarget = targetNick.replace(/^@/, "").trim();
@@ -937,4 +1062,3 @@ $("clearChat").onclick = async () => {
 </script>
 </body>
 </html>
-
