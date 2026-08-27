@@ -567,7 +567,7 @@ function updateActiveDJsUI() {
   let activeCount = 0;
 
   Object.values(activeUsersData).forEach(u => {
-    if(u.lastActive && Date.now() - u.lastActive < 120000 && u.isDJ) {
+    if(u.lastActive && Date.now() - u.lastActive < 300000 && u.isDJ) {
       activeCount++;
       const badge = document.createElement("span");
       badge.style.padding = "3px 8px";
