@@ -186,7 +186,7 @@ button[type=submit]:hover{filter:brightness(1.15);}
     <div id="radioMessages" class="chat-box-area" style="background:linear-gradient(135deg,rgba(4,120,87,0.25),rgba(2,44,34,0.25)); border-color:#047857;"></div>
   </div>
 
-  <!-- 3. Şifreli DJ Stüdyo Alanı (Yeni Sekme Konumu) -->
+  <!-- 3. Şifreli DJ Stüdyo Alanı -->
   <div id="djRoomAreaWrapper" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #047857;padding-bottom:10px;margin-bottom:12px;background:rgba(4,120,87,0.2);padding:10px 14px;border-radius:10px;">
       <h3 style="margin:0; font-size:14px; color:#34d399; text-shadow:0 0 10px rgba(52,211,153,0.6); letter-spacing:0.5px;">🎙️ Ses Mola ✦ 𝘿𝙅 𝓢𝓣𝓤𝘿𝓞 & 𝓚𝓞𝓝𝓣𝓡𝓞𝓛</h3>
@@ -211,7 +211,6 @@ button[type=submit]:hover{filter:brightness(1.15);}
     </div>
     <div id="djMessages" class="chat-box-area" style="height:210px; background:rgba(0,0,0,0.45);"></div>
     
-    <!-- DJ Formu Güncellendi: Tab Tuşu Eklendi -->
     <form id="djForm" autocomplete="off" style="margin-top:10px; display:flex; gap:8px;">
       <input type="text" id="djText" maxlength="300" placeholder="Stüdyo içi mesaj yaz (@ ile etiketle, Tab kullan)..." required>
       <button type="button" id="djTabButton" class="tab-btn" title="Kelimeden kullanıcı adı tamamla" style="background:#047857;">@ Tab</button>
@@ -221,7 +220,16 @@ button[type=submit]:hover{filter:brightness(1.15);}
 
   <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
   <div id="mainFormAreaWrapper">
-    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /admin, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelmeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
+    <form id="form" autocomplete="off">
+      <select id="userAvatar" title="Avatar">
+        <option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option>
+      </select>
+      <input type="color" id="userColor" value="#ff5555">
+      <input type="text" id="name" maxlength="30" placeholder="Adınız" readonly>
+      <input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /mute, /unmute, /admin, /sop, /op, /user, /away)..." required>
+      <button type="button" id="tabButton" class="tab-btn" title="Kelmeden kullanıcı adı tamamla">@ Tab</button>
+      <button type="submit">Gönder</button>
+    </form>
     <div class="action-btns">
       <button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
       <button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
@@ -275,7 +283,7 @@ button[type=submit]:hover{filter:brightness(1.15);}
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {getDatabase,ref,push,onValue,set,remove,get,update} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 const firebaseConfig={apiKey:"AIzaSyDvfuuPnoBVhBNyMg1n0iBfsY9J29IwbzA",authDomain:"kralfm-muhabbet.firebaseapp.com",databaseURL:"https://kralfm-muhabbet-default-rtdb.europe-west1.firebasedatabase.app",projectId:"kralfm-muhabbet",storageBucket:"kralfm-muhabbet.firebasestorage.app",messagingSenderId:"638769846511",appId:"1:638769846511:web:f6d8abb91564873996"};
-const app=initializeApp(firebaseConfig),db=getDatabase(app),messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence"),privateMessagesRef=ref(db,"privateMessages"),topicRef=ref(db,"topic"),usersRef=ref(db,"users");
+const app=initializeApp(firebaseConfig),db=getDatabase(app),messagesRef=ref(db,"messages"),presenceRef=ref(db,"presence"),privateMessagesRef=ref(db,"privateMessages"),topicRef=ref(db,"topic"),usersRef=ref(db,"users"),mutesRef=ref(db,"mutes");
 const $=id=>document.getElementById(id);window.$=$;
 
 const staticBots=[
@@ -289,6 +297,7 @@ window.staticBots=staticBots;
 let onlineUserNames=[],activeUsersData={},activePrivateTarget=null,userRole=sessionStorage.getItem("kralfm_role")||"user",isUserAway=false,guestReminderTimer=null;
 let isDJMode=false, preDJName="";
 let currentRoom = "general";
+let mutesData = {};
 
 window.onlineUserNames=onlineUserNames;window.activeUsersData=activeUsersData;window.activePrivateTarget=activePrivateTarget;window.userRole=userRole;window.isUserAway=isUserAway;
 const pageLoadTime=Date.now(),notificationSound=new Audio("https://actions.google.com/sounds/v1/notifications/beep_short.ogg");
@@ -306,7 +315,23 @@ function normalizeNick(name) {
 }
 window.normalizeNick = normalizeNick;
 
-// Oda dan Sekme Geçiş İşlevleri (3'lü Sekme Yapısı)
+// Mute verilerini dinle
+onValue(mutesRef, s => {
+  mutesData = s.val() || {};
+});
+
+// Kullanıcının aktif susturması var mı kontrol et
+function isUserMuted(nick) {
+  const key = normalizeNick(nick);
+  const muteInfo = mutesData[key];
+  if (!muteInfo) return false;
+  if (muteInfo.expiresAt > Date.now()) {
+    return muteInfo;
+  }
+  return false;
+}
+
+// Oda ve Sekme Geçiş İşlevleri
 $("roomBtnGeneral").onclick = () => {
   currentRoom = "general";
   $("roomBtnGeneral").style.background = "var(--primary)";
@@ -320,7 +345,7 @@ $("roomBtnGeneral").onclick = () => {
   $("radioChatAreaWrapper").style.display = "none";
   $("djRoomAreaWrapper").style.display = "none";
   $("mainFormAreaWrapper").style.display = "block";
-  $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /admin, /sop, /op, /user, /away)...";
+  $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /mute, /unmute, /admin, /sop, /op, /user, /away)...";
   updateOnlineUsersUI();
 };
 
@@ -518,9 +543,18 @@ $("modalToggleDJBtn").onclick = async () => {
 
 $("djForm").onsubmit = async e => {
   e.preventDefault();
+  const name = getCurrentMyName();
+  
+  // Susturma (Mute) Kontrolü
+  const activeMute = isUserMuted(name);
+  if (activeMute) {
+    const remMin = Math.ceil((activeMute.expiresAt - Date.now()) / 60000);
+    alert(`❌ Susturuldunuz! DJ odasına mesaj yazamazsınız.\nKalan Süre: ${remMin} dakika\nSebep: ${activeMute.reason || "Belirtilmedi"}`);
+    return;
+  }
+
   const input = $("djText");
   const text = input.value.trim();
-  const name = getCurrentMyName();
   input.value = "";
   if(!text) return;
   await push(messagesRef, {name, text, avatar: $("userAvatar").value, color: $("userColor").value, role: window.userRole, type: "dj", createdAt: Date.now()});
@@ -643,11 +677,42 @@ function triggerScreenShower(emojis){
 let titleInterval=null;function triggerToast(t,b){notificationSound.play().catch(()=>{});if(titleInterval)clearInterval(titleInterval);let x=true;titleInterval=setInterval(()=>{document.title=x?`🔴 ${t}`:"Radyo Kral FM & Muhabbet";x=!x},1000);const old=document.querySelector(".mention-toast");if(old)old.remove();const toast=document.createElement("div");toast.className="mention-toast";toast.innerHTML=`🔔 <b>${b}</b>`;document.body.appendChild(toast);setTimeout(()=>toast.remove(),4000)}
 window.addEventListener("focus",()=>{if(titleInterval){clearInterval(titleInterval);titleInterval=null}document.title="Radyo Kral FM & Muhabbet"});
 
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState === "visible") {
+    if (localStorage.getItem("kralfm_logged") === "true" || $("name").value.trim() !== "") {
+      await registerPresence();
+    }
+  }
+});
+
 function mentionUser(u){const i=currentRoom === "dj" ? $("djText") : $("text"),n=u.replace(/^[👑⭐🛡️👤]\s*/,"").replace(":","").trim();i.value="@"+n+" "+i.value;i.focus()}window.mentionUser=mentionUser;
 let unreadPrivateCounts={},processedPrivateMsgIds=new Set(),latestPrivateData={},processedEffectIds=new Set(),processedMentionMsgIds=new Set();
 window.unreadPrivateCounts=unreadPrivateCounts;
 
-function renderPrivateMessages(){const p=$("privateMessagesArea");if(!p||!window.activePrivateTarget)return;p.innerHTML="";const m=getCurrentMyName().toLowerCase(),t=window.activePrivateTarget.toLowerCase();Object.values(latestPrivateData).forEach(msg=>{const s=(msg.sender||"").toLowerCase(),r=(msg.recipient||"").toLowerCase();if((s===m&&r===t)||(s===t&&r===m)){const d=document.createElement("div");d.className="private-msg";d.textContent=`[${time(msg.createdAt)}] ${msg.sender}: ${msg.text}`;p.appendChild(d)}});p.scrollTop=p.scrollHeight}
+function renderPrivateMessages(){
+  const p=$("privateMessagesArea");
+  if(!p||!window.activePrivateTarget)return;
+  p.innerHTML="";
+  const m=getCurrentMyName().toLowerCase(),t=window.activePrivateTarget.toLowerCase();
+  
+  Object.values(latestPrivateData).forEach(msg=>{
+    const s=(msg.sender||"").toLowerCase(),r=(msg.recipient||"").toLowerCase();
+    if((s===m&&r===t)||(s===t&&r===m)){
+      const d=document.createElement("div");
+      d.className="private-msg";
+      d.textContent=`[${time(msg.createdAt)}] ${msg.sender}: ${msg.text}`;
+      p.appendChild(d);
+    }
+  });
+
+  const MAX_PRIVATE_MESSAGES = 100;
+  while(p.children.length > MAX_PRIVATE_MESSAGES) {
+    p.removeChild(p.firstChild);
+  }
+
+  p.scrollTop=p.scrollHeight;
+}
+
 function openPrivateChat(u){const t=u.replace(/^[👑⭐🛡️👤]\s*/,"").replace(":","").trim();window.activePrivateTarget=t;Object.keys(unreadPrivateCounts).forEach(k=>{if(k.toLowerCase()===t.toLowerCase())unreadPrivateCounts[k]=0});updateOnlineUsersUI();$("privateChatTitle").textContent=t;$("privateChatModal").style.display="flex";renderPrivateMessages();$("privateText").focus()}window.openPrivateChat=openPrivateChat;
 $("closePrivateModal").onclick=()=>{$("privateChatModal").style.display="none";window.activePrivateTarget=null;updateOnlineUsersUI()};
 document.querySelectorAll(".private-emoji-btn").forEach(b=>b.onclick=()=>{$("privateText").value+=b.dataset.emoji;$("privateText").focus()});
@@ -722,9 +787,9 @@ function appendMessageToBox(box, key, d){
   }
 
   const r=document.createElement("div"),ts=document.createElement("span");ts.className="time";ts.textContent="["+time(d.createdAt)+"] ";
-  if(d.type==="system"){r.className="msg system-msg";r.textContent=ts.textContent+" "+d.text;box.appendChild(r);box.scrollTop=box.scrollHeight;return}
-  if(d.type==="announcement"){r.className="msg announcement-msg";r.textContent=`📢 YÖNETİCİ DUYURUSU — ${d.text} | Yayınlayan: ${d.name||"Admin"} [${time(d.createdAt)}]`;box.appendChild(r);box.scrollTop=box.scrollHeight;return}
-  if(d.type==="action"){r.className="msg action-msg";r.textContent=`[${time(d.createdAt)}] * ${d.name||"Misafir"} ${d.text}`;box.appendChild(r);box.scrollTop=box.scrollHeight;return}
+  if(d.type==="system"){r.className="msg system-msg";r.textContent=ts.textContent+" "+d.text;box.appendChild(r);limitBoxMessages(box);box.scrollTop=box.scrollHeight;return}
+  if(d.type==="announcement"){r.className="msg announcement-msg";r.textContent=`📢 YÖNETİCİ DUYURUSU — ${d.text} | Yayınlayan: ${d.name||"Admin"} [${time(d.createdAt)}]`;box.appendChild(r);limitBoxMessages(box);box.scrollTop=box.scrollHeight;return}
+  if(d.type==="action"){r.className="msg action-msg";r.textContent=`[${time(d.createdAt)}] * ${d.name||"Misafir"} ${d.text}`;box.appendChild(r);limitBoxMessages(box);box.scrollTop=box.scrollHeight;return}
   
   const role=document.createElement("span");role.textContent=d.role==="admin"?"👑 ":d.role==="sop"?"⭐ ":d.role==="op"?"🛡️ ":"👤 ";
   const av=document.createElement("span");av.className="avatar";av.textContent=(d.type==="bot"?"🤖":d.avatar||"👤")+" ";
@@ -746,7 +811,18 @@ function appendMessageToBox(box, key, d){
   else if(d.type==="request") msgClass = "msg request-msg";
 
   r.className = msgClass;
-  r.append(ts,role,av,n,t);box.appendChild(r);box.scrollTop=box.scrollHeight
+  r.append(ts,role,av,n,t);
+  
+  box.appendChild(r);
+  limitBoxMessages(box);
+  box.scrollTop=box.scrollHeight;
+}
+
+function limitBoxMessages(container) {
+  const MAX_MESSAGES = 100;
+  while(container.children.length > MAX_MESSAGES) {
+    container.removeChild(container.firstChild);
+  }
 }
 
 function appendDJMessage(key, d){
@@ -781,6 +857,7 @@ function appendDJMessage(key, d){
   }
 
   box.appendChild(r);
+  limitBoxMessages(box);
   box.scrollTop=box.scrollHeight;
 }
 
@@ -981,8 +1058,67 @@ $("form").onsubmit=async e=>{
   e.preventDefault();
   const input=$("text");
   let text=input.value.trim(),name=getCurrentMyName(),avatar=$("userAvatar").value,color=$("userColor").value;
+  
+  // Mute (Susturma) Kontrolü
+  const activeMute = isUserMuted(name);
+  if (activeMute) {
+    const remMin = Math.ceil((activeMute.expiresAt - Date.now()) / 60000);
+    alert(`❌ Susturuldunuz! Mesaj yazamazsınız.\nKalan Süre: ${remMin} dakika\nSebep: ${activeMute.reason || "Belirtilmedi"}`);
+    return;
+  }
+
   input.value=""; 
   if(!text)return;
+
+  // /mute komutu (Admin, SOP, OP kullanabilir)
+  if(text.toLowerCase().startsWith("/mute ")){
+    if(!["admin", "sop", "op"].includes(window.userRole)) { alert("❌ Bu komutu yalnızca yetkililer (OP, SOP, Admin) kullanabilir!"); return; }
+    const parts = text.substring(6).trim().split(/\s+/);
+    const targetNick = parts[0];
+    const durationMin = parseInt(parts[1]) || 10; // Varsayılan 10 dakika
+    const reason = parts.slice(2).join(" ") || "Kurallara uymamak";
+    
+    if(!targetNick) { alert("❌ Lütfen susturulacak nicki yazın. Örnek: /mute ahmet 10 Küfür"); return; }
+    
+    const targetKey = normalizeNick(targetNick);
+    const expiresAt = Date.now() + (durationMin * 60 * 1000);
+    
+    await set(ref(db, "mutes/" + targetKey), {
+      targetName: targetNick,
+      mutedBy: name,
+      expiresAt: expiresAt,
+      reason: reason,
+      createdAt: Date.now()
+    });
+    
+    await push(messagesRef, {
+      name: "Sistem",
+      text: `🔇 CEZA: ${targetNick} adlı kullanıcı ${name} tarafından ${durationMin} dakika süreyle susturuldu! (Sebep: ${reason})`,
+      type: "system",
+      room: currentRoom,
+      createdAt: Date.now()
+    });
+    return;
+  }
+
+  // /unmute komutu
+  if(text.toLowerCase().startsWith("/unmute ")){
+    if(!["admin", "sop", "op"].includes(window.userRole)) { alert("❌ Bu komutu yalnızca yetkililer kullanabilir!"); return; }
+    const targetNick = text.substring(8).trim();
+    if(!targetNick) { alert("❌ Lütfen susturması kaldırılacak nicki yazın."); return; }
+    
+    const targetKey = normalizeNick(targetNick);
+    await remove(ref(db, "mutes/" + targetKey));
+    
+    await push(messagesRef, {
+      name: "Sistem",
+      text: `🔊 CEZA KALKTI: ${targetNick} adlı kullanıcının susturması ${name} tarafından kaldırıldı.`,
+      type: "system",
+      room: currentRoom,
+      createdAt: Date.now()
+    });
+    return;
+  }
 
   if(text.toLowerCase().startsWith("/admin ")){
     if(window.userRole !== "admin") { alert("❌ Bu komutu yalnızca Admin kullanabilir!"); return; }
@@ -1026,6 +1162,13 @@ $("form").onsubmit=async e=>{
 
 async function sendActionWithEffect(text, effectName){
   const name=getCurrentMyName();
+  
+  const activeMute = isUserMuted(name);
+  if (activeMute) {
+    alert(`❌ Susturulduğunuz için etiket veya ikram gönderemezsiniz! Kalan süre: ${Math.ceil((activeMute.expiresAt - Date.now()) / 60000)} dk.`);
+    return;
+  }
+
   if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}
   await push(messagesRef,{name,text,effect:effectName,type:"text",room:currentRoom,avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()})
 }
@@ -1039,10 +1182,18 @@ $("sendCoffee").onclick=()=>sendActionWithEffect("☕ odadakilere mis gibi Türk
 $("sendTea").onclick=()=>sendActionWithEffect("🍵 odadakilere demlenmiş mis gibi sıcak çay ikram etti, keyifler tavan yaptı! 🫖🌿", "tea");
 $("sendKuymak").onclick=()=>sendActionWithEffect("🫕 odadakilere mis gibi tereyağlı sıcak kuymak ve köy ekmeği ikram etti! 🧀🍞", "kuymak");
 $("sendFire").onclick=()=>sendActionWithEffect("🔥 ortamı ateşe verdi, ortalık yıkılıyor! 💥⚡", "fire");
-$("partyButton").onclick=()=>sendActionWithEffect("🪩 PARTİ BAŞLADI! Işıklar yanıp sönüyor! 🕺💃", "party");
+$("partyButton").onclick=()=>sendActionWifEffect("🪩 PARTİ BAŞLADI! Işıklar yanıp sönüyor! 🕺💃", "party");
 
 const themeModal=$("themeModal");$("toggleTheme").onclick=()=>themeModal.style.display="flex";$("closeThemeModal").onclick=()=>themeModal.style.display="none";window.applyThemeSelection=(c,n)=>{document.body.className=c;localStorage.setItem("kralfm_theme",c);themeModal.style.display="none";triggerToast("Tema Değişti",`Aktif Tema: ${n}`)};
-const requestModal=$("requestModal");$("openRequestModal").onclick=()=>requestModal.style.display="flex";$("closeRequestModal").onclick=()=>requestModal.style.display="none";$("sendRequest").onclick=async()=>{const artist=$("songArtist").value.trim(),title=$("songTitle").value.trim(),name=getCurrentMyName();if(!artist||!title){alert("Sanatçı ve şarkı adını girin!");return}await push(messagesRef,{name,text:`🎵 İstek Parça: ${artist} - ${title}`,type:"request",room:currentRoom,avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()});$("songArtist").value="";$("songTitle").value="";requestModal.style.display="none"};
+const requestModal=$("requestModal");$("openRequestModal").onclick=()=>requestModal.style.display="flex";$("closeRequestModal").onclick=()=>requestModal.style.display="none";$("sendRequest").onclick=async()=>{
+  const name=getCurrentMyName();
+  const activeMute = isUserMuted(name);
+  if (activeMute) { alert("❌ Susturulduğunuz için istek parça gönderemezsiniz!"); return; }
+
+  const artist=$("songArtist").value.trim(),title=$("songTitle").value.trim();
+  if(!artist||!title){alert("Sanatçı ve şarkı adını girin!");return}
+  await push(messagesRef,{name,text:`🎵 İstek Parça: ${artist} - ${title}`,type:"request",room:currentRoom,avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()});$("songArtist").value="";$("songTitle").value="";requestModal.style.display="none"
+};
 
 $("clearChat").onclick = async () => {
   if (!["admin", "sop", "op"].includes(window.userRole)) {
@@ -1088,3 +1239,4 @@ $("clearChat").onclick = async () => {
 </script>
 </body>
 </html>
+
