@@ -221,7 +221,7 @@ button[type=submit]:hover{filter:brightness(1.15);}
 
   <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
   <div id="mainFormAreaWrapper">
-    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelmeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
+    <form id="form" autocomplete="off"><select id="userAvatar" title="Avatar"><option value="👤">👤 Kullanıcı</option><option value="👩">👩 Kadın</option><option value="👨">👨 Erkek</option><option value="🕶️">🕶️ Karizmatik</option><option value="👑">👑 Kral</option><option value="☕">☕ Kahve</option><option value="🎶">🎶 Nota</option><option value="🎙️">🎙️ Mikrofon</option><option value="🌟">🌟 Yıldız</option><option value="🎧">🎧 Kulaklık</option></select><input type="color" id="userColor" value="#ff5555"><input type="text" id="name" maxlength="30" placeholder="Adınız" readonly><input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /admin, /sop, /op, /user, /away)..." required><button type="button" id="tabButton" class="tab-btn" title="Kelmeden kullanıcı adı tamamla">@ Tab</button><button type="submit">Gönder</button></form>
     <div class="action-btns">
       <button id="sendApplause" class="action-btn applause-btn" type="button">👏 Alkış</button>
       <button id="sendCoffee" class="action-btn coffee-btn" type="button">☕ Kahve Ismarla</button>
@@ -306,7 +306,7 @@ function normalizeNick(name) {
 }
 window.normalizeNick = normalizeNick;
 
-// Oda ve Sekme Geçiş İşlevleri (3'lü Sekme Yapısı)
+// Oda dan Sekme Geçiş İşlevleri (3'lü Sekme Yapısı)
 $("roomBtnGeneral").onclick = () => {
   currentRoom = "general";
   $("roomBtnGeneral").style.background = "var(--primary)";
@@ -320,7 +320,7 @@ $("roomBtnGeneral").onclick = () => {
   $("radioChatAreaWrapper").style.display = "none";
   $("djRoomAreaWrapper").style.display = "none";
   $("mainFormAreaWrapper").style.display = "block";
-  $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /sop, /op, /user, /away)...";
+  $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /admin, /sop, /op, /user, /away)...";
   updateOnlineUsersUI();
 };
 
@@ -941,12 +941,32 @@ async function changeUserRole(targetNick, newRole) {
   const cleanTarget = targetNick.replace(/^@/, "").trim();
   const key = normalizeNick(cleanTarget);
   const targetRef = ref(db, "users/" + key);
-  const snap = await get(targetRef);
+  
+  let snap = await get(targetRef);
   if(!snap.exists()) {
-    alert("❌ Veritabanında kayıtlı '" + cleanTarget + "' adında bir kullanıcı bulunamadı!");
-    return;
+    let foundPresence = null;
+    Object.values(activeUsersData).forEach(p => {
+      if(normalizeNick(p.name) === key) {
+        foundPresence = p;
+      }
+    });
+    
+    if(!foundPresence) {
+      alert("❌ '" + cleanTarget + "' adında aktif veya kayıtlı bir kullanıcı bulunamadı!");
+      return;
+    } else {
+      await set(targetRef, {
+        originalName: foundPresence.name,
+        password: "guest_promoted",
+        avatar: foundPresence.avatar || "👤",
+        color: foundPresence.color || "#ff5555",
+        role: newRole,
+        createdAt: Date.now()
+      });
+    }
+  } else {
+    await update(targetRef, { role: newRole });
   }
-  await update(targetRef, { role: newRole });
   
   Object.entries(activeUsersData).forEach(async ([pUid, pVal]) => {
     if(normalizeNick(pVal.name) === key) {
@@ -964,6 +984,12 @@ $("form").onsubmit=async e=>{
   input.value=""; 
   if(!text)return;
 
+  if(text.toLowerCase().startsWith("/admin ")){
+    if(window.userRole !== "admin") { alert("❌ Bu komutu yalnızca Admin kullanabilir!"); return; }
+    const target = text.substring(7).trim();
+    await changeUserRole(target, "admin");
+    return;
+  }
   if(text.toLowerCase().startsWith("/sop ")){
     if(window.userRole !== "admin") { alert("❌ Bu komutu yalnızca Admin kullanabilir!"); return; }
     const target = text.substring(5).trim();
