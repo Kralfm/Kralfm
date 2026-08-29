@@ -113,9 +113,9 @@ button[type=submit]:hover{filter:brightness(1.15);}
 
 .user-list-item{padding:8px 10px;margin:6px 0;background:rgba(0,0,0,.35);border-radius:8px;display:flex;flex-direction:column;gap:5px;border:1px solid var(--sidebar-border);transition:background 0.2s;}
 .user-list-item:hover{background:rgba(255,255,255,.05);}
-.user-list-item.away-user{opacity:.55;border-left:3px solid #f59e0b}
+.user-list-item.away-user{opacity:.75;border-left:3px solid #f59e0b}
 .user-info-row{display:flex;align-items:center;gap:6px;font-weight:bold;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.away-badge{font-size:9px;background:#f59e0b;color:#000;padding:2px 5px;border-radius:4px;font-weight:bold;margin-left:auto}
+.away-badge{font-size:11px;background:#f59e0b;color:#000;padding:2px 5px;border-radius:4px;font-weight:bold;margin-left:auto}
 .user-action-row{display:flex;gap:5px}
 .user-action-btn{background:#333;border:0;color:#fff;padding:3px 7px;border-radius:4px;font-size:10px;cursor:pointer;font-weight:bold;transition:background 0.2s;}
 .user-action-btn:hover{background:#555;}
@@ -165,28 +165,23 @@ button[type=submit]:hover{filter:brightness(1.15);}
 <div id="topicCard" class="card topic-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div style="font-size:13px;line-height:1.4;flex:1;">📌 <b style="color:#c084fc;">Günün Topiği:</b> <span id="topicText">Yükleniyor...</span></div><button id="editTopicBtn" type="button" class="user-action-btn" style="background:#7c3aed;padding:5px 12px;font-size:11px;display:none;">Düzenle</button></div><div id="topicAuthor" style="font-size:10px;color:#a78bfa;margin-top:5px;"></div></div>
 <div class="card radio-player-card"><div class="radio-banner"><div class="radio-logo-box"><div class="l2mr-logo"><svg viewBox="0 0 24 24"><path d="M12 2A9 9 0 0 0 3 11V18A3 3 0 0 0 6 21H8V13H5V11A7 7 0 0 1 12 4A7 7 0 0 1 19 11V13H16V21H18A3 3 0 0 0 21 18V11A9 9 0 0 0 12 2Z"/></svg></div><div class="radio-logo-text"><h1>💥 Ses Mola Müzik & Muhabbet</h1><span>Kesintisiz Canlı Yayın</span></div></div><div class="live-badge"><span class="live-dot"></span> CANLI YAYIN</div></div><div class="radio-description">✨ Müziğin ritmi, dostluğun adresi! Radyo odası sohbetine katılın ve keyifli dinlemeler. 🎶☕</div><div class="popup-player-box"><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="play-btn" id="toggleRadio">📻 Radyoyu Dinle</a><a href="http://kralfm.radiostream321.com/" target="_blank" rel="noopener" class="radio-browser-btn">🌐 Tarayıcıda Radyoyu Aç</a><div id="radioStatus" class="note" style="margin-top:8px;text-align:center">📻 Radyoyu Dinle butonuna basarak yayına bağlanabilirsiniz.</div></div></div>
 
-<!-- SOHBET ODALARI KARTI VE ÜÇLÜ SEKMELER -->
 <div class="card">
-  <!-- 3'lü Oda Seçici Sekmeler -->
   <div style="display:flex; gap:8px; margin-bottom:14px;">
     <button type="button" id="roomBtnGeneral" class="action-btn" style="flex:1; background:var(--primary); font-weight:bold; font-size:13px; padding:11px;">💬 Genel Sohbet</button>
     <button type="button" id="roomBtnRadio" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:11px;">📻 Radyo Odası</button>
     <button type="button" id="roomBtnDjRoom" class="action-btn" style="flex:1; background:#333; opacity:0.7; font-weight:bold; font-size:13px; padding:11px;">🎙️ DJ Stüdyosu</button>
   </div>
 
-  <!-- 1. Genel Sohbet Alanı -->
   <div id="generalChatAreaWrapper">
     <h3 style="margin-top:0; font-size:15px; color:var(--sidebar-header-color);">💬 Genel Sohbet Odası</h3>
     <div id="messages" class="chat-box-area"></div>
   </div>
 
-  <!-- 2. Radyo Odası Alanı -->
   <div id="radioChatAreaWrapper" style="display:none;">
     <h3 style="margin-top:0; font-size:15px; color:#fde047;">📻 Radyo Odası & Müzik Muhabbet</h3>
     <div id="radioMessages" class="chat-box-area" style="background:linear-gradient(135deg,rgba(4,120,87,0.25),rgba(2,44,34,0.25)); border-color:#047857;"></div>
   </div>
 
-  <!-- 3. Şifreli DJ Stüdyo Alanı -->
   <div id="djRoomAreaWrapper" style="display:none;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #047857;padding-bottom:10px;margin-bottom:12px;background:rgba(4,120,87,0.2);padding:10px 14px;border-radius:10px;">
       <h3 style="margin:0; font-size:14px; color:#34d399; text-shadow:0 0 10px rgba(52,211,153,0.6); letter-spacing:0.5px;">🎙️ Ses Mola ✦ 𝘿𝙅 𝓢𝓣𝓤𝘿𝓞 & 𝓚𝓞𝓝𝓣𝓡𝓞𝓛</h3>
@@ -218,7 +213,6 @@ button[type=submit]:hover{filter:brightness(1.15);}
     </form>
   </div>
 
-  <!-- Genel Sohbet ve Radyo Odası Ortak Form ve Eylemleri -->
   <div id="mainFormAreaWrapper">
     <form id="form" autocomplete="off">
       <select id="userAvatar" title="Avatar">
@@ -226,7 +220,7 @@ button[type=submit]:hover{filter:brightness(1.15);}
       </select>
       <input type="color" id="userColor" value="#ff5555">
       <input type="text" id="name" maxlength="30" placeholder="Adınız" readonly>
-      <input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /mute, /unmute, /admin, /sop, /op, /user, /away)..." required>
+      <input type="text" id="text" maxlength="300" placeholder="Mesaj (/topik, /duyuru, /mute, /unmute, /admin, /sop, /op, /user)..." required>
       <button type="button" id="tabButton" class="tab-btn" title="Kelmeden kullanıcı adı tamamla">@ Tab</button>
       <button type="submit">Gönder</button>
     </form>
@@ -298,8 +292,10 @@ let onlineUserNames=[],activeUsersData={},activePrivateTarget=null,userRole=sess
 let isDJMode=false, preDJName="";
 let currentRoom = "general";
 let mutesData = {};
+let inactivityTimer = null;
 
 window.onlineUserNames=onlineUserNames;window.activeUsersData=activeUsersData;window.activePrivateTarget=activePrivateTarget;window.userRole=userRole;window.isUserAway=isUserAway;
+
 const pageLoadTime=Date.now(),notificationSound=new Audio("https://actions.google.com/sounds/v1/notifications/beep_short.ogg");
 let uid=localStorage.getItem("kralfm_uid");if(!uid){uid="user_"+Math.random().toString(36).slice(2,10);localStorage.setItem("kralfm_uid",uid)}window.uid=uid;
 const defaultGuestName="Misafir_"+Math.floor(Math.random()*900+100);window.defaultGuestName=defaultGuestName;
@@ -315,12 +311,10 @@ function normalizeNick(name) {
 }
 window.normalizeNick = normalizeNick;
 
-// Mute verilerini dinle
 onValue(mutesRef, s => {
   mutesData = s.val() || {};
 });
 
-// Kullanıcının aktif susturması var mı kontrol et
 function isUserMuted(nick) {
   const key = normalizeNick(nick);
   const muteInfo = mutesData[key];
@@ -331,7 +325,24 @@ function isUserMuted(nick) {
   return false;
 }
 
-// Oda dan Sekme Geçiş İşlevleri
+// 10 dakika hareketsizlikte otomatik Away (💤) modu ve etkinlik sıfırlama
+function resetInactivityTimer() {
+  if (isUserAway) {
+    isUserAway = false;
+    registerPresence();
+  }
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(async () => {
+    isUserAway = true;
+    await registerPresence();
+  }, 600000); // 10 dakika (600,000 ms)
+}
+window.addEventListener('mousemove', resetInactivityTimer);
+window.addEventListener('keydown', resetInactivityTimer);
+window.addEventListener('click', resetInactivityTimer);
+window.addEventListener('scroll', resetInactivityTimer);
+window.addEventListener('touchstart', resetInactivityTimer);
+
 $("roomBtnGeneral").onclick = () => {
   currentRoom = "general";
   $("roomBtnGeneral").style.background = "var(--primary)";
@@ -345,7 +356,7 @@ $("roomBtnGeneral").onclick = () => {
   $("radioChatAreaWrapper").style.display = "none";
   $("djRoomAreaWrapper").style.display = "none";
   $("mainFormAreaWrapper").style.display = "block";
-  $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /mute, /unmute, /admin, /sop, /op, /user, /away)...";
+  $("text").placeholder = "Genel sohbet odasına mesaj yaz (/topik, /duyuru, /mute, /unmute, /admin, /sop, /op, /user)...";
   updateOnlineUsersUI();
 };
 
@@ -404,7 +415,7 @@ $("roomBtnDjRoom").onclick = async () => {
 
 window.addEventListener("DOMContentLoaded", () => {
   const isPageReload = (window.performance && window.performance.navigation && window.performance.navigation.type === 1) || 
-                      (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0] && window.performance.getEntriesByType("navigation")[0].type === 'reload');
+                        (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0] && window.performance.getEntriesByType("navigation")[0].type === 'reload');
 
   if (isPageReload) {
     if (!sessionStorage.getItem("kralfm_entryTime")) {
@@ -448,7 +459,15 @@ window.addEventListener("DOMContentLoaded", () => {
     $("headerLogoutBtn").style.display = "none";
     $("loginModal").style.display = "flex";
   }
+  resetInactivityTimer();
 });
+
+// Kalp atışı (Heartbeat) ile her 15 saniyede bir presence bilgisi tazelenir
+setInterval(() => {
+  if(localStorage.getItem("kralfm_logged") === "true" || $("name").value.trim() !== "") {
+    registerPresence();
+  }
+}, 15000);
 
 function startGuestReminder() {
   if(guestReminderTimer) clearTimeout(guestReminderTimer);
@@ -487,7 +506,7 @@ $("headerLogoutBtn").onclick = async () => {
 
 $("clearAllDjMsgBtn").onclick = async () => {
   if(!["admin", "sop", "op"].includes(window.userRole)) {
-    alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP veya Admin yapabilir).");
+    alert("❌ Bu işlem için yetkiniz yok (Sadece OP, SOP atau Admin yapabilir).");
     return;
   }
   if(confirm("Stüdyo içindeki tüm mesajları toplu olarak silmek istediğinize emin misiniz?")) {
@@ -545,7 +564,6 @@ $("djForm").onsubmit = async e => {
   e.preventDefault();
   const name = getCurrentMyName();
   
-  // Susturma (Mute) Kontrolü
   const activeMute = isUserMuted(name);
   if (activeMute) {
     const remMin = Math.ceil((activeMute.expiresAt - Date.now()) / 60000);
@@ -567,7 +585,9 @@ function updateActiveDJsUI() {
   let activeCount = 0;
 
   Object.values(activeUsersData).forEach(u => {
-    if(u.lastActive && Date.now() - u.lastActive < 300000 && u.isDJ) {
+    if (Date.now() - (u.lastActive || 0) > 600000) return;
+
+    if(u.isDJ) {
       activeCount++;
       const badge = document.createElement("span");
       badge.style.padding = "3px 8px";
@@ -677,7 +697,6 @@ function triggerScreenShower(emojis){
 let titleInterval=null;function triggerToast(t,b){notificationSound.play().catch(()=>{});if(titleInterval)clearInterval(titleInterval);let x=true;titleInterval=setInterval(()=>{document.title=x?`🔴 ${t}`:"Radyo Kral FM & Muhabbet";x=!x},1000);const old=document.querySelector(".mention-toast");if(old)old.remove();const toast=document.createElement("div");toast.className="mention-toast";toast.innerHTML=`🔔 <b>${b}</b>`;document.body.appendChild(toast);setTimeout(()=>toast.remove(),4000)}
 window.addEventListener("focus",()=>{if(titleInterval){clearInterval(titleInterval);titleInterval=null}document.title="Radyo Kral FM & Muhabbet"});
 
-// Geliştirilmiş Görünürlük ve Bağlantı Yönetimi
 document.addEventListener("visibilitychange", async () => {
   if (document.visibilityState === "visible") {
     if (localStorage.getItem("kralfm_logged") === "true" || $("name").value.trim() !== "") {
@@ -716,7 +735,6 @@ function renderPrivateMessages(){
   while(p.children.length > MAX_PRIVATE_MESSAGES) {
     p.removeChild(p.firstChild);
   }
-
   p.scrollTop=p.scrollHeight;
 }
 
@@ -752,7 +770,6 @@ function handleTabComplete(inputElement){
 
 $("tabButton").onclick=()=>handleTabComplete($("text"));
 $("text").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();handleTabComplete($("text"));}});
-
 $("djTabButton").onclick=()=>handleTabComplete($("djText"));
 $("djText").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();handleTabComplete($("djText"));}});
 
@@ -906,9 +923,9 @@ onValue(messagesRef,s=>{
 });
 
 onValue(privateMessagesRef,s=>{latestPrivateData=s.val()||{};renderPrivateMessages();const me=getCurrentMyName().toLowerCase(),target=(window.activePrivateTarget||"").toLowerCase();Object.entries(latestPrivateData).forEach(([id,m])=>{const sn=(m.sender||"").toLowerCase(),rn=(m.recipient||"").toLowerCase();if(rn===me&&sn!==me&&!processedPrivateMsgIds.has(id)){processedPrivateMsgIds.add(id);if(m.createdAt>pageLoadTime){if(sn!==target)unreadPrivateCounts[m.sender]=(unreadPrivateCounts[m.sender]||0)+1;updateOnlineUsersUI();openPrivateChat(m.sender);triggerToast(`${m.sender} fısıldadı!`,`${m.sender}: "${(m.text||"").substring(0,25)}..."`)}}})});
+
 $("privateForm").onsubmit=async e=>{e.preventDefault();const t=$("privateText").value.trim(),me=getCurrentMyName();if(!t||!window.activePrivateTarget)return;$("privateText").value="";await push(privateMessagesRef,{sender:me,recipient:window.activePrivateTarget,text:t,createdAt:Date.now()})};
 
-let heartbeatInterval=null;
 async function registerPresence(){
   const n=getCurrentMyName(),a=$("userAvatar").value,c=$("userColor").value;
   const isDJAuth = sessionStorage.getItem("kralfm_dj_authed") === "true" || ["admin", "sop", "op"].includes(window.userRole);
@@ -919,25 +936,13 @@ async function registerPresence(){
       avatar: a,
       color: c,
       role: window.userRole,
-      isAway: window.isUserAway,
+      isAway: isUserAway,
       isDJ: isDJMode,
       isDJAuth: isDJAuth,
       lastActive: Date.now()
     });
-    
-    await ref(db, "presence/" + uid).onDisconnect().remove();
-    const leaveRef = push(messagesRef);
-    leaveRef.onDisconnect().set({
-      name: n,
-      text: `${n} çıkış yaptı (inşallah bir daha geri gelirsin özleyeceğiz seni)`,
-      type: "system",
-      room: "general",
-      createdAt: Date.now()
-    });
 
     checkAdminUI();
-    if(heartbeatInterval) clearInterval(heartbeatInterval);
-    heartbeatInterval=setInterval(()=>set(ref(db,"presence/"+uid+"/lastActive"),Date.now()).catch(()=>{}),15000);
     
     if(!sessionStorage.getItem("kralfm_entry_msg_sent")) {
       sessionStorage.setItem("kralfm_entry_msg_sent", "true");
@@ -968,17 +973,17 @@ function updateOnlineUsersUI(){
   });
 
   Object.values(activeUsersData).forEach(u => {
-    if(u.lastActive && Date.now() - u.lastActive < 120000){
-      const isStaff = ["admin", "sop", "op"].includes(u.role);
-      if(currentRoom === "dj") {
-        if(u.isDJAuth || isStaff) {
-          onlineUserNames.push(u.name);
-          renderUserItem(u.avatar||"👤", u.name, u.role||"user", u.isAway||false);
-        }
-      } else {
+    if (Date.now() - (u.lastActive || 0) > 600000) return;
+
+    const isStaff = ["admin", "sop", "op"].includes(u.role);
+    if(currentRoom === "dj") {
+      if(u.isDJAuth || isStaff) {
         onlineUserNames.push(u.name);
         renderUserItem(u.avatar||"👤", u.name, u.role||"user", u.isAway||false);
       }
+    } else {
+      onlineUserNames.push(u.name);
+      renderUserItem(u.avatar||"👤", u.name, u.role||"user", u.isAway||false);
     }
   });
 }
@@ -999,7 +1004,7 @@ function renderUserItem(a,n,r,away){
   if(away){
     const tag=document.createElement("span");
     tag.className="away-badge";
-    tag.textContent="Away 🌙";
+    tag.textContent="💤";
     row.appendChild(tag)
   }
   const ar=document.createElement("div");
@@ -1066,7 +1071,6 @@ $("form").onsubmit=async e=>{
   const input=$("text");
   let text=input.value.trim(),name=getCurrentMyName(),avatar=$("userAvatar").value,color=$("userColor").value;
   
-  // Mute (Susturma) Kontrolü
   const activeMute = isUserMuted(name);
   if (activeMute) {
     const remMin = Math.ceil((activeMute.expiresAt - Date.now()) / 60000);
@@ -1077,12 +1081,11 @@ $("form").onsubmit=async e=>{
   input.value=""; 
   if(!text)return;
 
-  // /mute komutu (Admin, SOP, OP kullanabilir)
   if(text.toLowerCase().startsWith("/mute ")){
     if(!["admin", "sop", "op"].includes(window.userRole)) { alert("❌ Bu komutu yalnızca yetkililer (OP, SOP, Admin) kullanabilir!"); return; }
     const parts = text.substring(6).trim().split(/\s+/);
     const targetNick = parts[0];
-    const durationMin = parseInt(parts[1]) || 10; // Varsayılan 10 dakika
+    const durationMin = parseInt(parts[1]) || 10;
     const reason = parts.slice(2).join(" ") || "Kurallara uymamak";
     
     if(!targetNick) { alert("❌ Lütfen susturulacak nicki yazın. Örnek: /mute ahmet 10 Küfür"); return; }
@@ -1108,7 +1111,6 @@ $("form").onsubmit=async e=>{
     return;
   }
 
-  // /unmute komutu
   if(text.toLowerCase().startsWith("/unmute ")){
     if(!["admin", "sop", "op"].includes(window.userRole)) { alert("❌ Bu komutu yalnızca yetkililer kullanabilir!"); return; }
     const targetNick = text.substring(8).trim();
@@ -1160,75 +1162,92 @@ $("form").onsubmit=async e=>{
     if(!["admin", "sop", "op"].includes(window.userRole)){alert("Yetkiniz olmalı!");return}
     const t=text.substring(8).trim();if(t)await push(messagesRef,{name,text:t,type:"announcement",room:currentRoom,avatar,color,role:window.userRole,createdAt:Date.now()});return;
   }
-  if(text.toLowerCase().startsWith("/away")){window.isUserAway=true;await set(ref(db,"presence/"+uid+"/isAway"),true);await push(messagesRef,{name,text:"klavyeden uzaklaştı",type:"action",room:currentRoom,createdAt:Date.now()});return;}
-  if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}
-  let type="text";
-  if(text.toLowerCase().startsWith("/me ")){type="action";text=text.substring(4).trim()}
-  await push(messagesRef,{name,text,avatar,color,role:window.userRole,type,room:currentRoom,createdAt:Date.now()});
+
+  await push(messagesRef, {
+    name,
+    text,
+    avatar,
+    color,
+    role: window.userRole,
+    room: currentRoom,
+    createdAt: Date.now()
+  });
 };
 
-async function sendActionWithEffect(text, effectName){
-  const name=getCurrentMyName();
-  
+async function sendActionWithEffect(text, effectName) {
+  const name = getCurrentMyName();
   const activeMute = isUserMuted(name);
   if (activeMute) {
-    alert(`❌ Susturulduğunuz için etiket veya ikram gönderemezsiniz! Kalan süre: ${Math.ceil((activeMute.expiresAt - Date.now()) / 60000)} dk.`);
+    const remMin = Math.ceil((activeMute.expiresAt - Date.now()) / 60000);
+    alert(`❌ Susturuldunuz! Bu eylemi gerçekleştiremezsiniz.\nKalan Süre: ${remMin} dakika`);
     return;
   }
-
-  if(window.isUserAway){window.isUserAway=false;await set(ref(db,"presence/"+uid+"/isAway"),false)}
-  await push(messagesRef,{name,text,effect:effectName,type:"text",room:currentRoom,avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()})
+  await push(messagesRef, {
+    name,
+    text,
+    avatar: $("userAvatar").value,
+    color: $("userColor").value,
+    role: window.userRole,
+    effect: effectName,
+    room: currentRoom,
+    createdAt: Date.now()
+  });
 }
 
-$("sendHeart").onclick=()=>sendActionWithEffect("❤️ odadaki herkese sevgi dolu kalpler gönderdi! 🥰", "heart");
-$("sendSev").onclick=()=>sendActionWithEffect("💖 odadakilere kucak dolusu sevgilerini yolladı! 🌹", "sev");
-$("sendHoron").onclick=()=>sendActionWithEffect("🎻 horon ekibini sahneye sürdü, coşku tavan yaptı! 🎶🥁", "horon");
-$("sendConfetti").onclick=()=>sendActionWithEffect("🎉 ortamda konfetiler patlattı, kutlama başladı! 🎊", "confetti");
-$("sendApplause").onclick=()=>sendActionWithEffect("👏 odadakileri alkış yağmuruna tuttu! 🌟", "applause");
-$("sendCoffee").onclick=()=>sendActionWithEffect("☕ odadakilere mis gibi Türk kahvesi, çikolata ve su ikram etti! 🍫💧", "coffee");
-$("sendTea").onclick=()=>sendActionWithEffect("🍵 odadakilere demlenmiş mis gibi sıcak çay ikram etti, keyifler tavan yaptı! 🫖🌿", "tea");
-$("sendKuymak").onclick=()=>sendActionWithEffect("🫕 odadakilere mis gibi tereyağlı sıcak kuymak ve köy ekmeği ikram etti! 🧀🍞", "kuymak");
-$("sendFire").onclick=()=>sendActionWithEffect("🔥 ortamı ateşe verdi, ortalık yıkılıyor! 💥⚡", "fire");
-$("partyButton").onclick=()=>sendActionWithEffect("🪩 PARTİ BAŞLADI! Işıklar yanıp sönüyor! 🕺💃", "party");
+$("sendApplause").onclick = () => sendActionWithEffect("👏 Harika bir yayın, alkışlar!", "applause");
+$("sendCoffee").onclick = () => sendActionWithEffect("☕ Kahve ikram etti, afiyet olsun!", "coffee");
+$("sendTea").onclick = () => sendActionWithEffect("🍵 Çay demledi, mis gibi koktu!", "tea");
+$("sendKuymak").onclick = () => sendActionWithEffect("🫕 Kuymak ikram etti, sohbete lezzet kattı!", "kuymak");
+$("sendFire").onclick = () => sendActionWithEffect("🔥 Ortalığı yaktı geçti!", "fire");
+$("sendHeart").onclick = () => sendActionWithEffect("❤️ Kalp attı, sevgiler yolladı!", "heart");
+$("sendSev").onclick = () => sendActionWithEffect("💖 Sevgi pıtırcığı, ortalığı ısıttı!", "sev");
+$("sendHoron").onclick = () => sendActionWithEffect("🎻 Horon tepiyor, kemençe sesleri yükseliyor!", "horon");
+$("sendConfetti").onclick = () => sendActionWithEffect("🎉 Konfeti patlattı, eğlence dorukta!", "confetti");
+$("partyButton").onclick = () => sendActionWithEffect("🪩 Parti başladı, stüdyo sallanıyor!", "party");
 
-const themeModal=$("themeModal");$("toggleTheme").onclick=()=>themeModal.style.display="flex";$("closeThemeModal").onclick=()=>themeModal.style.display="none";window.applyThemeSelection=(c,n)=>{document.body.className=c;localStorage.setItem("kralfm_theme",c);themeModal.style.display="none";triggerToast("Tema Değişti",`Aktif Tema: ${n}`)};
-const requestModal=$("requestModal");$("openRequestModal").onclick=()=>requestModal.style.display="flex";$("closeRequestModal").onclick=()=>requestModal.style.display="none";$("sendRequest").onclick=async()=>{
-  const name=getCurrentMyName();
-  const activeMute = isUserMuted(name);
-  if (activeMute) { alert("❌ Susturulduğunuz için istek parça gönderemezsiniz!"); return; }
+$("toggleTheme").onclick = () => { $("themeModal").style.display = "flex"; };
+$("closeThemeModal").onclick = () => { $("themeModal").style.display = "none"; };
+window.applyThemeSelection = (themeName) => {
+  document.body.className = themeName;
+  localStorage.setItem("kralfm_theme", themeName);
+  $("themeModal").style.display = "none";
+};
 
-  const artist=$("songArtist").value.trim(),title=$("songTitle").value.trim();
-  if(!artist||!title){alert("Sanatçı ve şarkı adını girin!");return}
-  await push(messagesRef,{name,text:`🎵 İstek Parça: ${artist} - ${title}`,type:"request",room:currentRoom,avatar:$("userAvatar").value,color:$("userColor").value,role:window.userRole,createdAt:Date.now()});$("songArtist").value="";$("songTitle").value="";requestModal.style.display="none"
+$("openRequestModal").onclick = () => { $("requestModal").style.display = "flex"; };
+$("closeRequestModal").onclick = () => { $("requestModal").style.display = "none"; };
+$("sendRequest").onclick = async () => {
+  const artist = $("songArtist").value.trim();
+  const title = $("songTitle").value.trim();
+  if(!artist || !title) { alert("Lütfen sanatçı ve şarkı adı girin!"); return; }
+  $("requestModal").style.display = "none";
+  $("songArtist").value = "";
+  $("songTitle").value = "";
+  const name = getCurrentMyName();
+  await push(messagesRef, {
+    name,
+    text: `🎵 İSTEK PARÇA: ${artist} - ${title} (Yayıncıya iletildi)`,
+    type: "request",
+    room: currentRoom,
+    avatar: $("userAvatar").value,
+    color: $("userColor").value,
+    role: window.userRole,
+    createdAt: Date.now()
+  });
 };
 
 $("clearChat").onclick = async () => {
-  if (!["admin", "sop", "op"].includes(window.userRole)) {
-    const p = prompt("Yetkili şifresi girin:");
-    if (p === "123456") {
-      window.userRole = "admin";
-      sessionStorage.setItem("kralfm_role", "admin");
-      await set(ref(db, "presence/" + uid + "/role"), "admin");
-      registerPresence();
-      checkAdminUI();
-      alert("Admin yetkisi aktif edildi!");
-    } else {
-      alert("❌ Bu işlem için OP, SOP veya Admin yetkiniz olmalı!");
-      return;
-    }
+  if(!["admin", "sop", "op"].includes(window.userRole)) {
+    alert("❌ Sohbeti temizlemek için yetkiniz yok!");
+    return;
   }
-
-  const roomNameText = currentRoom === "radio" ? "Radyo Odası" : "Genel Sohbet";
-
-  if(confirm(`${roomNameText} geçmişi temizlensin mi?`)) {
+  if(confirm("Sohbet geçmişini temizlemek istediğinize emin misiniz?")) {
     try {
       const snapshot = await get(messagesRef);
       if(snapshot.exists()) {
         const updates = {};
         snapshot.forEach(childSnap => {
           const val = childSnap.val();
-          const msgRoom = val.room || "general";
-          if(val.type !== "dj" && msgRoom === currentRoom) {
+          if(val.type !== "dj") {
             updates[childSnap.key] = null;
           }
         });
@@ -1236,10 +1255,8 @@ $("clearChat").onclick = async () => {
           await update(messagesRef, updates);
         }
       }
-      await push(messagesRef, {name: "Sistem", text: `${window.userRole.toUpperCase()} yetkilisi tarafından sohbet temizlendi.`, type: "system", room: currentRoom, createdAt: Date.now()});
-    } catch (err) {
-      console.error("Sohbet temizleme hatası:", err);
-      alert("❌ Sohbet temizlenirken bir hata oluştu.");
+    } catch(e) {
+      alert("Temizleme sırasında hata oluştu.");
     }
   }
 };
